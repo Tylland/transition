@@ -1,0 +1,13 @@
+# Binaries
+bin/
+*.exe
+
+# Test output
+testdata/sfera/
+
+# IDE
+.vscode/
+
+# OS
+Thumbs.db
+Desktop.ini
