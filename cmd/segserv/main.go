@@ -6,6 +6,7 @@ import (
 	"path/filepath"
 
 	fdconv "github.com/tylland/transition/internal/convertion/facilitydata"
+	routeconv "github.com/tylland/transition/internal/convertion/routes"
 	sferaconv "github.com/tylland/transition/internal/convertion/sfera"
 )
 
@@ -35,4 +36,14 @@ func main() {
 	sferaconv.GenerateSegmentProfiles(nat, writer)
 
 	fmt.Println("Segment profiles written to", outputPath)
+
+	// Generate and write routes
+	routesPath := filepath.Join("testdata", "routes.xml")
+	r := routeconv.GenerateRoutes(nat)
+	if err := routeconv.WriteRoutesFile(r, routesPath); err != nil {
+		fmt.Fprintf(os.Stderr, "Error writing routes: %v\n", err)
+		os.Exit(1)
+	}
+
+	fmt.Println("Routes written to", routesPath)
 }

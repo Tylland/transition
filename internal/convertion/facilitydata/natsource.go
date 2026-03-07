@@ -36,6 +36,26 @@ func (s *FacilityDataNatSource) CreateNat() *dm.Nat {
 		nat.GetOrCreateLank(lankId, link.Length)
 	}
 
+	// Create node paths (nodvägar) by connecting all links that share a node.
+	// For each node, every pair of connected links gets a bidirectional path.
+	for _, nod := range nat.Noder() {
+		// Collect all links connected to this node
+		var connectedLinks []*dm.Lank
+		for _, lank := range nat.Lankar() {
+			if lank.Fran == nod || lank.Till == nod {
+				connectedLinks = append(connectedLinks, lank)
+			}
+		}
+		// Create bidirectional paths between all pairs
+		for i := 0; i < len(connectedLinks); i++ {
+			for j := 0; j < len(connectedLinks); j++ {
+				if i != j {
+					nod.AddVag(connectedLinks[i], connectedLinks[j])
+				}
+			}
+		}
+	}
+
 	// Import locations (platsmittar)
 	for _, location := range s.Infrastructure.Locations {
 		plats := dm.NewPlats(
@@ -60,6 +80,23 @@ func (s *FacilityDataNatSource) CreateNat() *dm.Nat {
 				for _, linkPosition := range subdivision.LinkPositions {
 					FDWithLank(nat, linkPosition, func(lank *dm.Lank) {
 						lank.Sparnummer.Add(dm.NewSparnummer(
+							subdivision.DivisionCode,
+							subdivision.Description,
+							FDGetLankutbredning(lank, linkPosition, dm.GilltighetsriktningBada),
+						))
+					})
+				}
+			}
+		}
+	}
+
+	// Import line tracks (linjespår)
+	for _, division := range s.Divisions {
+		if division.DivisionType == fd.DivisionTypesTrackUpDownSingle {
+			for _, subdivision := range division.Subdivisions {
+				for _, linkPosition := range subdivision.LinkPositions {
+					FDWithLank(nat, linkPosition, func(lank *dm.Lank) {
+						lank.Linjespar.Add(dm.NewLinjespar(
 							subdivision.DivisionCode,
 							subdivision.Description,
 							FDGetLankutbredning(lank, linkPosition, dm.GilltighetsriktningBada),

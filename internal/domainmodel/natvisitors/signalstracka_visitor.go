@@ -1,7 +1,6 @@
 package natvisitors
 
-import dm "github.com/tylland/transition/domainmodel"
-
+import dm "github.com/tylland/transition/internal/domainmodel"
 
 // SignalstrackaVisitor traverses the network to find signal sections.
 // It starts from a given signal and traverses in a direction until it finds
@@ -56,8 +55,14 @@ func (v *SignalstrackaVisitor) CanVisitNod(nod *dm.Nod) bool {
 func (v *SignalstrackaVisitor) LeaveNod(nod *dm.Nod) {
 }
 
-// LeaveLankanvandning removes the Lankanvandning from the tracked list.
+// LeaveLankanvandning removes the Lankanvandning and link from the tracked lists.
 func (v *SignalstrackaVisitor) LeaveLankanvandning(anvandning *dm.Lankanvandning) {
+	for i, l := range v.besöktaLankar {
+		if l == anvandning.Lank {
+			v.besöktaLankar = append(v.besöktaLankar[:i], v.besöktaLankar[i+1:]...)
+			break
+		}
+	}
 	for i, la := range v.lankanvandningar {
 		if la == anvandning {
 			v.lankanvandningar = append(v.lankanvandningar[:i], v.lankanvandningar[i+1:]...)
@@ -74,6 +79,8 @@ func (v *SignalstrackaVisitor) VisitNod(nod *dm.Nod) bool {
 // VisitLankanvandning processes a link usage, looking for stop signals.
 // Returns true if a stop signal was found (completing the signal section).
 func (v *SignalstrackaVisitor) VisitLankanvandning(anvandning *dm.Lankanvandning) bool {
+	v.besöktaLankar = append(v.besöktaLankar, anvandning.Lank)
+
 	signals := dm.GilltigaInom(anvandning.Lank.Signaler.Items(), anvandning)
 
 	var stopSignal *dm.Signal

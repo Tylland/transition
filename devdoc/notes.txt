@@ -1,0 +1,3 @@
+
+
+TrackRoutes are of type Arrival , Departure or Line. Arrival starts in a INF signal and ends in M signal inside a station. Departure starts in a M signal and ends in a UBL signal  inside a station. Line starts in a UBL signal in ona place and ends in a INF signal on next place.

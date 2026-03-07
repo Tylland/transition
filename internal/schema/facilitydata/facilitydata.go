@@ -48,6 +48,18 @@ const (
 	DivisionTypesInfrastructureManager
 	DivisionTypesInfrastructureOwner
 	DivisionTypesElectrification
+	DivisionTypesPassage
+	DivisionTypesTrafficDirection
+	DivisionTypesLineCategory
+	DivisionTypesKilometerRegion
+	DivisionTypesTrackPortion
+	DivisionTypesNetworkStatus
+	DivisionTypesTrackUpDownSingle
+	DivisionTypesTrackType
+	DivisionTypesTrafficControlNet
+	DivisionTypesCapacityPlanningNet
+	DivisionTypesOperatingStation
+	DivisionTypesTrafficControlArea
 )
 
 // UnmarshalXML decodes a DivisionTypes from its XML string representation.
@@ -69,6 +81,30 @@ func (d *DivisionTypes) UnmarshalXML(decoder *xml.Decoder, start xml.StartElemen
 		*d = DivisionTypesInfrastructureOwner
 	case "Electrification":
 		*d = DivisionTypesElectrification
+	case "Passage":
+		*d = DivisionTypesPassage
+	case "TrafficDirection":
+		*d = DivisionTypesTrafficDirection
+	case "LineCategory":
+		*d = DivisionTypesLineCategory
+	case "KilometerRegion":
+		*d = DivisionTypesKilometerRegion
+	case "TrackPortion":
+		*d = DivisionTypesTrackPortion
+	case "NetworkStatus":
+		*d = DivisionTypesNetworkStatus
+	case "TrackUpDownSingle":
+		*d = DivisionTypesTrackUpDownSingle
+	case "TrackType":
+		*d = DivisionTypesTrackType
+	case "TrafficControlNet":
+		*d = DivisionTypesTrafficControlNet
+	case "CapacityPlanningNet":
+		*d = DivisionTypesCapacityPlanningNet
+	case "OperatingStation":
+		*d = DivisionTypesOperatingStation
+	case "TrafficControlArea":
+		*d = DivisionTypesTrafficControlArea
 	default:
 		// Unknown division types are left at zero value
 		*d = -1

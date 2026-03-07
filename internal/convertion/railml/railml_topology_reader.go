@@ -3,7 +3,7 @@ package convertion
 import (
 	"fmt"
 
-	rml "github.com/tylland/transition/schema/railml"
+	rml "github.com/tylland/transition/internal/schema/railml"
 )
 
 // RailMLTopologyReader provides helper methods for navigating RailML topology.

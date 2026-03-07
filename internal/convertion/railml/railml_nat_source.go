@@ -3,8 +3,8 @@ package convertion
 import (
 	"strconv"
 
-	dm "github.com/tylland/transition/domainmodel"
-	rml "github.com/tylland/transition/schema/railml"
+	dm "github.com/tylland/transition/internal/domainmodel"
+	rml "github.com/tylland/transition/internal/schema/railml"
 )
 
 // RailMLNatSource creates a Nat (network) from RailML infrastructure data.

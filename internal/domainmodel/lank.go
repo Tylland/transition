@@ -15,6 +15,7 @@ type Lank struct {
 	Vagskydd           Entiteter[*Vagskydd]
 	Plattformar        Entiteter[*Plattform]
 	Sparnummer         Entiteter[*Sparnummer]
+	Linjespar          Entiteter[*Linjespar]
 	Hastighetsprofiler Entiteter[*Hastighetsprofil]
 	Lutningar          Entiteter[*Lutning]
 }
