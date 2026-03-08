@@ -1,0 +1,3753 @@
+{
+    "RESPONSE": {
+        "RESULT": [
+            {
+                "DagligFärdplan": [
+                    {
+                        "ID": {
+                            "Tågläge": 29699,
+                            "Utgångsdag": "2022-04-19"
+                        },
+                        "OperationalTransportIdentifiers": [
+                            {
+                                "ObjectType": "TR",
+                                "Company": "3791",
+                                "Core": "-------29699",
+                                "Variant": "00",
+                                "TimetableYear": 2022,
+                                "StartDate": "2022-04-19"
+                            },
+                            {
+                                "ObjectType": "PA",
+                                "Company": "9999",
+                                "Core": "-------29699",
+                                "Variant": "00",
+                                "TimetableYear": 2022,
+                                "StartDate": "2022-04-19"
+                            }
+                        ],
+                        "Färdplats": [
+                            {
+                                "Ordertext": [
+                                    {
+                                        "Ordningsnummer": 1,
+                                        "Kod": "VX",
+                                        "Text": "Traf.utb"
+                                    }
+                                ],
+                                "Avtalsplats": {
+                                    "Avtalat": {
+                                        "Ankomst": "2022-04-19T21:05:00.000+02:00",
+                                        "Avgång": "2022-04-19T21:05:00.000+02:00",
+                                        "Trafikaktivitet": [
+                                            {
+                                                "Kod": "VX"
+                                            }
+                                        ],
+                                        "Fordonsuppsättning": {
+                                            "TotalVagnsvikt": 0,
+                                            "TotalDrivfordonsvikt": 0,
+                                            "TotalVagnslängd": 20,
+                                            "TotalDrivfordonslängd": 0,
+                                            "HastighetskategoriID": "A",
+                                            "STAXID": "A",
+                                            "Drivfordon": [
+                                                {
+                                                    "TypKod": "T44"
+                                                }
+                                            ]
+                                        },
+                                        "Trafikutbytestid": "PT0S"
+                                    },
+                                    "AnsöktAnnonseratTågnummer": "29699",
+                                    "TågslagIDAnkomst": "TJT",
+                                    "TågslagIDAvgång": "TJT"
+                                },
+                                "AnkommandeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 29699,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "AvgåendeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 29699,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "Ankomst": "2022-04-19T21:05:00.000+02:00",
+                                "Avgång": "2022-04-19T21:05:00.000+02:00",
+                                "Platsspår": {
+                                    "ID": "2",
+                                    "Namn": "2"
+                                },
+                                "Ordningsnummer": 1,
+                                "TypAvStopp": "SCHEDULED_STOP",
+                                "Avstånd": 0,
+                                "STH": 80,
+                                "Signatur": "AK",
+                                "LandsKod": 74,
+                                "Namn": "Abisko östra"
+                            },
+                            {
+                                "AnkommandeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 29699,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "AvgåendeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 29699,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "Ankomst": "2022-04-19T21:15:00.000+02:00",
+                                "Avgång": "2022-04-19T21:20:00.000+02:00",
+                                "Platsspår": {
+                                    "ID": "1",
+                                    "Namn": "1"
+                                },
+                                "Ordningsnummer": 2,
+                                "TypAvStopp": "SCHEDULED_STOP",
+                                "Avstånd": 10316,
+                                "STH": 80,
+                                "Signatur": "SOA",
+                                "LandsKod": 74,
+                                "Namn": "Stordalen"
+                            },
+                            {
+                                "AnkommandeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 29699,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "AvgåendeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 29699,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "Ankomst": "2022-04-19T21:29:32.000+02:00",
+                                "Avgång": "2022-04-19T21:29:32.000+02:00",
+                                "Platsspår": {
+                                    "ID": "2",
+                                    "Namn": "2"
+                                },
+                                "Ordningsnummer": 3,
+                                "TypAvStopp": "RUN_THROUGH",
+                                "Avstånd": 12166,
+                                "STH": 80,
+                                "Signatur": "KPE",
+                                "LandsKod": 74,
+                                "Namn": "Kaisepakte"
+                            },
+                            {
+                                "AnkommandeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 29699,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "AvgåendeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 29699,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "Ankomst": "2022-04-19T21:36:45.000+02:00",
+                                "Avgång": "2022-04-19T21:36:45.000+02:00",
+                                "Platsspår": {
+                                    "ID": "1",
+                                    "Namn": "1"
+                                },
+                                "Ordningsnummer": 4,
+                                "TypAvStopp": "RUN_THROUGH",
+                                "Avstånd": 9346,
+                                "STH": 80,
+                                "Signatur": "SBK",
+                                "LandsKod": 74,
+                                "Namn": "Stenbacken"
+                            },
+                            {
+                                "AnkommandeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 29699,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "AvgåendeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 29699,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "Ankomst": "2022-04-19T21:44:17.000+02:00",
+                                "Avgång": "2022-04-19T21:44:17.000+02:00",
+                                "Platsspår": {
+                                    "ID": "3",
+                                    "Namn": "3"
+                                },
+                                "Ordningsnummer": 5,
+                                "TypAvStopp": "RUN_THROUGH",
+                                "Avstånd": 9730,
+                                "STH": 80,
+                                "Signatur": "TNK",
+                                "LandsKod": 74,
+                                "Namn": "Torneträsk"
+                            },
+                            {
+                                "AnkommandeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 29699,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "AvgåendeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 29699,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "Ankomst": "2022-04-19T21:52:46.000+02:00",
+                                "Avgång": "2022-04-19T21:52:46.000+02:00",
+                                "Platsspår": {
+                                    "ID": "1",
+                                    "Namn": "1"
+                                },
+                                "Ordningsnummer": 6,
+                                "TypAvStopp": "RUN_THROUGH",
+                                "Avstånd": 10527,
+                                "STH": 80,
+                                "Signatur": "BFS",
+                                "LandsKod": 74,
+                                "Namn": "Bergfors"
+                            },
+                            {
+                                "AnkommandeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 29699,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "AvgåendeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 29699,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "Ankomst": "2022-04-19T22:00:01.000+02:00",
+                                "Avgång": "2022-04-19T22:00:01.000+02:00",
+                                "Platsspår": {
+                                    "ID": "1",
+                                    "Namn": "1"
+                                },
+                                "Ordningsnummer": 7,
+                                "TypAvStopp": "RUN_THROUGH",
+                                "Avstånd": 9362,
+                                "STH": 80,
+                                "Signatur": "RSN",
+                                "LandsKod": 74,
+                                "Namn": "Rensjön"
+                            },
+                            {
+                                "AnkommandeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 29699,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "AvgåendeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 29699,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "Ankomst": "2022-04-19T22:07:57.000+02:00",
+                                "Avgång": "2022-04-19T22:07:57.000+02:00",
+                                "Platsspår": {
+                                    "ID": "1",
+                                    "Namn": "1"
+                                },
+                                "Ordningsnummer": 8,
+                                "TypAvStopp": "RUN_THROUGH",
+                                "Avstånd": 10256,
+                                "STH": 80,
+                                "Signatur": "RUT",
+                                "LandsKod": 74,
+                                "Namn": "Rautas"
+                            },
+                            {
+                                "AnkommandeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 29699,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "AvgåendeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 29699,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "Ankomst": "2022-04-19T22:17:00.000+02:00",
+                                "Avgång": "2022-04-19T22:21:00.000+02:00",
+                                "Platsspår": {
+                                    "ID": "1",
+                                    "Namn": "1"
+                                },
+                                "Ordningsnummer": 9,
+                                "TypAvStopp": "SCHEDULED_STOP",
+                                "Avstånd": 10395,
+                                "STH": 80,
+                                "Signatur": "KV",
+                                "LandsKod": 74,
+                                "Namn": "Krokvik"
+                            },
+                            {
+                                "AnkommandeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 29699,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "AvgåendeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 29699,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "Ankomst": "2022-04-19T22:26:56.000+02:00",
+                                "Avgång": "2022-04-19T22:26:56.000+02:00",
+                                "Platsspår": {
+                                    "ID": "1",
+                                    "Namn": "1"
+                                },
+                                "Ordningsnummer": 10,
+                                "TypAvStopp": "RUN_THROUGH",
+                                "Avstånd": 7497,
+                                "STH": 80,
+                                "Signatur": "PEA",
+                                "LandsKod": 74,
+                                "Namn": "Peuravaara"
+                            },
+                            {
+                                "AnkommandeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 29699,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "AvgåendeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 29699,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "Ankomst": "2022-04-19T22:35:00.000+02:00",
+                                "Avgång": "2022-04-19T22:44:00.000+02:00",
+                                "Platsspår": {
+                                    "ID": "2",
+                                    "Namn": "2"
+                                },
+                                "Ordningsnummer": 11,
+                                "TypAvStopp": "SCHEDULED_STOP",
+                                "Avstånd": 9393,
+                                "STH": 80,
+                                "Signatur": "KIA",
+                                "LandsKod": 74,
+                                "Namn": "Kirunavaara"
+                            },
+                            {
+                                "AnkommandeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 29699,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "AvgåendeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 29699,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "Ankomst": "2022-04-19T22:45:56.000+02:00",
+                                "Avgång": "2022-04-19T22:45:56.000+02:00",
+                                "Platsspår": {
+                                    "ID": "1",
+                                    "Namn": "1"
+                                },
+                                "Ordningsnummer": 12,
+                                "TypAvStopp": "RUN_THROUGH",
+                                "Avstånd": 1786,
+                                "STH": 80,
+                                "Signatur": "RSI",
+                                "LandsKod": 74,
+                                "Namn": "Råtsi"
+                            },
+                            {
+                                "Ordertext": [
+                                    {
+                                        "Ordningsnummer": 2,
+                                        "Kod": "VX",
+                                        "Text": "Traf.utb"
+                                    }
+                                ],
+                                "Avtalsplats": {
+                                    "Avtalat": {
+                                        "Ankomst": "2022-04-19T22:56:00.000+02:00",
+                                        "Avgång": "2022-04-19T22:56:00.000+02:00",
+                                        "Trafikaktivitet": [
+                                            {
+                                                "Kod": "VX"
+                                            }
+                                        ],
+                                        "Fordonsuppsättning": {
+                                            "TotalVagnsvikt": 0,
+                                            "TotalDrivfordonsvikt": 0,
+                                            "TotalVagnslängd": 20,
+                                            "TotalDrivfordonslängd": 0,
+                                            "HastighetskategoriID": "A",
+                                            "STAXID": "A",
+                                            "Drivfordon": [
+                                                {
+                                                    "TypKod": "T44"
+                                                }
+                                            ]
+                                        },
+                                        "Trafikutbytestid": "PT0S"
+                                    },
+                                    "AnsöktAnnonseratTågnummer": "29699",
+                                    "TågslagIDAnkomst": "TJT",
+                                    "TågslagIDAvgång": "TJT"
+                                },
+                                "AnkommandeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 29699,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "AvgåendeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 29699,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "Ankomst": "2022-04-19T22:56:00.000+02:00",
+                                "Avgång": "2022-04-19T22:56:00.000+02:00",
+                                "Platsspår": {
+                                    "ID": "2",
+                                    "Namn": "2"
+                                },
+                                "Ordningsnummer": 13,
+                                "TypAvStopp": "SCHEDULED_STOP",
+                                "Avstånd": 10263,
+                                "STH": 80,
+                                "Signatur": "APT",
+                                "LandsKod": 74,
+                                "Namn": "Aptas"
+                            }
+                        ],
+                        "Tåglägesvariant": {
+                            "Tågläge": 29699,
+                            "Variant": 1
+                        },
+                        "Tåglägesinnehavare": {
+                            "OrganisationID": "PT"
+                        },
+                        "Operatör": {
+                            "OperatörID": "PT"
+                        },
+                        "SenastÄndrad": "2022-04-22T11:08:16.322+02:00",
+                        "InternationellTrafik": false,
+                        "ModifiedTime": "2022-04-22T09:10:08.511Z",
+                        "Deleted": false
+                    },
+                    {
+                        "ID": {
+                            "Tågläge": 54918,
+                            "Utgångsdag": "2022-04-19"
+                        },
+                        "OperationalTransportIdentifiers": [
+                            {
+                                "ObjectType": "TR",
+                                "Company": "0027",
+                                "Core": "-------54918",
+                                "Variant": "00",
+                                "TimetableYear": 2022,
+                                "StartDate": "2022-04-19"
+                            },
+                            {
+                                "ObjectType": "PA",
+                                "Company": "9999",
+                                "Core": "-------54918",
+                                "Variant": "00",
+                                "TimetableYear": 2022,
+                                "StartDate": "2022-04-19"
+                            }
+                        ],
+                        "Färdplats": [
+                            {
+                                "Ordertext": [
+                                    {
+                                        "Ordningsnummer": 1,
+                                        "Kod": "UP",
+                                        "Text": "Traf.utb"
+                                    }
+                                ],
+                                "Avtalsplats": {
+                                    "Avtalat": {
+                                        "Ankomst": "2022-04-19T21:53:00.000+02:00",
+                                        "Avgång": "2022-04-19T21:53:00.000+02:00",
+                                        "Trafikaktivitet": [
+                                            {
+                                                "Kod": "UP"
+                                            }
+                                        ],
+                                        "Fordonsuppsättning": {
+                                            "TotalVagnsvikt": 0,
+                                            "TotalDrivfordonsvikt": 0,
+                                            "TotalVagnslängd": 18,
+                                            "TotalDrivfordonslängd": 0,
+                                            "STAXID": "A",
+                                            "Drivfordon": [
+                                                {
+                                                    "TypKod": "Z65"
+                                                }
+                                            ]
+                                        },
+                                        "Trafikutbytestid": "PT0S"
+                                    },
+                                    "AnsöktAnnonseratTågnummer": "54918",
+                                    "TågslagIDAnkomst": "TJT",
+                                    "TågslagIDAvgång": "TJT"
+                                },
+                                "AnkommandeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 54918,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "AvgåendeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 54918,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "Ankomst": "2022-04-19T21:53:00.000+02:00",
+                                "Avgång": "2022-04-19T21:53:00.000+02:00",
+                                "Platsspår": {
+                                    "ID": "2",
+                                    "Namn": "2"
+                                },
+                                "Ordningsnummer": 1,
+                                "TypAvStopp": "SCHEDULED_STOP",
+                                "Avstånd": 0,
+                                "STH": 70,
+                                "Signatur": "VAA",
+                                "LandsKod": 74,
+                                "Namn": "Vara"
+                            },
+                            {
+                                "Ordertext": [
+                                    {
+                                        "Ordningsnummer": 2,
+                                        "Kod": "UP",
+                                        "Text": "Traf.utb"
+                                    }
+                                ],
+                                "Avtalsplats": {
+                                    "Avtalat": {
+                                        "Ankomst": "2022-04-19T21:59:00.000+02:00",
+                                        "Avgång": "2022-04-19T21:59:00.000+02:00",
+                                        "Trafikaktivitet": [
+                                            {
+                                                "Kod": "UP"
+                                            }
+                                        ],
+                                        "Fordonsuppsättning": {
+                                            "TotalVagnsvikt": 0,
+                                            "TotalDrivfordonsvikt": 0,
+                                            "TotalVagnslängd": 18,
+                                            "TotalDrivfordonslängd": 0,
+                                            "STAXID": "A",
+                                            "Drivfordon": [
+                                                {
+                                                    "TypKod": "Z65"
+                                                }
+                                            ]
+                                        },
+                                        "Trafikutbytestid": "PT0S"
+                                    },
+                                    "AnsöktAnnonseratTågnummer": "54918",
+                                    "TågslagIDAnkomst": "TJT",
+                                    "TågslagIDAvgång": "TJT"
+                                },
+                                "AnkommandeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 54918,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "AvgåendeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 54918,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "Ankomst": "2022-04-19T21:59:00.000+02:00",
+                                "Avgång": "2022-04-19T21:59:00.000+02:00",
+                                "Platsspår": {
+                                    "ID": "1",
+                                    "Namn": "1"
+                                },
+                                "Ordningsnummer": 2,
+                                "TypAvStopp": "SCHEDULED_STOP",
+                                "Avstånd": 5706,
+                                "STH": 70,
+                                "Signatur": "HÅP",
+                                "LandsKod": 74,
+                                "Namn": "Håkantorp"
+                            }
+                        ],
+                        "Tåglägesvariant": {
+                            "Tågläge": 54918,
+                            "Variant": 1
+                        },
+                        "Tåglägesinnehavare": {
+                            "OrganisationID": "IFAB"
+                        },
+                        "Operatör": {
+                            "OperatörID": "IFAB"
+                        },
+                        "SenastÄndrad": "2022-04-22T11:08:16.745+02:00",
+                        "InternationellTrafik": false,
+                        "ModifiedTime": "2022-04-22T09:11:33.068Z",
+                        "Deleted": false
+                    },
+                    {
+                        "ID": {
+                            "Tågläge": 55087,
+                            "Utgångsdag": "2022-04-19"
+                        },
+                        "OperationalTransportIdentifiers": [
+                            {
+                                "ObjectType": "TR",
+                                "Company": "0027",
+                                "Core": "-------55087",
+                                "Variant": "00",
+                                "TimetableYear": 2022,
+                                "StartDate": "2022-04-19"
+                            },
+                            {
+                                "ObjectType": "PA",
+                                "Company": "9999",
+                                "Core": "-------55087",
+                                "Variant": "00",
+                                "TimetableYear": 2022,
+                                "StartDate": "2022-04-19"
+                            }
+                        ],
+                        "Färdplats": [
+                            {
+                                "Ordertext": [
+                                    {
+                                        "Ordningsnummer": 1,
+                                        "Kod": "UP",
+                                        "Text": "Traf.utb"
+                                    }
+                                ],
+                                "Avtalsplats": {
+                                    "Avtalat": {
+                                        "Ankomst": "2022-04-19T05:27:00.000+02:00",
+                                        "Avgång": "2022-04-19T05:27:00.000+02:00",
+                                        "Trafikaktivitet": [
+                                            {
+                                                "Kod": "UP"
+                                            }
+                                        ],
+                                        "Fordonsuppsättning": {
+                                            "TotalVagnsvikt": 0,
+                                            "TotalDrivfordonsvikt": 0,
+                                            "TotalVagnslängd": 18,
+                                            "TotalDrivfordonslängd": 0,
+                                            "STAXID": "A",
+                                            "Drivfordon": [
+                                                {
+                                                    "TypKod": "Z65"
+                                                }
+                                            ]
+                                        },
+                                        "Trafikutbytestid": "PT0S"
+                                    },
+                                    "AnsöktAnnonseratTågnummer": "55087",
+                                    "TågslagIDAnkomst": "TJT",
+                                    "TågslagIDAvgång": "TJT"
+                                },
+                                "AnkommandeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 55087,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "AvgåendeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 55087,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "Ankomst": "2022-04-19T05:27:00.000+02:00",
+                                "Avgång": "2022-04-19T05:27:00.000+02:00",
+                                "Platsspår": {
+                                    "ID": "1",
+                                    "Namn": "1"
+                                },
+                                "Ordningsnummer": 1,
+                                "TypAvStopp": "SCHEDULED_STOP",
+                                "Avstånd": 0,
+                                "STH": 70,
+                                "Signatur": "HÅP",
+                                "LandsKod": 74,
+                                "Namn": "Håkantorp"
+                            },
+                            {
+                                "Ordertext": [
+                                    {
+                                        "Ordningsnummer": 2,
+                                        "Kod": "UP",
+                                        "Text": "Traf.utb"
+                                    }
+                                ],
+                                "Avtalsplats": {
+                                    "Avtalat": {
+                                        "Ankomst": "2022-04-19T05:33:00.000+02:00",
+                                        "Avgång": "2022-04-19T05:33:00.000+02:00",
+                                        "Trafikaktivitet": [
+                                            {
+                                                "Kod": "UP"
+                                            }
+                                        ],
+                                        "Fordonsuppsättning": {
+                                            "TotalVagnsvikt": 0,
+                                            "TotalDrivfordonsvikt": 0,
+                                            "TotalVagnslängd": 18,
+                                            "TotalDrivfordonslängd": 0,
+                                            "STAXID": "A",
+                                            "Drivfordon": [
+                                                {
+                                                    "TypKod": "Z65"
+                                                }
+                                            ]
+                                        },
+                                        "Trafikutbytestid": "PT0S"
+                                    },
+                                    "AnsöktAnnonseratTågnummer": "55087",
+                                    "TågslagIDAnkomst": "TJT",
+                                    "TågslagIDAvgång": "TJT"
+                                },
+                                "AnkommandeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 55087,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "AvgåendeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 55087,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "Ankomst": "2022-04-19T05:33:00.000+02:00",
+                                "Avgång": "2022-04-19T05:33:00.000+02:00",
+                                "Platsspår": {
+                                    "ID": "2",
+                                    "Namn": "2"
+                                },
+                                "Ordningsnummer": 2,
+                                "TypAvStopp": "SCHEDULED_STOP",
+                                "Avstånd": 5706,
+                                "STH": 70,
+                                "Signatur": "VAA",
+                                "LandsKod": 74,
+                                "Namn": "Vara"
+                            }
+                        ],
+                        "Tåglägesvariant": {
+                            "Tågläge": 55087,
+                            "Variant": 1
+                        },
+                        "Tåglägesinnehavare": {
+                            "OrganisationID": "IFAB"
+                        },
+                        "Operatör": {
+                            "OperatörID": "IFAB"
+                        },
+                        "SenastÄndrad": "2022-04-22T11:08:16.746+02:00",
+                        "InternationellTrafik": false,
+                        "ModifiedTime": "2022-04-22T09:11:33.291Z",
+                        "Deleted": false
+                    },
+                    {
+                        "ID": {
+                            "Tågläge": 55235,
+                            "Utgångsdag": "2022-04-19"
+                        },
+                        "OperationalTransportIdentifiers": [
+                            {
+                                "ObjectType": "TR",
+                                "Company": "0027",
+                                "Core": "-------55235",
+                                "Variant": "00",
+                                "TimetableYear": 2022,
+                                "StartDate": "2022-04-19"
+                            },
+                            {
+                                "ObjectType": "PA",
+                                "Company": "9999",
+                                "Core": "-------55235",
+                                "Variant": "00",
+                                "TimetableYear": 2022,
+                                "StartDate": "2022-04-19"
+                            }
+                        ],
+                        "Färdplats": [
+                            {
+                                "Ordertext": [
+                                    {
+                                        "Ordningsnummer": 1,
+                                        "Kod": "UP",
+                                        "Text": "Traf.utb"
+                                    }
+                                ],
+                                "Avtalsplats": {
+                                    "Avtalat": {
+                                        "Ankomst": "2022-04-19T08:00:00.000+02:00",
+                                        "Avgång": "2022-04-19T08:00:00.000+02:00",
+                                        "Trafikaktivitet": [
+                                            {
+                                                "Kod": "UP"
+                                            }
+                                        ],
+                                        "Fordonsuppsättning": {
+                                            "TotalVagnsvikt": 0,
+                                            "TotalDrivfordonsvikt": 0,
+                                            "TotalVagnslängd": 18,
+                                            "TotalDrivfordonslängd": 0,
+                                            "STAXID": "A",
+                                            "Drivfordon": [
+                                                {
+                                                    "TypKod": "Z65"
+                                                }
+                                            ]
+                                        },
+                                        "Trafikutbytestid": "PT0S"
+                                    },
+                                    "AnsöktAnnonseratTågnummer": "55235",
+                                    "TågslagIDAnkomst": "TJT",
+                                    "TågslagIDAvgång": "TJT"
+                                },
+                                "AnkommandeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 55235,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "AvgåendeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 55235,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "Ankomst": "2022-04-19T08:00:00.000+02:00",
+                                "Avgång": "2022-04-19T08:00:00.000+02:00",
+                                "Platsspår": {
+                                    "ID": "2",
+                                    "Namn": "2"
+                                },
+                                "Ordningsnummer": 1,
+                                "TypAvStopp": "SCHEDULED_STOP",
+                                "Avstånd": 0,
+                                "STH": 70,
+                                "Signatur": "BÄF",
+                                "LandsKod": 74,
+                                "Namn": "Bäckefors"
+                            },
+                            {
+                                "AnkommandeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 55235,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "AvgåendeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 55235,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "Ankomst": "2022-04-19T08:23:25.000+02:00",
+                                "Avgång": "2022-04-19T08:23:25.000+02:00",
+                                "Platsspår": {
+                                    "ID": "2",
+                                    "Namn": "2"
+                                },
+                                "Ordningsnummer": 2,
+                                "TypAvStopp": "RUN_THROUGH",
+                                "Avstånd": 26385,
+                                "STH": 70,
+                                "Signatur": "RÅS",
+                                "LandsKod": 74,
+                                "Namn": "Råskogen"
+                            },
+                            {
+                                "AnkommandeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 55235,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "AvgåendeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 55235,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "Ankomst": "2022-04-19T08:27:06.000+02:00",
+                                "Avgång": "2022-04-19T08:27:06.000+02:00",
+                                "Platsspår": {
+                                    "ID": "0",
+                                    "Namn": "0"
+                                },
+                                "Ordningsnummer": 3,
+                                "TypAvStopp": "RUN_THROUGH",
+                                "Avstånd": 4175,
+                                "STH": 70,
+                                "Signatur": "SKBL",
+                                "LandsKod": 74,
+                                "Namn": "Skälebol"
+                            },
+                            {
+                                "AnkommandeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 55235,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "AvgåendeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 55235,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "Ankomst": "2022-04-19T08:32:33.000+02:00",
+                                "Avgång": "2022-04-19T08:32:33.000+02:00",
+                                "Platsspår": {
+                                    "ID": "2",
+                                    "Namn": "2"
+                                },
+                                "Ordningsnummer": 4,
+                                "TypAvStopp": "RUN_THROUGH",
+                                "Avstånd": 5789,
+                                "STH": 70,
+                                "Signatur": "BRL",
+                                "LandsKod": 74,
+                                "Namn": "Brålanda"
+                            },
+                            {
+                                "AnkommandeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 55235,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "AvgåendeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 55235,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "Ankomst": "2022-04-19T08:39:58.000+02:00",
+                                "Avgång": "2022-04-19T08:39:58.000+02:00",
+                                "Platsspår": {
+                                    "ID": "2",
+                                    "Namn": "2"
+                                },
+                                "Ordningsnummer": 5,
+                                "TypAvStopp": "RUN_THROUGH",
+                                "Avstånd": 8395,
+                                "STH": 70,
+                                "Signatur": "FDF",
+                                "LandsKod": 74,
+                                "Namn": "Frändefors"
+                            },
+                            {
+                                "AnkommandeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 55235,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "AvgåendeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 55235,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "Ankomst": "2022-04-19T08:46:33.000+02:00",
+                                "Avgång": "2022-04-19T08:46:33.000+02:00",
+                                "Platsspår": {
+                                    "ID": "1",
+                                    "Namn": "1"
+                                },
+                                "Ordningsnummer": 6,
+                                "TypAvStopp": "RUN_THROUGH",
+                                "Avstånd": 7455,
+                                "STH": 70,
+                                "Signatur": "BJH",
+                                "LandsKod": 74,
+                                "Namn": "Bjurhem"
+                            },
+                            {
+                                "AnkommandeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 55235,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "AvgåendeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 55235,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "Ankomst": "2022-04-19T08:53:41.000+02:00",
+                                "Avgång": "2022-04-19T08:53:41.000+02:00",
+                                "Platsspår": {
+                                    "ID": "2",
+                                    "Namn": "2"
+                                },
+                                "Ordningsnummer": 7,
+                                "TypAvStopp": "RUN_THROUGH",
+                                "Avstånd": 8068,
+                                "STH": 70,
+                                "Signatur": "ÖX",
+                                "LandsKod": 74,
+                                "Namn": "Öxnered"
+                            },
+                            {
+                                "AnkommandeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 55235,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "AvgåendeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 55235,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "Ankomst": "2022-04-19T09:02:00.000+02:00",
+                                "Avgång": "2022-04-19T09:27:00.000+02:00",
+                                "Platsspår": {
+                                    "ID": "2",
+                                    "Namn": "2"
+                                },
+                                "Ordningsnummer": 8,
+                                "TypAvStopp": "SCHEDULED_STOP",
+                                "Avstånd": 8805,
+                                "STH": 70,
+                                "Signatur": "THN",
+                                "LandsKod": 74,
+                                "Namn": "Trollhättan"
+                            },
+                            {
+                                "AnkommandeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 55235,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "AvgåendeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 55235,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "Ankomst": "2022-04-19T09:34:22.000+02:00",
+                                "Avgång": "2022-04-19T09:34:22.000+02:00",
+                                "Platsspår": {
+                                    "ID": "2",
+                                    "Namn": "2"
+                                },
+                                "Ordningsnummer": 9,
+                                "TypAvStopp": "RUN_THROUGH",
+                                "Avstånd": 8219,
+                                "STH": 70,
+                                "Signatur": "VEAS",
+                                "LandsKod": 74,
+                                "Namn": "Velanda södra"
+                            },
+                            {
+                                "AnkommandeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 55235,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "AvgåendeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 55235,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "Ankomst": "2022-04-19T09:43:26.000+02:00",
+                                "Avgång": "2022-04-19T09:43:26.000+02:00",
+                                "Platsspår": {
+                                    "ID": "2",
+                                    "Namn": "2"
+                                },
+                                "Ordningsnummer": 10,
+                                "TypAvStopp": "RUN_THROUGH",
+                                "Avstånd": 9879,
+                                "STH": 70,
+                                "Signatur": "VPM",
+                                "LandsKod": 74,
+                                "Namn": "Varpemossen"
+                            },
+                            {
+                                "AnkommandeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 55235,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "AvgåendeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 55235,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "Ankomst": "2022-04-19T09:50:30.000+02:00",
+                                "Avgång": "2022-04-19T09:50:30.000+02:00",
+                                "Platsspår": {
+                                    "ID": "1",
+                                    "Namn": "1"
+                                },
+                                "Ordningsnummer": 11,
+                                "TypAvStopp": "RUN_THROUGH",
+                                "Avstånd": 8002,
+                                "STH": 70,
+                                "Signatur": "TBN",
+                                "LandsKod": 74,
+                                "Namn": "Torbacken"
+                            },
+                            {
+                                "AnkommandeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 55235,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "AvgåendeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 55235,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "Ankomst": "2022-04-19T09:57:47.000+02:00",
+                                "Avgång": "2022-04-19T09:57:47.000+02:00",
+                                "Platsspår": {
+                                    "ID": "1",
+                                    "Namn": "1"
+                                },
+                                "Ordningsnummer": 12,
+                                "TypAvStopp": "RUN_THROUGH",
+                                "Avstånd": 8248,
+                                "STH": 70,
+                                "Signatur": "ALH",
+                                "LandsKod": 74,
+                                "Namn": "Alvhem"
+                            },
+                            {
+                                "AnkommandeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 55235,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "AvgåendeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 55235,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "Ankomst": "2022-04-19T10:03:44.000+02:00",
+                                "Avgång": "2022-04-19T10:03:44.000+02:00",
+                                "Platsspår": {
+                                    "ID": "3",
+                                    "Namn": "3"
+                                },
+                                "Ordningsnummer": 13,
+                                "TypAvStopp": "RUN_THROUGH",
+                                "Avstånd": 6724,
+                                "STH": 70,
+                                "Signatur": "ÄN",
+                                "LandsKod": 74,
+                                "Namn": "Älvängen"
+                            },
+                            {
+                                "AnkommandeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 55235,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "AvgåendeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 55235,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "Ankomst": "2022-04-19T10:08:41.000+02:00",
+                                "Avgång": "2022-04-19T10:08:41.000+02:00",
+                                "Platsspår": {
+                                    "ID": "N",
+                                    "Namn": "N"
+                                },
+                                "Ordningsnummer": 14,
+                                "TypAvStopp": "RUN_THROUGH",
+                                "Avstånd": 5610,
+                                "STH": 70,
+                                "Signatur": "NOL",
+                                "LandsKod": 74,
+                                "Namn": "Nol"
+                            },
+                            {
+                                "AnkommandeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 55235,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "AvgåendeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 55235,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "Ankomst": "2022-04-19T10:11:21.000+02:00",
+                                "Avgång": "2022-04-19T10:11:21.000+02:00",
+                                "Platsspår": {
+                                    "ID": "N",
+                                    "Namn": "N"
+                                },
+                                "Ordningsnummer": 15,
+                                "TypAvStopp": "RUN_THROUGH",
+                                "Avstånd": 3010,
+                                "STH": 70,
+                                "Signatur": "NÖE",
+                                "LandsKod": 74,
+                                "Namn": "Nödinge"
+                            },
+                            {
+                                "AnkommandeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 55235,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "AvgåendeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 55235,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "Ankomst": "2022-04-19T10:14:27.000+02:00",
+                                "Avgång": "2022-04-19T10:14:27.000+02:00",
+                                "Platsspår": {
+                                    "ID": "3",
+                                    "Namn": "3"
+                                },
+                                "Ordningsnummer": 16,
+                                "TypAvStopp": "RUN_THROUGH",
+                                "Avstånd": 3515,
+                                "STH": 70,
+                                "Signatur": "BHS",
+                                "LandsKod": 74,
+                                "Namn": "Bohus"
+                            },
+                            {
+                                "AnkommandeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 55235,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "AvgåendeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 55235,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "Ankomst": "2022-04-19T10:18:23.000+02:00",
+                                "Avgång": "2022-04-19T10:18:23.000+02:00",
+                                "Platsspår": {
+                                    "ID": "N",
+                                    "Namn": "N"
+                                },
+                                "Ordningsnummer": 17,
+                                "TypAvStopp": "RUN_THROUGH",
+                                "Avstånd": 4463,
+                                "STH": 70,
+                                "Signatur": "SUE",
+                                "LandsKod": 74,
+                                "Namn": "Surte"
+                            },
+                            {
+                                "AnkommandeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 55235,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "AvgåendeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 55235,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "Ankomst": "2022-04-19T10:24:05.000+02:00",
+                                "Avgång": "2022-04-19T10:24:05.000+02:00",
+                                "Platsspår": {
+                                    "ID": "1",
+                                    "Namn": "1"
+                                },
+                                "Ordningsnummer": 18,
+                                "TypAvStopp": "RUN_THROUGH",
+                                "Avstånd": 4941,
+                                "STH": 70,
+                                "Signatur": "AGB",
+                                "LandsKod": 74,
+                                "Namn": "Agnesberg"
+                            },
+                            {
+                                "AnkommandeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 55235,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "AvgåendeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 55235,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "Ankomst": "2022-04-19T10:28:24.000+02:00",
+                                "Avgång": "2022-04-19T10:28:24.000+02:00",
+                                "Platsspår": {
+                                    "ID": "1",
+                                    "Namn": "1"
+                                },
+                                "Ordningsnummer": 19,
+                                "TypAvStopp": "RUN_THROUGH",
+                                "Avstånd": 3754,
+                                "STH": 70,
+                                "Signatur": "GBM",
+                                "LandsKod": 74,
+                                "Namn": "Göteborg Marieholm"
+                            },
+                            {
+                                "AnkommandeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 55235,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "AvgåendeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 55235,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "Ankomst": "2022-04-19T10:31:32.000+02:00",
+                                "Avgång": "2022-04-19T10:31:32.000+02:00",
+                                "Platsspår": {
+                                    "ID": "0",
+                                    "Namn": "0"
+                                },
+                                "Ordningsnummer": 20,
+                                "TypAvStopp": "RUN_THROUGH",
+                                "Avstånd": 2020,
+                                "STH": 70,
+                                "Signatur": "OR",
+                                "LandsKod": 74,
+                                "Namn": "Olskroken"
+                            },
+                            {
+                                "AnkommandeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 55235,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "AvgåendeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 55235,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "Ankomst": "2022-04-19T10:31:56.000+02:00",
+                                "Avgång": "2022-04-19T10:31:56.000+02:00",
+                                "Platsspår": {
+                                    "ID": "71",
+                                    "Namn": "71"
+                                },
+                                "Ordningsnummer": 21,
+                                "TypAvStopp": "RUN_THROUGH",
+                                "Avstånd": 461,
+                                "STH": 70,
+                                "Signatur": "GSV",
+                                "LandsKod": 74,
+                                "Namn": "Göteborg Sävenäs"
+                            },
+                            {
+                                "Ordertext": [
+                                    {
+                                        "Ordningsnummer": 2,
+                                        "Kod": "UP",
+                                        "Text": "Traf.utb"
+                                    }
+                                ],
+                                "Avtalsplats": {
+                                    "Avtalat": {
+                                        "Ankomst": "2022-04-19T10:36:00.000+02:00",
+                                        "Avgång": "2022-04-19T10:36:00.000+02:00",
+                                        "Trafikaktivitet": [
+                                            {
+                                                "Kod": "UP"
+                                            }
+                                        ],
+                                        "Fordonsuppsättning": {
+                                            "TotalVagnsvikt": 0,
+                                            "TotalDrivfordonsvikt": 0,
+                                            "TotalVagnslängd": 18,
+                                            "TotalDrivfordonslängd": 0,
+                                            "STAXID": "A",
+                                            "Drivfordon": [
+                                                {
+                                                    "TypKod": "Z65"
+                                                }
+                                            ]
+                                        },
+                                        "Trafikutbytestid": "PT0S"
+                                    },
+                                    "AnsöktAnnonseratTågnummer": "55235",
+                                    "TågslagIDAnkomst": "TJT",
+                                    "TågslagIDAvgång": "TJT"
+                                },
+                                "AnkommandeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 55235,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "AvgåendeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 55235,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "Ankomst": "2022-04-19T10:36:00.000+02:00",
+                                "Avgång": "2022-04-19T10:36:00.000+02:00",
+                                "Platsspår": {
+                                    "ID": "111",
+                                    "Namn": "111"
+                                },
+                                "Ordningsnummer": 22,
+                                "TypAvStopp": "SCHEDULED_STOP",
+                                "Avstånd": 1952,
+                                "STH": 70,
+                                "Signatur": "SÄR",
+                                "LandsKod": 74,
+                                "Namn": "Sävenäs rangerbangård"
+                            }
+                        ],
+                        "Tåglägesvariant": {
+                            "Tågläge": 55235,
+                            "Variant": 1
+                        },
+                        "Tåglägesinnehavare": {
+                            "OrganisationID": "IFAB"
+                        },
+                        "Operatör": {
+                            "OperatörID": "IFAB"
+                        },
+                        "SenastÄndrad": "2022-04-22T11:08:16.747+02:00",
+                        "InternationellTrafik": false,
+                        "ModifiedTime": "2022-04-22T09:11:33.648Z",
+                        "Deleted": false
+                    },
+                    {
+                        "ID": {
+                            "Tågläge": 55686,
+                            "Utgångsdag": "2022-04-19"
+                        },
+                        "OperationalTransportIdentifiers": [
+                            {
+                                "ObjectType": "TR",
+                                "Company": "0027",
+                                "Core": "-------55686",
+                                "Variant": "00",
+                                "TimetableYear": 2022,
+                                "StartDate": "2022-04-19"
+                            },
+                            {
+                                "ObjectType": "PA",
+                                "Company": "9999",
+                                "Core": "-------55686",
+                                "Variant": "00",
+                                "TimetableYear": 2022,
+                                "StartDate": "2022-04-19"
+                            }
+                        ],
+                        "Färdplats": [
+                            {
+                                "Ordertext": [
+                                    {
+                                        "Ordningsnummer": 1,
+                                        "Kod": "UP",
+                                        "Text": "Traf.utb"
+                                    }
+                                ],
+                                "Avtalsplats": {
+                                    "Avtalat": {
+                                        "Ankomst": "2022-04-19T14:05:00.000+02:00",
+                                        "Avgång": "2022-04-19T14:05:00.000+02:00",
+                                        "Trafikaktivitet": [
+                                            {
+                                                "Kod": "UP"
+                                            }
+                                        ],
+                                        "Fordonsuppsättning": {
+                                            "TotalVagnsvikt": 32,
+                                            "TotalDrivfordonsvikt": 0,
+                                            "TotalVagnslängd": 12,
+                                            "TotalDrivfordonslängd": 0,
+                                            "STAXID": "B",
+                                            "Drivfordon": [
+                                                {
+                                                    "TypKod": "Z65"
+                                                }
+                                            ]
+                                        },
+                                        "Trafikutbytestid": "PT0S"
+                                    },
+                                    "AnsöktAnnonseratTågnummer": "55686",
+                                    "TågslagIDAnkomst": "TJT",
+                                    "TågslagIDAvgång": "TJT"
+                                },
+                                "AnkommandeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 55686,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "AvgåendeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 55686,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "Ankomst": "2022-04-19T14:05:00.000+02:00",
+                                "Avgång": "2022-04-19T14:05:00.000+02:00",
+                                "Platsspår": {
+                                    "ID": "3",
+                                    "Namn": "3"
+                                },
+                                "Inställd": {
+                                    "InställdAvgång": true,
+                                    "InställdAnkomst": true,
+                                    "Definitivt": true,
+                                    "AvvaktaAlternativ": false,
+                                    "OrsakId": "J",
+                                    "OrsakBeskrivning": "Järnvägsföretag"
+                                },
+                                "Ordningsnummer": 1,
+                                "TypAvStopp": "SCHEDULED_STOP",
+                                "Avstånd": 0,
+                                "STH": 70,
+                                "Signatur": "HÄB",
+                                "LandsKod": 74,
+                                "Namn": "Hämrasviken"
+                            },
+                            {
+                                "AnkommandeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 55686,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "AvgåendeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 55686,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "Ankomst": "2022-04-19T14:14:55.000+02:00",
+                                "Avgång": "2022-04-19T14:14:55.000+02:00",
+                                "Platsspår": {
+                                    "ID": "1",
+                                    "Namn": "1"
+                                },
+                                "Inställd": {
+                                    "InställdAvgång": true,
+                                    "InställdAnkomst": true,
+                                    "Definitivt": true,
+                                    "AvvaktaAlternativ": false,
+                                    "OrsakId": "J",
+                                    "OrsakBeskrivning": "Järnvägsföretag"
+                                },
+                                "Ordningsnummer": 2,
+                                "TypAvStopp": "RUN_THROUGH",
+                                "Avstånd": 9975,
+                                "STH": 70,
+                                "Signatur": "DÖE",
+                                "LandsKod": 74,
+                                "Namn": "Drömme"
+                            },
+                            {
+                                "AnkommandeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 55686,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "AvgåendeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 55686,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "Ankomst": "2022-04-19T14:25:57.000+02:00",
+                                "Avgång": "2022-04-19T14:25:57.000+02:00",
+                                "Platsspår": {
+                                    "ID": "2",
+                                    "Namn": "2"
+                                },
+                                "Inställd": {
+                                    "InställdAvgång": true,
+                                    "InställdAnkomst": true,
+                                    "Definitivt": true,
+                                    "AvvaktaAlternativ": false,
+                                    "OrsakId": "J",
+                                    "OrsakBeskrivning": "Järnvägsföretag"
+                                },
+                                "Ordningsnummer": 3,
+                                "TypAvStopp": "RUN_THROUGH",
+                                "Avstånd": 12485,
+                                "STH": 70,
+                                "Signatur": "BJA",
+                                "LandsKod": 74,
+                                "Namn": "Bjästa"
+                            },
+                            {
+                                "AnkommandeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 55686,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "AvgåendeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 55686,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "Ankomst": "2022-04-19T14:37:23.000+02:00",
+                                "Avgång": "2022-04-19T14:37:23.000+02:00",
+                                "Platsspår": {
+                                    "ID": "3",
+                                    "Namn": "3"
+                                },
+                                "Inställd": {
+                                    "InställdAvgång": true,
+                                    "InställdAnkomst": true,
+                                    "Definitivt": true,
+                                    "AvvaktaAlternativ": false,
+                                    "OrsakId": "J",
+                                    "OrsakBeskrivning": "Järnvägsföretag"
+                                },
+                                "Ordningsnummer": 4,
+                                "TypAvStopp": "RUN_THROUGH",
+                                "Avstånd": 12567,
+                                "STH": 70,
+                                "Signatur": "GÅN",
+                                "LandsKod": 74,
+                                "Namn": "Gålnäs"
+                            },
+                            {
+                                "AnkommandeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 55686,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "AvgåendeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 55686,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "Ankomst": "2022-04-19T14:42:37.000+02:00",
+                                "Avgång": "2022-04-19T14:42:37.000+02:00",
+                                "Platsspår": {
+                                    "ID": "11",
+                                    "Namn": "11"
+                                },
+                                "Inställd": {
+                                    "InställdAvgång": true,
+                                    "InställdAnkomst": true,
+                                    "Definitivt": true,
+                                    "AvvaktaAlternativ": false,
+                                    "OrsakId": "J",
+                                    "OrsakBeskrivning": "Järnvägsföretag"
+                                },
+                                "Ordningsnummer": 5,
+                                "TypAvStopp": "RUN_THROUGH",
+                                "Avstånd": 5922,
+                                "STH": 70,
+                                "Signatur": "ÖK",
+                                "LandsKod": 74,
+                                "Namn": "Örnsköldsviks central"
+                            },
+                            {
+                                "Ordertext": [
+                                    {
+                                        "Ordningsnummer": 2,
+                                        "Kod": "UP",
+                                        "Text": "Traf.utb"
+                                    }
+                                ],
+                                "Avtalsplats": {
+                                    "Avtalat": {
+                                        "Ankomst": "2022-04-19T14:46:00.000+02:00",
+                                        "Avgång": "2022-04-19T14:46:00.000+02:00",
+                                        "Trafikaktivitet": [
+                                            {
+                                                "Kod": "UP"
+                                            }
+                                        ],
+                                        "Fordonsuppsättning": {
+                                            "TotalVagnsvikt": 32,
+                                            "TotalDrivfordonsvikt": 0,
+                                            "TotalVagnslängd": 12,
+                                            "TotalDrivfordonslängd": 0,
+                                            "STAXID": "B",
+                                            "Drivfordon": [
+                                                {
+                                                    "TypKod": "Z65"
+                                                }
+                                            ]
+                                        },
+                                        "Trafikutbytestid": "PT0S"
+                                    },
+                                    "AnsöktAnnonseratTågnummer": "55686",
+                                    "TågslagIDAnkomst": "TJT",
+                                    "TågslagIDAvgång": "TJT"
+                                },
+                                "AnkommandeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 55686,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "AvgåendeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 55686,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "Ankomst": "2022-04-19T14:46:00.000+02:00",
+                                "Avgång": "2022-04-19T14:46:00.000+02:00",
+                                "Platsspår": {
+                                    "ID": "21",
+                                    "Namn": "21"
+                                },
+                                "Inställd": {
+                                    "InställdAvgång": true,
+                                    "InställdAnkomst": true,
+                                    "Definitivt": true,
+                                    "AvvaktaAlternativ": false,
+                                    "OrsakId": "J",
+                                    "OrsakBeskrivning": "Järnvägsföretag"
+                                },
+                                "Ordningsnummer": 6,
+                                "TypAvStopp": "SCHEDULED_STOP",
+                                "Avstånd": 2416,
+                                "STH": 70,
+                                "Signatur": "ÖKN",
+                                "LandsKod": 74,
+                                "Namn": "Örnsköldsvik norra"
+                            }
+                        ],
+                        "Tåglägesvariant": {
+                            "Tågläge": 55686,
+                            "Variant": 1
+                        },
+                        "Tåglägesinnehavare": {
+                            "OrganisationID": "IFAB"
+                        },
+                        "Operatör": {
+                            "OperatörID": "IFAB"
+                        },
+                        "Inställt": {
+                            "Definitivt": true,
+                            "AvvaktaAlternativ": false,
+                            "OrsakId": "J",
+                            "OrsakBeskrivning": "Järnvägsföretag"
+                        },
+                        "SenastÄndrad": "2022-04-22T11:08:16.750+02:00",
+                        "InternationellTrafik": false,
+                        "ModifiedTime": "2022-04-22T09:11:35.418Z",
+                        "Deleted": false
+                    },
+                    {
+                        "ID": {
+                            "Tågläge": 55772,
+                            "Utgångsdag": "2022-04-19"
+                        },
+                        "OperationalTransportIdentifiers": [
+                            {
+                                "ObjectType": "TR",
+                                "Company": "2295",
+                                "Core": "-------55772",
+                                "Variant": "00",
+                                "TimetableYear": 2022,
+                                "StartDate": "2022-04-19"
+                            },
+                            {
+                                "ObjectType": "PA",
+                                "Company": "9999",
+                                "Core": "-------55772",
+                                "Variant": "00",
+                                "TimetableYear": 2022,
+                                "StartDate": "2022-04-19"
+                            }
+                        ],
+                        "Färdplats": [
+                            {
+                                "Ordertext": [
+                                    {
+                                        "Ordningsnummer": 1,
+                                        "Kod": "UP",
+                                        "Text": "Traf.utb"
+                                    }
+                                ],
+                                "Avtalsplats": {
+                                    "Avtalat": {
+                                        "Ankomst": "2022-04-19T09:05:00.000+02:00",
+                                        "Avgång": "2022-04-19T09:05:00.000+02:00",
+                                        "Trafikaktivitet": [
+                                            {
+                                                "Kod": "UP"
+                                            }
+                                        ],
+                                        "Fordonsuppsättning": {
+                                            "TotalVagnsvikt": 0,
+                                            "TotalDrivfordonsvikt": 0,
+                                            "TotalVagnslängd": 17,
+                                            "TotalDrivfordonslängd": 0,
+                                            "HastighetskategoriID": "A",
+                                            "STAXID": "B",
+                                            "Drivfordon": [
+                                                {
+                                                    "TypKod": "ÖVR"
+                                                }
+                                            ]
+                                        },
+                                        "Trafikutbytestid": "PT0S"
+                                    },
+                                    "AnsöktAnnonseratTågnummer": "55772",
+                                    "TågslagIDAnkomst": "TJT",
+                                    "TågslagIDAvgång": "TJT"
+                                },
+                                "AnkommandeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 55772,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "AvgåendeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 55772,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "Ankomst": "2022-04-19T09:05:00.000+02:00",
+                                "Avgång": "2022-04-19T09:05:00.000+02:00",
+                                "Platsspår": {
+                                    "ID": "3",
+                                    "Namn": "3"
+                                },
+                                "Inställd": {
+                                    "InställdAvgång": true,
+                                    "InställdAnkomst": true,
+                                    "Definitivt": true,
+                                    "AvvaktaAlternativ": false,
+                                    "OrsakId": "J",
+                                    "OrsakBeskrivning": "Järnvägsföretag"
+                                },
+                                "Ordningsnummer": 1,
+                                "TypAvStopp": "SCHEDULED_STOP",
+                                "Avstånd": 0,
+                                "STH": 70,
+                                "Signatur": "SL",
+                                "LandsKod": 74,
+                                "Namn": "Sala"
+                            },
+                            {
+                                "AnkommandeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 55772,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "AvgåendeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 55772,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "Ankomst": "2022-04-19T09:13:56.000+02:00",
+                                "Avgång": "2022-04-19T09:13:56.000+02:00",
+                                "Platsspår": {
+                                    "ID": "1",
+                                    "Namn": "1"
+                                },
+                                "Inställd": {
+                                    "InställdAvgång": true,
+                                    "InställdAnkomst": true,
+                                    "Definitivt": true,
+                                    "AvvaktaAlternativ": false,
+                                    "OrsakId": "J",
+                                    "OrsakBeskrivning": "Järnvägsföretag"
+                                },
+                                "Ordningsnummer": 2,
+                                "TypAvStopp": "RUN_THROUGH",
+                                "Avstånd": 9997,
+                                "STH": 70,
+                                "Signatur": "BDO",
+                                "LandsKod": 74,
+                                "Namn": "Broddbo"
+                            },
+                            {
+                                "AnkommandeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 55772,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "AvgåendeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 55772,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "Ankomst": "2022-04-19T09:25:01.000+02:00",
+                                "Avgång": "2022-04-19T09:25:01.000+02:00",
+                                "Platsspår": {
+                                    "ID": "2",
+                                    "Namn": "2"
+                                },
+                                "Inställd": {
+                                    "InställdAvgång": true,
+                                    "InställdAnkomst": true,
+                                    "Definitivt": true,
+                                    "AvvaktaAlternativ": false,
+                                    "OrsakId": "J",
+                                    "OrsakBeskrivning": "Järnvägsföretag"
+                                },
+                                "Ordningsnummer": 3,
+                                "TypAvStopp": "RUN_THROUGH",
+                                "Avstånd": 11968,
+                                "STH": 70,
+                                "Signatur": "RY",
+                                "LandsKod": 74,
+                                "Namn": "Rosshyttan"
+                            },
+                            {
+                                "AnkommandeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 55772,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "AvgåendeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 55772,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "Ankomst": "2022-04-19T09:35:03.000+02:00",
+                                "Avgång": "2022-04-19T09:35:03.000+02:00",
+                                "Platsspår": {
+                                    "ID": "2",
+                                    "Namn": "2"
+                                },
+                                "Inställd": {
+                                    "InställdAvgång": true,
+                                    "InställdAnkomst": true,
+                                    "Definitivt": true,
+                                    "AvvaktaAlternativ": false,
+                                    "OrsakId": "J",
+                                    "OrsakBeskrivning": "Järnvägsföretag"
+                                },
+                                "Ordningsnummer": 4,
+                                "TypAvStopp": "RUN_THROUGH",
+                                "Avstånd": 10676,
+                                "STH": 70,
+                                "Signatur": "AVKY",
+                                "LandsKod": 74,
+                                "Namn": "Avesta Krylbo"
+                            },
+                            {
+                                "AnkommandeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 55772,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "AvgåendeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 55772,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "Ankomst": "2022-04-19T09:38:47.000+02:00",
+                                "Avgång": "2022-04-19T09:38:47.000+02:00",
+                                "Platsspår": {
+                                    "ID": "1",
+                                    "Namn": "1"
+                                },
+                                "Inställd": {
+                                    "InställdAvgång": true,
+                                    "InställdAnkomst": true,
+                                    "Definitivt": true,
+                                    "AvvaktaAlternativ": false,
+                                    "OrsakId": "J",
+                                    "OrsakBeskrivning": "Järnvägsföretag"
+                                },
+                                "Ordningsnummer": 5,
+                                "TypAvStopp": "RUN_THROUGH",
+                                "Avstånd": 4220,
+                                "STH": 70,
+                                "Signatur": "JU",
+                                "LandsKod": 74,
+                                "Namn": "Jularbo"
+                            },
+                            {
+                                "AnkommandeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 55772,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "AvgåendeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 55772,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "Ankomst": "2022-04-19T09:44:53.000+02:00",
+                                "Avgång": "2022-04-19T09:44:53.000+02:00",
+                                "Platsspår": {
+                                    "ID": "1",
+                                    "Namn": "1"
+                                },
+                                "Inställd": {
+                                    "InställdAvgång": true,
+                                    "InställdAnkomst": true,
+                                    "Definitivt": true,
+                                    "AvvaktaAlternativ": false,
+                                    "OrsakId": "J",
+                                    "OrsakBeskrivning": "Järnvägsföretag"
+                                },
+                                "Ordningsnummer": 6,
+                                "TypAvStopp": "RUN_THROUGH",
+                                "Avstånd": 6336,
+                                "STH": 70,
+                                "Signatur": "FS",
+                                "LandsKod": 74,
+                                "Namn": "Fors"
+                            },
+                            {
+                                "AnkommandeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 55772,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "AvgåendeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 55772,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "Ankomst": "2022-04-19T09:51:38.000+02:00",
+                                "Avgång": "2022-04-19T09:51:38.000+02:00",
+                                "Platsspår": {
+                                    "ID": "1",
+                                    "Namn": "1"
+                                },
+                                "Inställd": {
+                                    "InställdAvgång": true,
+                                    "InställdAnkomst": true,
+                                    "Definitivt": true,
+                                    "AvvaktaAlternativ": false,
+                                    "OrsakId": "J",
+                                    "OrsakBeskrivning": "Järnvägsföretag"
+                                },
+                                "Ordningsnummer": 7,
+                                "TypAvStopp": "RUN_THROUGH",
+                                "Avstånd": 7654,
+                                "STH": 70,
+                                "Signatur": "MRS",
+                                "LandsKod": 74,
+                                "Namn": "Morshyttan"
+                            },
+                            {
+                                "AnkommandeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 55772,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "AvgåendeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 55772,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "Ankomst": "2022-04-19T09:55:54.000+02:00",
+                                "Avgång": "2022-04-19T09:55:54.000+02:00",
+                                "Platsspår": {
+                                    "ID": "E",
+                                    "Namn": "E"
+                                },
+                                "Inställd": {
+                                    "InställdAvgång": true,
+                                    "InställdAnkomst": true,
+                                    "Definitivt": true,
+                                    "AvvaktaAlternativ": false,
+                                    "OrsakId": "J",
+                                    "OrsakBeskrivning": "Järnvägsföretag"
+                                },
+                                "Ordningsnummer": 8,
+                                "TypAvStopp": "RUN_THROUGH",
+                                "Avstånd": 4825,
+                                "STH": 70,
+                                "Signatur": "HLR",
+                                "LandsKod": 74,
+                                "Namn": "Horndals bruk"
+                            },
+                            {
+                                "AnkommandeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 55772,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "AvgåendeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 55772,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "Ankomst": "2022-04-19T09:57:15.000+02:00",
+                                "Avgång": "2022-04-19T09:57:15.000+02:00",
+                                "Platsspår": {
+                                    "ID": "1",
+                                    "Namn": "1"
+                                },
+                                "Inställd": {
+                                    "InställdAvgång": true,
+                                    "InställdAnkomst": true,
+                                    "Definitivt": true,
+                                    "AvvaktaAlternativ": false,
+                                    "OrsakId": "J",
+                                    "OrsakBeskrivning": "Järnvägsföretag"
+                                },
+                                "Ordningsnummer": 9,
+                                "TypAvStopp": "RUN_THROUGH",
+                                "Avstånd": 967,
+                                "STH": 70,
+                                "Signatur": "HL",
+                                "LandsKod": 74,
+                                "Namn": "Horndal"
+                            },
+                            {
+                                "AnkommandeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 55772,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "AvgåendeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 55772,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "Ankomst": "2022-04-19T10:01:57.000+02:00",
+                                "Avgång": "2022-04-19T10:01:57.000+02:00",
+                                "Platsspår": {
+                                    "ID": "1",
+                                    "Namn": "1"
+                                },
+                                "Inställd": {
+                                    "InställdAvgång": true,
+                                    "InställdAnkomst": true,
+                                    "Definitivt": true,
+                                    "AvvaktaAlternativ": false,
+                                    "OrsakId": "J",
+                                    "OrsakBeskrivning": "Järnvägsföretag"
+                                },
+                                "Ordningsnummer": 10,
+                                "TypAvStopp": "RUN_THROUGH",
+                                "Avstånd": 5321,
+                                "STH": 70,
+                                "Signatur": "BY",
+                                "LandsKod": 74,
+                                "Namn": "Byvalla"
+                            },
+                            {
+                                "AnkommandeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 55772,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "AvgåendeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 55772,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "Ankomst": "2022-04-19T10:05:36.000+02:00",
+                                "Avgång": "2022-04-19T10:05:36.000+02:00",
+                                "Platsspår": {
+                                    "ID": "3",
+                                    "Namn": "3"
+                                },
+                                "Inställd": {
+                                    "InställdAvgång": true,
+                                    "InställdAnkomst": true,
+                                    "Definitivt": true,
+                                    "AvvaktaAlternativ": false,
+                                    "OrsakId": "J",
+                                    "OrsakBeskrivning": "Järnvägsföretag"
+                                },
+                                "Ordningsnummer": 11,
+                                "TypAvStopp": "RUN_THROUGH",
+                                "Avstånd": 4124,
+                                "STH": 70,
+                                "Signatur": "DGN",
+                                "LandsKod": 74,
+                                "Namn": "Dalgränsen"
+                            },
+                            {
+                                "AnkommandeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 55772,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "AvgåendeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 55772,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "Ankomst": "2022-04-19T10:12:16.000+02:00",
+                                "Avgång": "2022-04-19T10:12:16.000+02:00",
+                                "Platsspår": {
+                                    "ID": "2",
+                                    "Namn": "2"
+                                },
+                                "Inställd": {
+                                    "InställdAvgång": true,
+                                    "InställdAnkomst": true,
+                                    "Definitivt": true,
+                                    "AvvaktaAlternativ": false,
+                                    "OrsakId": "J",
+                                    "OrsakBeskrivning": "Järnvägsföretag"
+                                },
+                                "Ordningsnummer": 12,
+                                "TypAvStopp": "RUN_THROUGH",
+                                "Avstånd": 7557,
+                                "STH": 70,
+                                "Signatur": "HÄ",
+                                "LandsKod": 74,
+                                "Namn": "Hästbo"
+                            },
+                            {
+                                "AnkommandeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 55772,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "AvgåendeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 55772,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "Ankomst": "2022-04-19T10:19:29.000+02:00",
+                                "Avgång": "2022-04-19T10:19:29.000+02:00",
+                                "Platsspår": {
+                                    "ID": "1",
+                                    "Namn": "1"
+                                },
+                                "Inställd": {
+                                    "InställdAvgång": true,
+                                    "InställdAnkomst": true,
+                                    "Definitivt": true,
+                                    "AvvaktaAlternativ": false,
+                                    "OrsakId": "J",
+                                    "OrsakBeskrivning": "Järnvägsföretag"
+                                },
+                                "Ordningsnummer": 13,
+                                "TypAvStopp": "RUN_THROUGH",
+                                "Avstånd": 7616,
+                                "STH": 70,
+                                "Signatur": "TSÅ",
+                                "LandsKod": 74,
+                                "Namn": "Torsåker"
+                            },
+                            {
+                                "AnkommandeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 55772,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "AvgåendeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 55772,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "Ankomst": "2022-04-19T10:27:20.000+02:00",
+                                "Avgång": "2022-04-19T10:27:20.000+02:00",
+                                "Platsspår": {
+                                    "ID": "5",
+                                    "Namn": "5"
+                                },
+                                "Inställd": {
+                                    "InställdAvgång": true,
+                                    "InställdAnkomst": true,
+                                    "Definitivt": true,
+                                    "AvvaktaAlternativ": false,
+                                    "OrsakId": "J",
+                                    "OrsakBeskrivning": "Järnvägsföretag"
+                                },
+                                "Ordningsnummer": 14,
+                                "TypAvStopp": "RUN_THROUGH",
+                                "Avstånd": 8862,
+                                "STH": 70,
+                                "Signatur": "SV",
+                                "LandsKod": 74,
+                                "Namn": "Storvik"
+                            },
+                            {
+                                "AnkommandeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 55772,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "AvgåendeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 55772,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "Ankomst": "2022-04-19T10:33:31.000+02:00",
+                                "Avgång": "2022-04-19T10:45:31.000+02:00",
+                                "Platsspår": {
+                                    "ID": "1",
+                                    "Namn": "1"
+                                },
+                                "Inställd": {
+                                    "InställdAvgång": true,
+                                    "InställdAnkomst": true,
+                                    "Definitivt": true,
+                                    "AvvaktaAlternativ": false,
+                                    "OrsakId": "J",
+                                    "OrsakBeskrivning": "Järnvägsföretag"
+                                },
+                                "Ordningsnummer": 15,
+                                "TypAvStopp": "SCHEDULED_STOP",
+                                "Avstånd": 5842,
+                                "STH": 70,
+                                "Signatur": "KGD",
+                                "LandsKod": 74,
+                                "Namn": "Kungsgården"
+                            },
+                            {
+                                "AnkommandeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 55772,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "AvgåendeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 55772,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "Ankomst": "2022-04-19T10:49:24.000+02:00",
+                                "Avgång": "2022-04-19T10:49:24.000+02:00",
+                                "Platsspår": {
+                                    "ID": "0",
+                                    "Namn": "0"
+                                },
+                                "Inställd": {
+                                    "InställdAvgång": true,
+                                    "InställdAnkomst": true,
+                                    "Definitivt": true,
+                                    "AvvaktaAlternativ": false,
+                                    "OrsakId": "J",
+                                    "OrsakBeskrivning": "Järnvägsföretag"
+                                },
+                                "Ordningsnummer": 16,
+                                "TypAvStopp": "RUN_THROUGH",
+                                "Avstånd": 4279,
+                                "STH": 70,
+                                "Signatur": "VMU",
+                                "LandsKod": 74,
+                                "Namn": "Villersmuren"
+                            },
+                            {
+                                "AnkommandeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 55772,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "AvgåendeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 55772,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "Ankomst": "2022-04-19T10:53:58.000+02:00",
+                                "Avgång": "2022-04-19T11:20:58.000+02:00",
+                                "Platsspår": {
+                                    "ID": "2",
+                                    "Namn": "2"
+                                },
+                                "Inställd": {
+                                    "InställdAvgång": true,
+                                    "InställdAnkomst": true,
+                                    "Definitivt": true,
+                                    "AvvaktaAlternativ": false,
+                                    "OrsakId": "J",
+                                    "OrsakBeskrivning": "Järnvägsföretag"
+                                },
+                                "Ordningsnummer": 17,
+                                "TypAvStopp": "SCHEDULED_STOP",
+                                "Avstånd": 4558,
+                                "STH": 70,
+                                "Signatur": "SNV",
+                                "LandsKod": 74,
+                                "Namn": "Sandviken"
+                            },
+                            {
+                                "AnkommandeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 55772,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "AvgåendeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 55772,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "Ankomst": "2022-04-19T11:28:07.000+02:00",
+                                "Avgång": "2022-04-19T11:33:07.000+02:00",
+                                "Platsspår": {
+                                    "ID": "4",
+                                    "Namn": "4"
+                                },
+                                "Inställd": {
+                                    "InställdAvgång": true,
+                                    "InställdAnkomst": true,
+                                    "Definitivt": true,
+                                    "AvvaktaAlternativ": false,
+                                    "OrsakId": "J",
+                                    "OrsakBeskrivning": "Järnvägsföretag"
+                                },
+                                "Ordningsnummer": 18,
+                                "TypAvStopp": "SCHEDULED_STOP",
+                                "Avstånd": 6826,
+                                "STH": 70,
+                                "Signatur": "FB",
+                                "LandsKod": 74,
+                                "Namn": "Forsbacka"
+                            },
+                            {
+                                "Ordertext": [
+                                    {
+                                        "Ordningsnummer": 2,
+                                        "Kod": "UP",
+                                        "Text": "Traf.utb"
+                                    }
+                                ],
+                                "Avtalsplats": {
+                                    "Avtalat": {
+                                        "Ankomst": "2022-04-19T11:41:00.000+02:00",
+                                        "Avgång": "2022-04-19T11:41:00.000+02:00",
+                                        "Trafikaktivitet": [
+                                            {
+                                                "Kod": "UP"
+                                            }
+                                        ],
+                                        "Fordonsuppsättning": {
+                                            "TotalVagnsvikt": 0,
+                                            "TotalDrivfordonsvikt": 0,
+                                            "TotalVagnslängd": 17,
+                                            "TotalDrivfordonslängd": 0,
+                                            "HastighetskategoriID": "A",
+                                            "STAXID": "B",
+                                            "Drivfordon": [
+                                                {
+                                                    "TypKod": "ÖVR"
+                                                }
+                                            ]
+                                        },
+                                        "Trafikutbytestid": "PT0S"
+                                    },
+                                    "AnsöktAnnonseratTågnummer": "55772",
+                                    "TågslagIDAnkomst": "TJT",
+                                    "TågslagIDAvgång": "TJT"
+                                },
+                                "AnkommandeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 55772,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "AvgåendeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 55772,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "Ankomst": "2022-04-19T11:41:00.000+02:00",
+                                "Avgång": "2022-04-19T11:41:00.000+02:00",
+                                "Platsspår": {
+                                    "ID": "1",
+                                    "Namn": "1"
+                                },
+                                "Inställd": {
+                                    "InställdAvgång": true,
+                                    "InställdAnkomst": true,
+                                    "Definitivt": true,
+                                    "AvvaktaAlternativ": false,
+                                    "OrsakId": "J",
+                                    "OrsakBeskrivning": "Järnvägsföretag"
+                                },
+                                "Ordningsnummer": 19,
+                                "TypAvStopp": "SCHEDULED_STOP",
+                                "Avstånd": 7307,
+                                "STH": 70,
+                                "Signatur": "NVL",
+                                "LandsKod": 74,
+                                "Namn": "Norra Valbo"
+                            }
+                        ],
+                        "Tåglägesvariant": {
+                            "Tågläge": 55772,
+                            "Variant": 1
+                        },
+                        "Tåglägesinnehavare": {
+                            "OrganisationID": "STR"
+                        },
+                        "Operatör": {
+                            "OperatörID": "STR"
+                        },
+                        "Inställt": {
+                            "Definitivt": true,
+                            "AvvaktaAlternativ": false,
+                            "OrsakId": "J",
+                            "OrsakBeskrivning": "Järnvägsföretag"
+                        },
+                        "SenastÄndrad": "2022-04-22T11:08:16.751+02:00",
+                        "InternationellTrafik": false,
+                        "ModifiedTime": "2022-04-22T09:11:35.913Z",
+                        "Deleted": false
+                    },
+                    {
+                        "ID": {
+                            "Tågläge": 71032,
+                            "Utgångsdag": "2022-04-19"
+                        },
+                        "OperationalTransportIdentifiers": [
+                            {
+                                "ObjectType": "TR",
+                                "Company": "0027",
+                                "Core": "-------71032",
+                                "Variant": "00",
+                                "TimetableYear": 2022,
+                                "StartDate": "2022-04-19"
+                            },
+                            {
+                                "ObjectType": "PA",
+                                "Company": "9999",
+                                "Core": "-------71032",
+                                "Variant": "00",
+                                "TimetableYear": 2022,
+                                "StartDate": "2022-04-19"
+                            }
+                        ],
+                        "Färdplats": [
+                            {
+                                "Ordertext": [
+                                    {
+                                        "Ordningsnummer": 1,
+                                        "Kod": "UP",
+                                        "Text": "Traf.utb"
+                                    }
+                                ],
+                                "Avtalsplats": {
+                                    "Avtalat": {
+                                        "Ankomst": "2022-04-19T08:48:00.000+02:00",
+                                        "Avgång": "2022-04-19T08:48:00.000+02:00",
+                                        "Trafikaktivitet": [
+                                            {
+                                                "Kod": "UP"
+                                            }
+                                        ],
+                                        "Fordonsuppsättning": {
+                                            "TotalVagnsvikt": 26,
+                                            "TotalDrivfordonsvikt": 0,
+                                            "TotalVagnslängd": 15,
+                                            "TotalDrivfordonslängd": 0,
+                                            "STAXID": "A",
+                                            "Drivfordon": [
+                                                {
+                                                    "TypKod": "Y1TW"
+                                                }
+                                            ]
+                                        },
+                                        "Trafikutbytestid": "PT0S"
+                                    },
+                                    "AnsöktAnnonseratTågnummer": "71032",
+                                    "TågslagIDAnkomst": "TJT",
+                                    "TågslagIDAvgång": "TJT"
+                                },
+                                "AnkommandeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 71032,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "AvgåendeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 71032,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "Ankomst": "2022-04-19T08:48:00.000+02:00",
+                                "Avgång": "2022-04-19T08:48:00.000+02:00",
+                                "Platsspår": {
+                                    "ID": "0",
+                                    "Namn": "0"
+                                },
+                                "Ordningsnummer": 1,
+                                "TypAvStopp": "SCHEDULED_STOP",
+                                "Avstånd": 0,
+                                "STH": 70,
+                                "Signatur": "BLG",
+                                "LandsKod": 74,
+                                "Namn": "BLG"
+                            },
+                            {
+                                "AnkommandeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 71032,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "AvgåendeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 71032,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "Ankomst": "2022-04-19T08:50:37.000+02:00",
+                                "Avgång": "2022-04-19T08:50:37.000+02:00",
+                                "Platsspår": {
+                                    "ID": "0",
+                                    "Namn": "0"
+                                },
+                                "Ordningsnummer": 2,
+                                "TypAvStopp": "RUN_THROUGH",
+                                "Avstånd": 1604,
+                                "STH": 70,
+                                "Signatur": "DMN",
+                                "LandsKod": 74,
+                                "Namn": "Domnarvet"
+                            },
+                            {
+                                "AnkommandeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 71032,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "AvgåendeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 71032,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "Ankomst": "2022-04-19T08:56:43.000+02:00",
+                                "Avgång": "2022-04-19T08:56:43.000+02:00",
+                                "Platsspår": {
+                                    "ID": "1",
+                                    "Namn": "1"
+                                },
+                                "Ordningsnummer": 3,
+                                "TypAvStopp": "RUN_THROUGH",
+                                "Avstånd": 5447,
+                                "STH": 70,
+                                "Signatur": "ORN",
+                                "LandsKod": 74,
+                                "Namn": "Ornäs"
+                            },
+                            {
+                                "AnkommandeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 71032,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "AvgåendeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 71032,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "Ankomst": "2022-04-19T09:06:26.000+02:00",
+                                "Avgång": "2022-04-19T09:06:26.000+02:00",
+                                "Platsspår": {
+                                    "ID": "1",
+                                    "Namn": "1"
+                                },
+                                "Ordningsnummer": 4,
+                                "TypAvStopp": "RUN_THROUGH",
+                                "Avstånd": 8537,
+                                "STH": 70,
+                                "Signatur": "HNO",
+                                "LandsKod": 74,
+                                "Namn": "Hinsnoret"
+                            },
+                            {
+                                "AnkommandeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 71032,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "AvgåendeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 71032,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "Ankomst": "2022-04-19T09:16:03.000+02:00",
+                                "Avgång": "2022-04-19T09:30:03.000+02:00",
+                                "Platsspår": {
+                                    "ID": "3",
+                                    "Namn": "3"
+                                },
+                                "Ordningsnummer": 5,
+                                "TypAvStopp": "SCHEDULED_STOP",
+                                "Avstånd": 8231,
+                                "STH": 70,
+                                "Signatur": "FLN",
+                                "LandsKod": 74,
+                                "Namn": "Falun central"
+                            },
+                            {
+                                "AnkommandeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 71032,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "AvgåendeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 71032,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "Ankomst": "2022-04-19T09:35:58.000+02:00",
+                                "Avgång": "2022-04-19T09:35:58.000+02:00",
+                                "Platsspår": {
+                                    "ID": "1",
+                                    "Namn": "1"
+                                },
+                                "Ordningsnummer": 6,
+                                "TypAvStopp": "RUN_THROUGH",
+                                "Avstånd": 4544,
+                                "STH": 70,
+                                "Signatur": "KOÄ",
+                                "LandsKod": 74,
+                                "Namn": "Korsnäs"
+                            },
+                            {
+                                "AnkommandeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 71032,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "AvgåendeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 71032,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "Ankomst": "2022-04-19T09:51:09.000+02:00",
+                                "Avgång": "2022-04-19T09:51:09.000+02:00",
+                                "Platsspår": {
+                                    "ID": "3",
+                                    "Namn": "3"
+                                },
+                                "Ordningsnummer": 7,
+                                "TypAvStopp": "RUN_THROUGH",
+                                "Avstånd": 13269,
+                                "STH": 70,
+                                "Signatur": "RYG",
+                                "LandsKod": 74,
+                                "Namn": "Ryggen"
+                            },
+                            {
+                                "AnkommandeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 71032,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "AvgåendeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 71032,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "Ankomst": "2022-04-19T10:00:02.000+02:00",
+                                "Avgång": "2022-04-19T10:10:02.000+02:00",
+                                "Platsspår": {
+                                    "ID": "3",
+                                    "Namn": "3"
+                                },
+                                "Ordningsnummer": 8,
+                                "TypAvStopp": "SCHEDULED_STOP",
+                                "Avstånd": 8302,
+                                "STH": 70,
+                                "Signatur": "LSJ",
+                                "LandsKod": 74,
+                                "Namn": "Långsjön"
+                            },
+                            {
+                                "Ordertext": [
+                                    {
+                                        "Ordningsnummer": 2,
+                                        "Kod": "?",
+                                        "Text": "Genomfartståg"
+                                    }
+                                ],
+                                "Avtalsplats": {
+                                    "Avtalat": {
+                                        "Ankomst": "2022-04-19T10:22:18.000+02:00",
+                                        "Avgång": "2022-04-19T11:04:00.000+02:00",
+                                        "Trafikaktivitet": [
+                                            {
+                                                "Kod": "?"
+                                            }
+                                        ],
+                                        "Fordonsuppsättning": {
+                                            "TotalVagnsvikt": 26,
+                                            "TotalDrivfordonsvikt": 0,
+                                            "TotalVagnslängd": 15,
+                                            "TotalDrivfordonslängd": 0,
+                                            "STAXID": "A",
+                                            "Drivfordon": [
+                                                {
+                                                    "TypKod": "Y1TW"
+                                                }
+                                            ]
+                                        },
+                                        "Trafikutbytestid": "PT2502S"
+                                    },
+                                    "AnsöktAnnonseratTågnummer": "71032",
+                                    "TågslagIDAnkomst": "TJT",
+                                    "TågslagIDAvgång": "TJT"
+                                },
+                                "AnkommandeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 71032,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "AvgåendeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 71032,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "Ankomst": "2022-04-19T10:22:18.000+02:00",
+                                "Avgång": "2022-04-19T11:04:00.000+02:00",
+                                "Platsspår": {
+                                    "ID": "2",
+                                    "Namn": "2"
+                                },
+                                "Ordningsnummer": 9,
+                                "TypAvStopp": "SCHEDULED_STOP",
+                                "Avstånd": 10463,
+                                "STH": 70,
+                                "Signatur": "HFR",
+                                "LandsKod": 74,
+                                "Namn": "Hofors"
+                            },
+                            {
+                                "AnkommandeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 71032,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "AvgåendeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 71032,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "Ankomst": "2022-04-19T11:11:53.000+02:00",
+                                "Avgång": "2022-04-19T11:11:53.000+02:00",
+                                "Platsspår": {
+                                    "ID": "2",
+                                    "Namn": "2"
+                                },
+                                "Ordningsnummer": 10,
+                                "TypAvStopp": "RUN_THROUGH",
+                                "Avstånd": 6458,
+                                "STH": 70,
+                                "Signatur": "GAD",
+                                "LandsKod": 74,
+                                "Namn": "Granstanda"
+                            },
+                            {
+                                "AnkommandeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 71032,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "AvgåendeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 71032,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "Ankomst": "2022-04-19T11:21:37.000+02:00",
+                                "Avgång": "2022-04-19T11:21:37.000+02:00",
+                                "Platsspår": {
+                                    "ID": "5",
+                                    "Namn": "5"
+                                },
+                                "Ordningsnummer": 11,
+                                "TypAvStopp": "RUN_THROUGH",
+                                "Avstånd": 10380,
+                                "STH": 70,
+                                "Signatur": "SV",
+                                "LandsKod": 74,
+                                "Namn": "Storvik"
+                            },
+                            {
+                                "AnkommandeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 71032,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "AvgåendeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 71032,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "Ankomst": "2022-04-19T11:30:24.000+02:00",
+                                "Avgång": "2022-04-19T11:30:24.000+02:00",
+                                "Platsspår": {
+                                    "ID": "3",
+                                    "Namn": "3"
+                                },
+                                "Ordningsnummer": 12,
+                                "TypAvStopp": "RUN_THROUGH",
+                                "Avstånd": 7651,
+                                "STH": 70,
+                                "Signatur": "ÅH",
+                                "LandsKod": 74,
+                                "Namn": "Åshammar"
+                            },
+                            {
+                                "AnkommandeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 71032,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "AvgåendeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 71032,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "Ankomst": "2022-04-19T11:40:21.000+02:00",
+                                "Avgång": "2022-04-19T11:40:21.000+02:00",
+                                "Platsspår": {
+                                    "ID": "1",
+                                    "Namn": "1"
+                                },
+                                "Ordningsnummer": 13,
+                                "TypAvStopp": "RUN_THROUGH",
+                                "Avstånd": 8698,
+                                "STH": 70,
+                                "Signatur": "JB",
+                                "LandsKod": 74,
+                                "Namn": "Järbo"
+                            },
+                            {
+                                "AnkommandeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 71032,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "AvgåendeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 71032,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "Ankomst": "2022-04-19T11:52:01.000+02:00",
+                                "Avgång": "2022-04-19T11:52:01.000+02:00",
+                                "Platsspår": {
+                                    "ID": "2",
+                                    "Namn": "2"
+                                },
+                                "Ordningsnummer": 14,
+                                "TypAvStopp": "RUN_THROUGH",
+                                "Avstånd": 10335,
+                                "STH": 70,
+                                "Signatur": "MSN",
+                                "LandsKod": 74,
+                                "Namn": "Medskogsheden"
+                            },
+                            {
+                                "AnkommandeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 71032,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "AvgåendeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 71032,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "Ankomst": "2022-04-19T12:04:45.000+02:00",
+                                "Avgång": "2022-04-19T12:04:45.000+02:00",
+                                "Platsspår": {
+                                    "ID": "3",
+                                    "Namn": "3"
+                                },
+                                "Ordningsnummer": 15,
+                                "TypAvStopp": "RUN_THROUGH",
+                                "Avstånd": 11729,
+                                "STH": 70,
+                                "Signatur": "OB",
+                                "LandsKod": 74,
+                                "Namn": "Ockelbo"
+                            },
+                            {
+                                "AnkommandeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 71032,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "AvgåendeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 71032,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "Ankomst": "2022-04-19T12:12:11.000+02:00",
+                                "Avgång": "2022-04-19T12:12:11.000+02:00",
+                                "Platsspår": {
+                                    "ID": "0",
+                                    "Namn": "0"
+                                },
+                                "Ordningsnummer": 16,
+                                "TypAvStopp": "RUN_THROUGH",
+                                "Avstånd": 6027,
+                                "STH": 70,
+                                "Signatur": "MOG",
+                                "LandsKod": 74,
+                                "Namn": "Mo grindar"
+                            },
+                            {
+                                "AnkommandeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 71032,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "AvgåendeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 71032,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "Ankomst": "2022-04-19T12:20:02.000+02:00",
+                                "Avgång": "2022-04-19T12:20:02.000+02:00",
+                                "Platsspår": {
+                                    "ID": "4",
+                                    "Namn": "4"
+                                },
+                                "Ordningsnummer": 17,
+                                "TypAvStopp": "RUN_THROUGH",
+                                "Avstånd": 6909,
+                                "STH": 70,
+                                "Signatur": "DÖL",
+                                "LandsKod": 74,
+                                "Namn": "Döljebro"
+                            },
+                            {
+                                "AnkommandeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 71032,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "AvgåendeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 71032,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "Ankomst": "2022-04-19T12:24:33.000+02:00",
+                                "Avgång": "2022-04-19T12:24:33.000+02:00",
+                                "Platsspår": {
+                                    "ID": "U",
+                                    "Namn": "U"
+                                },
+                                "Ordningsnummer": 18,
+                                "TypAvStopp": "RUN_THROUGH",
+                                "Avstånd": 4738,
+                                "STH": 70,
+                                "Signatur": "LB",
+                                "LandsKod": 74,
+                                "Namn": "Lingbo"
+                            },
+                            {
+                                "AnkommandeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 71032,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "AvgåendeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 71032,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "Ankomst": "2022-04-19T12:34:42.000+02:00",
+                                "Avgång": "2022-04-19T12:43:42.000+02:00",
+                                "Platsspår": {
+                                    "ID": "2",
+                                    "Namn": "2"
+                                },
+                                "Ordningsnummer": 19,
+                                "TypAvStopp": "SCHEDULED_STOP",
+                                "Avstånd": 9524,
+                                "STH": 70,
+                                "Signatur": "HDN",
+                                "LandsKod": 74,
+                                "Namn": "Holmsveden"
+                            },
+                            {
+                                "AnkommandeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 71032,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "AvgåendeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 71032,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "Ankomst": "2022-04-19T12:50:47.000+02:00",
+                                "Avgång": "2022-04-19T12:50:47.000+02:00",
+                                "Platsspår": {
+                                    "ID": "3",
+                                    "Namn": "3"
+                                },
+                                "Ordningsnummer": 20,
+                                "TypAvStopp": "RUN_THROUGH",
+                                "Avstånd": 6123,
+                                "STH": 70,
+                                "Signatur": "RBO",
+                                "LandsKod": 74,
+                                "Namn": "Röstbo"
+                            },
+                            {
+                                "AnkommandeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 71032,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "AvgåendeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 71032,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "Ankomst": "2022-04-19T13:00:19.000+02:00",
+                                "Avgång": "2022-04-19T13:00:19.000+02:00",
+                                "Platsspår": {
+                                    "ID": "2",
+                                    "Namn": "2"
+                                },
+                                "Ordningsnummer": 21,
+                                "TypAvStopp": "RUN_THROUGH",
+                                "Avstånd": 9615,
+                                "STH": 70,
+                                "Signatur": "KLS",
+                                "LandsKod": 74,
+                                "Namn": "Kilafors"
+                            },
+                            {
+                                "AnkommandeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 71032,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "AvgåendeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 71032,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "Ankomst": "2022-04-19T13:19:58.000+02:00",
+                                "Avgång": "2022-04-19T13:19:58.000+02:00",
+                                "Platsspår": {
+                                    "ID": "3",
+                                    "Namn": "3"
+                                },
+                                "Ordningsnummer": 22,
+                                "TypAvStopp": "RUN_THROUGH",
+                                "Avstånd": 17030,
+                                "STH": 70,
+                                "Signatur": "BN",
+                                "LandsKod": 74,
+                                "Namn": "Bollnäs"
+                            },
+                            {
+                                "AnkommandeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 71032,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "AvgåendeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 71032,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "Ankomst": "2022-04-19T13:29:42.000+02:00",
+                                "Avgång": "2022-04-19T13:29:42.000+02:00",
+                                "Platsspår": {
+                                    "ID": "3",
+                                    "Namn": "3"
+                                },
+                                "Ordningsnummer": 23,
+                                "TypAvStopp": "RUN_THROUGH",
+                                "Avstånd": 8447,
+                                "STH": 70,
+                                "Signatur": "LOT",
+                                "LandsKod": 74,
+                                "Namn": "Lottefors"
+                            },
+                            {
+                                "AnkommandeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 71032,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "AvgåendeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 71032,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "Ankomst": "2022-04-19T13:36:33.000+02:00",
+                                "Avgång": "2022-04-19T13:36:33.000+02:00",
+                                "Platsspår": {
+                                    "ID": "1",
+                                    "Namn": "1"
+                                },
+                                "Ordningsnummer": 24,
+                                "TypAvStopp": "RUN_THROUGH",
+                                "Avstånd": 5961,
+                                "STH": 70,
+                                "Signatur": "AB",
+                                "LandsKod": 74,
+                                "Namn": "Arbrå"
+                            },
+                            {
+                                "AnkommandeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 71032,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "AvgåendeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 71032,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "Ankomst": "2022-04-19T13:43:18.000+02:00",
+                                "Avgång": "2022-04-19T13:43:18.000+02:00",
+                                "Platsspår": {
+                                    "ID": "1",
+                                    "Namn": "1"
+                                },
+                                "Ordningsnummer": 25,
+                                "TypAvStopp": "RUN_THROUGH",
+                                "Avstånd": 5891,
+                                "STH": 70,
+                                "Signatur": "VL",
+                                "LandsKod": 74,
+                                "Namn": "Vallsta"
+                            },
+                            {
+                                "AnkommandeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 71032,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "AvgåendeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 71032,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "Ankomst": "2022-04-19T13:49:53.000+02:00",
+                                "Avgång": "2022-04-19T13:49:53.000+02:00",
+                                "Platsspår": {
+                                    "ID": "3",
+                                    "Namn": "3"
+                                },
+                                "Ordningsnummer": 26,
+                                "TypAvStopp": "RUN_THROUGH",
+                                "Avstånd": 6260,
+                                "STH": 70,
+                                "Signatur": "SMÅ",
+                                "LandsKod": 74,
+                                "Namn": "Simeå"
+                            },
+                            {
+                                "AnkommandeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 71032,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "AvgåendeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 71032,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "Ankomst": "2022-04-19T14:00:07.000+02:00",
+                                "Avgång": "2022-04-19T14:12:07.000+02:00",
+                                "Platsspår": {
+                                    "ID": "2",
+                                    "Namn": "2"
+                                },
+                                "Ordningsnummer": 27,
+                                "TypAvStopp": "SCHEDULED_STOP",
+                                "Avstånd": 9155,
+                                "STH": 70,
+                                "Signatur": "KSÖ",
+                                "LandsKod": 74,
+                                "Namn": "Karsjö"
+                            },
+                            {
+                                "AnkommandeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 71032,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "AvgåendeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 71032,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "Ankomst": "2022-04-19T14:18:44.000+02:00",
+                                "Avgång": "2022-04-19T14:33:44.000+02:00",
+                                "Platsspår": {
+                                    "ID": "1",
+                                    "Namn": "1"
+                                },
+                                "Ordningsnummer": 28,
+                                "TypAvStopp": "SCHEDULED_STOP",
+                                "Avstånd": 5434,
+                                "STH": 70,
+                                "Signatur": "LÖ",
+                                "LandsKod": 74,
+                                "Namn": "Lörstrand"
+                            },
+                            {
+                                "Ordertext": [
+                                    {
+                                        "Ordningsnummer": 3,
+                                        "Kod": "?",
+                                        "Text": "Genomfartståg"
+                                    }
+                                ],
+                                "Avtalsplats": {
+                                    "Avtalat": {
+                                        "Ankomst": "2022-04-19T14:41:50.000+02:00",
+                                        "Avgång": "2022-04-19T14:50:00.000+02:00",
+                                        "Trafikaktivitet": [
+                                            {
+                                                "Kod": "?"
+                                            }
+                                        ],
+                                        "Fordonsuppsättning": {
+                                            "TotalVagnsvikt": 26,
+                                            "TotalDrivfordonsvikt": 0,
+                                            "TotalVagnslängd": 15,
+                                            "TotalDrivfordonslängd": 0,
+                                            "STAXID": "A",
+                                            "Drivfordon": [
+                                                {
+                                                    "TypKod": "Y1TW"
+                                                }
+                                            ]
+                                        },
+                                        "Trafikutbytestid": "PT490S"
+                                    },
+                                    "AnsöktAnnonseratTågnummer": "71032",
+                                    "TågslagIDAnkomst": "TJT",
+                                    "TågslagIDAvgång": "TJT"
+                                },
+                                "AnkommandeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 71032,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "AvgåendeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 71032,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "Ankomst": "2022-04-19T14:41:50.000+02:00",
+                                "Avgång": "2022-04-19T14:50:00.000+02:00",
+                                "Platsspår": {
+                                    "ID": "1",
+                                    "Namn": "1"
+                                },
+                                "Ordningsnummer": 29,
+                                "TypAvStopp": "SCHEDULED_STOP",
+                                "Avstånd": 6687,
+                                "STH": 70,
+                                "Signatur": "JR",
+                                "LandsKod": 74,
+                                "Namn": "Järvsö"
+                            },
+                            {
+                                "AnkommandeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 71032,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "AvgåendeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 71032,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "Ankomst": "2022-04-19T14:54:21.000+02:00",
+                                "Avgång": "2022-04-19T14:54:21.000+02:00",
+                                "Platsspår": {
+                                    "ID": "1",
+                                    "Namn": "1"
+                                },
+                                "Ordningsnummer": 30,
+                                "TypAvStopp": "RUN_THROUGH",
+                                "Avstånd": 3820,
+                                "STH": 70,
+                                "Signatur": "SKÄ",
+                                "LandsKod": 74,
+                                "Namn": "Skästra"
+                            },
+                            {
+                                "AnkommandeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 71032,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "AvgåendeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 71032,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "Ankomst": "2022-04-19T15:06:45.000+02:00",
+                                "Avgång": "2022-04-19T15:20:45.000+02:00",
+                                "Platsspår": {
+                                    "ID": "3",
+                                    "Namn": "3"
+                                },
+                                "Ordningsnummer": 31,
+                                "TypAvStopp": "SCHEDULED_STOP",
+                                "Avstånd": 10588,
+                                "STH": 70,
+                                "Signatur": "LS",
+                                "LandsKod": 74,
+                                "Namn": "Ljusdal"
+                            },
+                            {
+                                "AnkommandeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 71032,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "AvgåendeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 71032,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "Ankomst": "2022-04-19T15:29:26.000+02:00",
+                                "Avgång": "2022-04-19T15:29:26.000+02:00",
+                                "Platsspår": {
+                                    "ID": "3",
+                                    "Namn": "3"
+                                },
+                                "Ordningsnummer": 32,
+                                "TypAvStopp": "RUN_THROUGH",
+                                "Avstånd": 6953,
+                                "STH": 70,
+                                "Signatur": "TL",
+                                "LandsKod": 74,
+                                "Namn": "Tallåsen"
+                            },
+                            {
+                                "AnkommandeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 71032,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "AvgåendeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 71032,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "Ankomst": "2022-04-19T15:41:06.000+02:00",
+                                "Avgång": "2022-04-19T16:05:06.000+02:00",
+                                "Platsspår": {
+                                    "ID": "2",
+                                    "Namn": "2"
+                                },
+                                "Ordningsnummer": 33,
+                                "TypAvStopp": "SCHEDULED_STOP",
+                                "Avstånd": 10059,
+                                "STH": 70,
+                                "Signatur": "LTR",
+                                "LandsKod": 74,
+                                "Namn": "Loster"
+                            },
+                            {
+                                "AnkommandeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 71032,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "AvgåendeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 71032,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "Ankomst": "2022-04-19T16:17:18.000+02:00",
+                                "Avgång": "2022-04-19T16:17:18.000+02:00",
+                                "Platsspår": {
+                                    "ID": "2",
+                                    "Namn": "2"
+                                },
+                                "Ordningsnummer": 34,
+                                "TypAvStopp": "RUN_THROUGH",
+                                "Avstånd": 10464,
+                                "STH": 70,
+                                "Signatur": "HNN",
+                                "LandsKod": 74,
+                                "Namn": "Hennan"
+                            },
+                            {
+                                "AnkommandeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 71032,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "AvgåendeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 71032,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "Ankomst": "2022-04-19T16:25:03.000+02:00",
+                                "Avgång": "2022-04-19T16:25:03.000+02:00",
+                                "Platsspår": {
+                                    "ID": "3",
+                                    "Namn": "3"
+                                },
+                                "Ordningsnummer": 35,
+                                "TypAvStopp": "RUN_THROUGH",
+                                "Avstånd": 6731,
+                                "STH": 70,
+                                "Signatur": "HNB",
+                                "LandsKod": 74,
+                                "Namn": "Hälsingenybo"
+                            },
+                            {
+                                "AnkommandeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 71032,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "AvgåendeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 71032,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "Ankomst": "2022-04-19T16:32:21.000+02:00",
+                                "Avgång": "2022-04-19T16:32:21.000+02:00",
+                                "Platsspår": {
+                                    "ID": "2",
+                                    "Namn": "2"
+                                },
+                                "Ordningsnummer": 36,
+                                "TypAvStopp": "RUN_THROUGH",
+                                "Avstånd": 6330,
+                                "STH": 70,
+                                "Signatur": "ÖBN",
+                                "LandsKod": 74,
+                                "Namn": "Örabäcken"
+                            },
+                            {
+                                "AnkommandeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 71032,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "AvgåendeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 71032,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "Ankomst": "2022-04-19T16:40:44.000+02:00",
+                                "Avgång": "2022-04-19T16:40:44.000+02:00",
+                                "Platsspår": {
+                                    "ID": "2",
+                                    "Namn": "2"
+                                },
+                                "Ordningsnummer": 37,
+                                "TypAvStopp": "RUN_THROUGH",
+                                "Avstånd": 7273,
+                                "STH": 70,
+                                "Signatur": "RSÖ",
+                                "LandsKod": 74,
+                                "Namn": "Ramsjö"
+                            },
+                            {
+                                "AnkommandeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 71032,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "AvgåendeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 71032,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "Ankomst": "2022-04-19T16:52:42.000+02:00",
+                                "Avgång": "2022-04-19T16:52:42.000+02:00",
+                                "Platsspår": {
+                                    "ID": "1",
+                                    "Namn": "1"
+                                },
+                                "Ordningsnummer": 38,
+                                "TypAvStopp": "RUN_THROUGH",
+                                "Avstånd": 9940,
+                                "STH": 70,
+                                "Signatur": "NG",
+                                "LandsKod": 74,
+                                "Namn": "Norrhög"
+                            },
+                            {
+                                "AnkommandeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 71032,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "AvgåendeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 71032,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "Ankomst": "2022-04-19T17:02:07.000+02:00",
+                                "Avgång": "2022-04-19T17:02:07.000+02:00",
+                                "Platsspår": {
+                                    "ID": "1",
+                                    "Namn": "1"
+                                },
+                                "Ordningsnummer": 39,
+                                "TypAvStopp": "RUN_THROUGH",
+                                "Avstånd": 8403,
+                                "STH": 70,
+                                "Signatur": "MSÖ",
+                                "LandsKod": 74,
+                                "Namn": "Mellansjö"
+                            },
+                            {
+                                "AnkommandeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 71032,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "AvgåendeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 71032,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "Ankomst": "2022-04-19T17:12:29.000+02:00",
+                                "Avgång": "2022-04-19T17:12:29.000+02:00",
+                                "Platsspår": {
+                                    "ID": "2",
+                                    "Namn": "2"
+                                },
+                                "Ordningsnummer": 40,
+                                "TypAvStopp": "RUN_THROUGH",
+                                "Avstånd": 9530,
+                                "STH": 70,
+                                "Signatur": "JÅ",
+                                "LandsKod": 74,
+                                "Namn": "Juån"
+                            },
+                            {
+                                "AnkommandeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 71032,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "AvgåendeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 71032,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "Ankomst": "2022-04-19T17:20:37.000+02:00",
+                                "Avgång": "2022-04-19T17:20:37.000+02:00",
+                                "Platsspår": {
+                                    "ID": "3",
+                                    "Namn": "3"
+                                },
+                                "Ordningsnummer": 41,
+                                "TypAvStopp": "RUN_THROUGH",
+                                "Avstånd": 8443,
+                                "STH": 70,
+                                "Signatur": "ÖV",
+                                "LandsKod": 74,
+                                "Namn": "Östavall"
+                            },
+                            {
+                                "AnkommandeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 71032,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "AvgåendeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 71032,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "Ankomst": "2022-04-19T17:29:27.000+02:00",
+                                "Avgång": "2022-04-19T17:29:27.000+02:00",
+                                "Platsspår": {
+                                    "ID": "1",
+                                    "Namn": "1"
+                                },
+                                "Ordningsnummer": 42,
+                                "TypAvStopp": "RUN_THROUGH",
+                                "Avstånd": 8349,
+                                "STH": 70,
+                                "Signatur": "AY",
+                                "LandsKod": 74,
+                                "Namn": "Alby"
+                            },
+                            {
+                                "AnkommandeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 71032,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "AvgåendeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 71032,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "Ankomst": "2022-04-19T17:37:00.000+02:00",
+                                "Avgång": "2022-04-19T17:37:00.000+02:00",
+                                "Platsspår": {
+                                    "ID": "2",
+                                    "Namn": "2"
+                                },
+                                "Ordningsnummer": 43,
+                                "TypAvStopp": "RUN_THROUGH",
+                                "Avstånd": 7732,
+                                "STH": 70,
+                                "Signatur": "OSÖ",
+                                "LandsKod": 74,
+                                "Namn": "Ovansjö"
+                            },
+                            {
+                                "Ordertext": [
+                                    {
+                                        "Ordningsnummer": 4,
+                                        "Kod": "UP",
+                                        "Text": "Traf.utb"
+                                    }
+                                ],
+                                "Avtalsplats": {
+                                    "Avtalat": {
+                                        "Ankomst": "2022-04-19T17:45:00.000+02:00",
+                                        "Avgång": "2022-04-19T17:45:00.000+02:00",
+                                        "Trafikaktivitet": [
+                                            {
+                                                "Kod": "UP"
+                                            }
+                                        ],
+                                        "Fordonsuppsättning": {
+                                            "TotalVagnsvikt": 26,
+                                            "TotalDrivfordonsvikt": 0,
+                                            "TotalVagnslängd": 15,
+                                            "TotalDrivfordonslängd": 0,
+                                            "STAXID": "A",
+                                            "Drivfordon": [
+                                                {
+                                                    "TypKod": "Y1TW"
+                                                }
+                                            ]
+                                        },
+                                        "Trafikutbytestid": "PT0S"
+                                    },
+                                    "AnsöktAnnonseratTågnummer": "71032",
+                                    "TågslagIDAnkomst": "TJT",
+                                    "TågslagIDAvgång": "TJT"
+                                },
+                                "AnkommandeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 71032,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "AvgåendeOperativtTåg": {
+                                    "TågslagID": "TJT",
+                                    "OperativtTågnummer": 71032,
+                                    "Utgångsdag": "2022-04-19"
+                                },
+                                "Ankomst": "2022-04-19T17:45:00.000+02:00",
+                                "Avgång": "2022-04-19T17:45:00.000+02:00",
+                                "Platsspår": {
+                                    "ID": "3",
+                                    "Namn": "3"
+                                },
+                                "Ordningsnummer": 44,
+                                "TypAvStopp": "SCHEDULED_STOP",
+                                "Avstånd": 5836,
+                                "STH": 70,
+                                "Signatur": "ÅG",
+                                "LandsKod": 74,
+                                "Namn": "Ånge"
+                            }
+                        ],
+                        "Tåglägesvariant": {
+                            "Tågläge": 71032,
+                            "Variant": 1
+                        },
+                        "Tåglägesinnehavare": {
+                            "OrganisationID": "IFAB"
+                        },
+                        "Operatör": {
+                            "OperatörID": "IFAB"
+                        },
+                        "SenastÄndrad": "2022-04-22T11:08:16.832+02:00",
+                        "InternationellTrafik": false,
+                        "ModifiedTime": "2022-04-22T09:11:50.944Z",
+                        "Deleted": false
+                    }
+                ],
+                "INFO": {
+                    "LASTCHANGEID": "7089353377615708183"
+                }
+            }
+        ]
+    }
+}

@@ -1,6 +1,9 @@
 package domainmodel
 
-import "fmt"
+import (
+	"fmt"
+	"sort"
+)
 
 // NatVisitor is the interface for traversing the network.
 // Method names differ from C# due to Go not supporting method overloading:
@@ -39,12 +42,18 @@ func NewNat() *Nat {
 	}
 }
 
-// Noder returns all nodes in the network.
+// Noder returns all nodes in the network, sorted by NodId for deterministic iteration.
 func (n *Nat) Noder() []*Nod {
 	result := make([]*Nod, 0, len(n.noder))
 	for _, nod := range n.noder {
 		result = append(result, nod)
 	}
+	sort.Slice(result, func(i, j int) bool {
+		if result[i].Id.TrafikplatsId != result[j].Id.TrafikplatsId {
+			return result[i].Id.TrafikplatsId < result[j].Id.TrafikplatsId
+		}
+		return result[i].Id.Nummer < result[j].Id.Nummer
+	})
 	return result
 }
 
@@ -68,12 +77,28 @@ func (n *Nat) SaveNod(nodId NodId, namn string) {
 	}
 }
 
-// Lankar returns all links in the network.
+// Lankar returns all links in the network, sorted by LankId for deterministic iteration.
 func (n *Nat) Lankar() []*Lank {
 	result := make([]*Lank, 0, len(n.lankar))
 	for _, lank := range n.lankar {
 		result = append(result, lank)
 	}
+	sort.Slice(result, func(i, j int) bool {
+		li, lj := result[i].Id, result[j].Id
+		if li.Fran.TrafikplatsId != lj.Fran.TrafikplatsId {
+			return li.Fran.TrafikplatsId < lj.Fran.TrafikplatsId
+		}
+		if li.Fran.Nummer != lj.Fran.Nummer {
+			return li.Fran.Nummer < lj.Fran.Nummer
+		}
+		if li.Till.TrafikplatsId != lj.Till.TrafikplatsId {
+			return li.Till.TrafikplatsId < lj.Till.TrafikplatsId
+		}
+		if li.Till.Nummer != lj.Till.Nummer {
+			return li.Till.Nummer < lj.Till.Nummer
+		}
+		return li.Sekvensnummer < lj.Sekvensnummer
+	})
 	return result
 }
 
@@ -117,12 +142,15 @@ func (n *Nat) WithLank(id LankId, action func(*Lank)) {
 	action(n.GetLank(id))
 }
 
-// Platser returns all places in the network.
+// Platser returns all places in the network, sorted by PLC for deterministic iteration.
 func (n *Nat) Platser() []*Plats {
 	result := make([]*Plats, 0, len(n.platser))
 	for _, plats := range n.platser {
 		result = append(result, plats)
 	}
+	sort.Slice(result, func(i, j int) bool {
+		return result[i].PLC < result[j].PLC
+	})
 	return result
 }
 

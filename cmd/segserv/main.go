@@ -6,6 +6,7 @@ import (
 	"path/filepath"
 
 	fdconv "github.com/tylland/transition/internal/convertion/facilitydata"
+	pdconv "github.com/tylland/transition/internal/convertion/planningdata"
 	routeconv "github.com/tylland/transition/internal/convertion/routes"
 	sferaconv "github.com/tylland/transition/internal/convertion/sfera"
 )
@@ -46,4 +47,22 @@ func main() {
 	}
 
 	fmt.Println("Routes written to", routesPath)
+
+	// Match planning data to track routes (if planning data file exists)
+	planningDataPath := filepath.Join("testdata", "planningdata_sample.xml")
+	if _, err := os.Stat(planningDataPath); err == nil {
+		response, err := pdconv.ReadPlanningData(planningDataPath)
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "Error reading planning data: %v\n", err)
+			os.Exit(1)
+		}
+
+		fmt.Println()
+		for _, result := range response.Results {
+			for i := range result.DagligFärdplan {
+				matchResult := pdconv.MatchFärdplan(&result.DagligFärdplan[i], r.TrackRoutes)
+				pdconv.PrintMatchResult(matchResult)
+			}
+		}
+	}
 }
