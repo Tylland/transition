@@ -67,23 +67,23 @@ func (s *SignalId) Equals(other *SignalId) bool {
 
 // Signal represents a signal on the network.
 type Signal struct {
-	*EntitetMedPosition
-	Id  *SignalId
-	Typ string
+	*EntityWithPosition
+	Id   *SignalId
+	Type string
 }
 
 // NewSignal creates a new Signal.
-func NewSignal(id *SignalId, typ string, lankposition *Lankposition) *Signal {
+func NewSignal(id *SignalId, t string, position *LinkPosition) *Signal {
 	return &Signal{
-		EntitetMedPosition: NewEntitetMedPosition(lankposition),
+		EntityWithPosition: NewEntityWithPosition(position),
 		Id:                 id,
-		Typ:                typ,
+		Type:               t,
 	}
 }
 
 // IsStopSignal checks if this signal is a stop signal.
 func (s *Signal) IsStopSignal() bool {
-	return IsStopSignalTyp(s.Typ)
+	return IsStopSignalTyp(s.Type)
 }
 
 // String returns a string representation.

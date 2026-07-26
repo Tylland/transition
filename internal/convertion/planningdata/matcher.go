@@ -4,6 +4,7 @@ package planningdata
 
 import (
 	"fmt"
+	"strings"
 
 	pd "github.com/tylland/transition/internal/schema/planningdata"
 	"github.com/tylland/transition/internal/schema/routes"
@@ -46,35 +47,88 @@ type trackRouteKey struct {
 }
 
 // trackRouteIndex maps trackRouteKey to the matching TrackRoute for fast lookup.
-type trackRouteIndex map[trackRouteKey]*routes.TrackRoute
+// trackRouteIndex stores TrackRoutes for lookup, grouped by type and places.
+type trackRouteIndex struct {
+	// exact maps the full key for exact lookups.
+	exact map[trackRouteKey]*routes.TrackRoute
+	// byTypePlaces groups routes by (Type, StartPlace, EndPlace) for wildcard track matching.
+	byTypePlaces map[typePlacesKey][]*routes.TrackRoute
+}
+
+// typePlacesKey groups routes by type and places only (ignoring tracks).
+type typePlacesKey struct {
+	Type       routes.TrackRouteType
+	StartPlace string
+	EndPlace   string
+}
 
 // buildIndex creates a lookup index from a slice of TrackRoutes.
+// Place names are normalized to uppercase for case-insensitive matching.
 func buildIndex(trackRoutes []routes.TrackRoute) trackRouteIndex {
-	idx := make(trackRouteIndex, len(trackRoutes))
+	idx := trackRouteIndex{
+		exact:        make(map[trackRouteKey]*routes.TrackRoute, len(trackRoutes)),
+		byTypePlaces: make(map[typePlacesKey][]*routes.TrackRoute),
+	}
 	for i := range trackRoutes {
 		tr := &trackRoutes[i]
 		key := trackRouteKey{
 			Type:       tr.Type,
-			StartPlace: tr.StartPlace,
-			EndPlace:   tr.EndPlace,
+			StartPlace: strings.ToUpper(tr.StartPlace),
+			EndPlace:   strings.ToUpper(tr.EndPlace),
 			StartTrack: tr.StartTrack,
 			EndTrack:   tr.EndTrack,
 		}
-		idx[key] = tr
+		idx.exact[key] = tr
+
+		tpKey := typePlacesKey{
+			Type:       tr.Type,
+			StartPlace: strings.ToUpper(tr.StartPlace),
+			EndPlace:   strings.ToUpper(tr.EndPlace),
+		}
+		idx.byTypePlaces[tpKey] = append(idx.byTypePlaces[tpKey], tr)
 	}
 	return idx
 }
 
 // lookup finds a TrackRoute matching the given properties.
+// Place names are normalized to uppercase for case-insensitive matching.
+// When startTrack or endTrack is empty, the lookup matches any track in that position.
+// If multiple routes match a wildcard lookup, the first one is returned.
 func (idx trackRouteIndex) lookup(typ routes.TrackRouteType, startPlace, endPlace, startTrack, endTrack string) *routes.TrackRoute {
-	key := trackRouteKey{
-		Type:       typ,
-		StartPlace: startPlace,
-		EndPlace:   endPlace,
-		StartTrack: startTrack,
-		EndTrack:   endTrack,
+	startPlaceUpper := strings.ToUpper(startPlace)
+	endPlaceUpper := strings.ToUpper(endPlace)
+
+	// Try exact match first when both tracks are specified.
+	if startTrack != "" && endTrack != "" {
+		key := trackRouteKey{
+			Type:       typ,
+			StartPlace: startPlaceUpper,
+			EndPlace:   endPlaceUpper,
+			StartTrack: startTrack,
+			EndTrack:   endTrack,
+		}
+		if tr := idx.exact[key]; tr != nil {
+			return tr
+		}
 	}
-	return idx[key]
+
+	// Fall back to wildcard match when one or both tracks are empty.
+	tpKey := typePlacesKey{
+		Type:       typ,
+		StartPlace: startPlaceUpper,
+		EndPlace:   endPlaceUpper,
+	}
+	for _, tr := range idx.byTypePlaces[tpKey] {
+		if startTrack != "" && tr.StartTrack != startTrack {
+			continue
+		}
+		if endTrack != "" && tr.EndTrack != endTrack {
+			continue
+		}
+		return tr
+	}
+
+	return nil
 }
 
 // MatchFärdplan matches a DagligFärdplan to TrackRoutes, producing an ordered

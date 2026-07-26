@@ -4,67 +4,67 @@ import (
 	"fmt"
 
 	dm "github.com/tylland/transition/internal/domainmodel"
-	"github.com/tylland/transition/internal/domainmodel/natvisitors"
+	"github.com/tylland/transition/internal/domainmodel/networkvisitor"
 	"github.com/tylland/transition/internal/schema/routes"
 )
 
 // createProfileId creates a SFERA segment profile ID from a LankId and direction.
-func createProfileId(lankId dm.LankId, riktning dm.Lankriktning) string {
-	return fmt.Sprintf("%v:%d", lankId, int(riktning))
+func createProfileId(linkId dm.LinkId, riktning dm.LinkDirection) string {
+	return fmt.Sprintf("%v:%d", linkId, int(riktning))
 }
 
 // GenerateSignalRoutes traverses the network from every stop signal in both directions
 // and returns the resulting signal routes.
-func GenerateSignalRoutes(nat *dm.Nat) []routes.SignalRoute {
-	signalRoutes, _ := GenerateSignalRoutesWithDomain(nat)
+func GenerateSignalRoutes(network *dm.Network) []routes.SignalRoute {
+	signalRoutes, _ := GenerateSignalRoutesWithDomain(network)
 	return signalRoutes
 }
 
 // GenerateSignalRoutesWithDomain traverses the network from every stop signal in both directions
 // and returns both the schema signal routes and the domain Signalstracka objects.
-func GenerateSignalRoutesWithDomain(nat *dm.Nat) ([]routes.SignalRoute, []*dm.Signalstracka) {
+func GenerateSignalRoutesWithDomain(network *dm.Network) ([]routes.SignalRoute, []*dm.SignalPath) {
 	var result []routes.SignalRoute
-	var strackor []*dm.Signalstracka
+	var strackor []*dm.SignalPath
 
-	for _, lank := range nat.Lankar() {
-		for _, signal := range lank.Signaler.Items() {
+	for _, link := range network.Links() {
+		for _, signal := range link.Signals.Items() {
 			if !signal.IsStopSignal() {
 				continue
 			}
 
-			for _, riktning := range []dm.Lankriktning{dm.LankriktningMed, dm.LankriktningMot} {
-				if !signal.Lankposition.Gilltig(riktning) {
+			for _, direction := range []dm.LinkDirection{dm.LinkDirectionWith, dm.LinkDirectionAgainst} {
+				if !signal.LinkPosition.IsValid(direction) {
 					continue
 				}
 
-				visitor := natvisitors.NewSignalstrackaVisitor(signal, riktning)
+				visitor := networkvisitor.NewSignalPathCreator(signal, direction)
 				dm.Traverse(visitor)
 
-				if visitor.Signalstracka == nil {
+				if visitor.SignalPath == nil {
 					continue
 				}
 
-				st := visitor.Signalstracka
+				signalPath := visitor.SignalPath
 
 				signalRoute := routes.SignalRoute{
-					StartSignal: st.Start.Id.String(),
-					EndSignal:   st.Slut.Id.String(),
-					StartPlace:  st.Start.Id.TrafikplatsSignatur,
-					EndPlace:    st.Slut.Id.TrafikplatsSignatur,
+					StartSignal: signalPath.Start.Id.String(),
+					EndSignal:   signalPath.End.Id.String(),
+					StartPlace:  signalPath.Start.Id.TrafikplatsSignatur,
+					EndPlace:    signalPath.End.Id.TrafikplatsSignatur,
 				}
 
-				for _, la := range st.Lankanvandningar {
+				for _, path := range signalPath.LinkPaths {
 					signalRoute.SegmentProfileRefs = append(signalRoute.SegmentProfileRefs,
 						routes.SegmentProfileReference{
-							SPID:      createProfileId(la.Lank.Id, la.Riktning),
-							StartPos:  la.Start,
-							EndPos:    la.Slut,
-							Direction: int(la.Riktning),
+							SPID:      createProfileId(path.Link.Id, path.Direction),
+							StartPos:  path.Start,
+							EndPos:    path.End,
+							Direction: int(path.Direction),
 						})
 				}
 
 				result = append(result, signalRoute)
-				strackor = append(strackor, st)
+				strackor = append(strackor, signalPath)
 			}
 		}
 	}
@@ -74,15 +74,15 @@ func GenerateSignalRoutesWithDomain(nat *dm.Nat) ([]routes.SignalRoute, []*dm.Si
 
 // findTrackAtPosition returns the track number (spårnummer) that covers the given
 // position on the given link. Returns empty string if none found.
-func findTrackAtPosition(lank *dm.Lank, position float64) string {
-	for _, sn := range lank.Sparnummer.Items() {
-		start := sn.Lankutbredning.Start
-		slut := sn.Lankutbredning.Slut
+func findTrackAtPosition(link *dm.Link, position float64) string {
+	for _, sn := range link.StationTracks.Items() {
+		start := sn.Extent.Start
+		slut := sn.Extent.End
 		if start > slut {
 			start, slut = slut, start
 		}
 		if position >= start && position <= slut {
-			return sn.Nummer
+			return sn.Number
 		}
 	}
 	return ""
@@ -90,15 +90,15 @@ func findTrackAtPosition(lank *dm.Lank, position float64) string {
 
 // findLineTrackAtPosition returns the line track (linjespår) that covers the given
 // position on the given link. Returns empty string if none found.
-func findLineTrackAtPosition(lank *dm.Lank, position float64) string {
-	for _, ls := range lank.Linjespar.Items() {
-		start := ls.Lankutbredning.Start
-		slut := ls.Lankutbredning.Slut
+func findLineTrackAtPosition(link *dm.Link, position float64) string {
+	for _, ls := range link.LineTracks.Items() {
+		start := ls.Extent.Start
+		slut := ls.Extent.End
 		if start > slut {
 			start, slut = slut, start
 		}
 		if position >= start && position <= slut {
-			return ls.Nummer
+			return ls.Number
 		}
 	}
 	return ""
@@ -106,33 +106,33 @@ func findLineTrackAtPosition(lank *dm.Lank, position float64) string {
 
 // isLineSignal returns true if the signal type is a line signal (INF, UBL, MBL)
 // that sits on the line between stations and should use linjespår for track lookup.
-func isLineSignal(signalTyp string) bool {
-	return signalTyp == dm.SignalTypInfart ||
-		signalTyp == dm.SignalTypUtfart ||
-		signalTyp == dm.SignalTypMellanBlock
+func isLineSignal(signalType string) bool {
+	return signalType == dm.SignalTypInfart ||
+		signalType == dm.SignalTypUtfart ||
+		signalType == dm.SignalTypMellanBlock
 }
 
 // findTrackForSignal returns the track number for a signal position.
 // Line signals (INF, UBL, MBL) use linjespår, station signals (M) use spårnummer.
-func findTrackForSignal(lank *dm.Lank, position float64, signalTyp string) string {
-	if isLineSignal(signalTyp) {
-		return findLineTrackAtPosition(lank, position)
+func findTrackForSignal(link *dm.Link, position float64, signalType string) string {
+	if isLineSignal(signalType) {
+		return findLineTrackAtPosition(link, position)
 	}
-	return findTrackAtPosition(lank, position)
+	return findTrackAtPosition(link, position)
 }
 
 // findFirstLineTrackOnLink returns the first linjespår nummer on the link, or empty string.
-func findFirstLineTrackOnLink(lank *dm.Lank) string {
-	if items := lank.Linjespar.Items(); len(items) > 0 {
-		return items[0].Nummer
+func findFirstLineTrackOnLink(link *dm.Link) string {
+	if items := link.LineTracks.Items(); len(items) > 0 {
+		return items[0].Number
 	}
 	return ""
 }
 
 // findFirstTrackOnLink returns the first spårnummer on the link, or empty string.
-func findFirstTrackOnLink(lank *dm.Lank) string {
-	if items := lank.Sparnummer.Items(); len(items) > 0 {
-		return items[0].Nummer
+func findFirstTrackOnLink(link *dm.Link) string {
+	if items := link.StationTracks.Items(); len(items) > 0 {
+		return items[0].Number
 	}
 	return ""
 }
@@ -140,20 +140,20 @@ func findFirstTrackOnLink(lank *dm.Lank) string {
 // findStartTrack finds the track at the start of a signal route.
 // Uses linjespår for line signals (INF, UBL, MBL), spårnummer for station signals (M).
 // If not found at the signal position, searches forward through the route's links.
-func findStartTrack(st *dm.Signalstracka) string {
-	startLank := st.Start.Lankposition.Lank
-	track := findTrackForSignal(startLank, st.Start.Lankposition.Position, st.Start.Typ)
+func findStartTrack(st *dm.SignalPath) string {
+	startLank := st.Start.LinkPosition.Link
+	track := findTrackForSignal(startLank, st.Start.LinkPosition.Position, st.Start.Type)
 	if track != "" {
 		return track
 	}
-	line := isLineSignal(st.Start.Typ)
-	for _, la := range st.Lankanvandningar {
+	line := isLineSignal(st.Start.Type)
+	for _, la := range st.LinkPaths {
 		if line {
-			if t := findFirstLineTrackOnLink(la.Lank); t != "" {
+			if t := findFirstLineTrackOnLink(la.Link); t != "" {
 				return t
 			}
 		} else {
-			if t := findFirstTrackOnLink(la.Lank); t != "" {
+			if t := findFirstTrackOnLink(la.Link); t != "" {
 				return t
 			}
 		}
@@ -164,21 +164,21 @@ func findStartTrack(st *dm.Signalstracka) string {
 // findEndTrack finds the track at the end of a signal route.
 // Uses linjespår for line signals (INF, UBL, MBL), spårnummer for station signals (M).
 // If not found at the signal position, searches backward through the route's links.
-func findEndTrack(st *dm.Signalstracka) string {
-	endLank := st.Slut.Lankposition.Lank
-	track := findTrackForSignal(endLank, st.Slut.Lankposition.Position, st.Slut.Typ)
+func findEndTrack(st *dm.SignalPath) string {
+	endLink := st.End.LinkPosition.Link
+	track := findTrackForSignal(endLink, st.End.LinkPosition.Position, st.End.Type)
 	if track != "" {
 		return track
 	}
-	line := isLineSignal(st.Slut.Typ)
-	for i := len(st.Lankanvandningar) - 1; i >= 0; i-- {
-		la := st.Lankanvandningar[i]
+	line := isLineSignal(st.End.Type)
+	for i := len(st.LinkPaths) - 1; i >= 0; i-- {
+		la := st.LinkPaths[i]
 		if line {
-			if t := findFirstLineTrackOnLink(la.Lank); t != "" {
+			if t := findFirstLineTrackOnLink(la.Link); t != "" {
 				return t
 			}
 		} else {
-			if t := findFirstTrackOnLink(la.Lank); t != "" {
+			if t := findFirstTrackOnLink(la.Link); t != "" {
 				return t
 			}
 		}
@@ -191,9 +191,9 @@ func findEndTrack(st *dm.Signalstracka) string {
 //   - Arrival: line signal → M (entering a station)
 //   - Departure: M → line signal (leaving a station)
 //   - Line: line signal → line signal (between stations)
-func classifySignalRoute(st *dm.Signalstracka) routes.TrackRouteType {
-	startIsLine := isLineSignal(st.Start.Typ)
-	endIsLine := isLineSignal(st.Slut.Typ)
+func classifySignalRoute(st *dm.SignalPath) routes.TrackRouteType {
+	startIsLine := isLineSignal(st.Start.Type)
+	endIsLine := isLineSignal(st.End.Type)
 
 	if startIsLine && endIsLine {
 		return routes.TrackRouteLine
@@ -206,7 +206,7 @@ func classifySignalRoute(st *dm.Signalstracka) routes.TrackRouteType {
 	}
 
 	// M → M: use place difference as hint
-	samePlats := st.Start.Id.TrafikplatsSignatur == st.Slut.Id.TrafikplatsSignatur
+	samePlats := st.Start.Id.TrafikplatsSignatur == st.End.Id.TrafikplatsSignatur
 	if !samePlats {
 		return routes.TrackRouteLine
 	}
@@ -226,7 +226,7 @@ type trackRouteKey struct {
 // GenerateTrackRoutes creates track routes by classifying each signal route as
 // Arrival, Departure, or Line based on signal types, then grouping by type and
 // place/track.
-func GenerateTrackRoutes(nat *dm.Nat, signalRoutes []routes.SignalRoute, signalstrackor []*dm.Signalstracka) []routes.TrackRoute {
+func GenerateTrackRoutes(network *dm.Network, signalRoutes []routes.SignalRoute, signalstrackor []*dm.SignalPath) []routes.TrackRoute {
 	grouped := make(map[trackRouteKey][]routes.SignalRouteRef)
 
 	for i, sr := range signalRoutes {
@@ -275,9 +275,9 @@ func GenerateTrackRoutes(nat *dm.Nat, signalRoutes []routes.SignalRoute, signals
 }
 
 // GenerateRoutes generates all routes (signal routes and track routes) for the network.
-func GenerateRoutes(nat *dm.Nat) *routes.Routes {
-	signalRoutes, signalstrackor := GenerateSignalRoutesWithDomain(nat)
-	trackRoutes := GenerateTrackRoutes(nat, signalRoutes, signalstrackor)
+func GenerateRoutes(network *dm.Network) *routes.Routes {
+	signalRoutes, signalstrackor := GenerateSignalRoutesWithDomain(network)
+	trackRoutes := GenerateTrackRoutes(network, signalRoutes, signalstrackor)
 
 	return &routes.Routes{
 		SignalRoutes: signalRoutes,

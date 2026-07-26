@@ -1,4 +1,4 @@
-package convertion
+package facilitydata
 
 import (
 	"encoding/xml"
@@ -9,7 +9,7 @@ import (
 )
 
 // ReadFacilityData deserializes a FacilityData XML file from the given path.
-func ReadFacilityData(path string) (*fd.FacilityData, error) {
+func ReadXML(path string) (*fd.FacilityData, error) {
 	data, err := os.ReadFile(path)
 	if err != nil {
 		return nil, fmt.Errorf("could not open facility data file %s: %w", path, err)

@@ -5,7 +5,7 @@ import (
 	"os"
 	"path/filepath"
 
-	fdconv "github.com/tylland/transition/internal/convertion/facilitydata"
+	"github.com/tylland/transition/internal/convertion/facilitydata"
 	pdconv "github.com/tylland/transition/internal/convertion/planningdata"
 	routeconv "github.com/tylland/transition/internal/convertion/routes"
 	sferaconv "github.com/tylland/transition/internal/convertion/sfera"
@@ -16,15 +16,15 @@ func main() {
 	outputPath := filepath.Join("testdata", "sfera")
 
 	// Read FacilityData XML
-	facilityData, err := fdconv.ReadFacilityData(inputPath)
+	facilityData, err := facilitydata.ReadXML(inputPath)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error reading facility data: %v\n", err)
 		os.Exit(1)
 	}
 
 	// Build domain model network from FacilityData
-	natSource := fdconv.NewFacilityDataNatSource(facilityData.BaseRoot)
-	nat := natSource.CreateNat()
+	builder := facilitydata.NewDomainModelBuilder(facilityData.BaseRoot)
+	network := builder.Build()
 
 	// Ensure output directory exists
 	if err := os.MkdirAll(outputPath, 0755); err != nil {
@@ -34,13 +34,13 @@ func main() {
 
 	// Write SFERA segment profiles
 	writer := sferaconv.NewSegmentProfileFileWriter(outputPath)
-	sferaconv.GenerateSegmentProfiles(nat, writer)
+	sferaconv.GenerateSegmentProfiles(network, writer)
 
 	fmt.Println("Segment profiles written to", outputPath)
 
 	// Generate and write routes
 	routesPath := filepath.Join("testdata", "routes.xml")
-	r := routeconv.GenerateRoutes(nat)
+	r := routeconv.GenerateRoutes(network)
 	if err := routeconv.WriteRoutesFile(r, routesPath); err != nil {
 		fmt.Fprintf(os.Stderr, "Error writing routes: %v\n", err)
 		os.Exit(1)
@@ -49,7 +49,7 @@ func main() {
 	fmt.Println("Routes written to", routesPath)
 
 	// Match planning data to track routes (if planning data file exists)
-	planningDataPath := filepath.Join("testdata", "planningdata_sample.xml")
+	planningDataPath := filepath.Join("testdata", "2022-04-19.7st.planningdata.json")
 	if _, err := os.Stat(planningDataPath); err == nil {
 		response, err := pdconv.ReadPlanningData(planningDataPath)
 		if err != nil {

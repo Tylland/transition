@@ -8,19 +8,19 @@ import (
 )
 
 // CreateProfileId creates a SFERA segment profile ID from a LankId and direction.
-func CreateProfileId(lankId dm.LankId, riktning dm.Lankriktning) string {
-	riktningIndex := int(riktning)
-	return fmt.Sprintf("%v:%d", lankId, riktningIndex)
+func CreateProfileId(linkId dm.LinkId, direction dm.LinkDirection) string {
+	riktningIndex := int(direction)
+	return fmt.Sprintf("%v:%d", linkId, riktningIndex)
 }
 
-// GetGradientDirection returns the SFERA gradient direction for a Lutning.
-func GetGradientDirection(lutning *dm.Lutning, riktning dm.Lankriktning) sfera.GradientDirectionType {
-	grader := lutning.Grader
-	if riktning == dm.LankriktningMot {
-		grader = -grader
+// GetGradientDirection returns the SFERA gradient direction for a Slope.
+func GetGradientDirection(slope *dm.Slope, direction dm.LinkDirection) sfera.GradientDirectionType {
+	gradient := slope.Gradient
+	if direction == dm.LinkDirectionAgainst {
+		gradient = -gradient
 	}
 
-	if grader >= 0 {
+	if gradient >= 0 {
 		return sfera.GradientDirectionUphill
 	}
 	return sfera.GradientDirectionDownhill
