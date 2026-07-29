@@ -1,75 +1,59 @@
-package routes
+package trackroute
 
 import (
-	"fmt"
-
-	dm "github.com/tylland/transition/internal/domainmodel"
-	"github.com/tylland/transition/internal/domainmodel/networkvisitor"
+	dm "github.com/tylland/transition/internal/model/domainmodel"
 	"github.com/tylland/transition/internal/schema/routes"
 )
 
-// createProfileId creates a SFERA segment profile ID from a LankId and direction.
-func createProfileId(linkId dm.LinkId, riktning dm.LinkDirection) string {
-	return fmt.Sprintf("%v:%d", linkId, int(riktning))
-}
+// Generate creates track routes by classifying each signal route as
+// Arrival, Departure, or Line based on signal types, then grouping by type and
+// place/track.
+func Generate(network *dm.Network, signalRoutes []routes.SignalRoute, signalstrackor []*dm.SignalPath) []routes.TrackRoute {
+	grouped := make(map[trackRouteKey][]routes.SignalRouteRef)
 
-// GenerateSignalRoutes traverses the network from every stop signal in both directions
-// and returns the resulting signal routes.
-func GenerateSignalRoutes(network *dm.Network) []routes.SignalRoute {
-	signalRoutes, _ := GenerateSignalRoutesWithDomain(network)
-	return signalRoutes
-}
+	for i, sr := range signalRoutes {
+		st := signalstrackor[i]
 
-// GenerateSignalRoutesWithDomain traverses the network from every stop signal in both directions
-// and returns both the schema signal routes and the domain Signalstracka objects.
-func GenerateSignalRoutesWithDomain(network *dm.Network) ([]routes.SignalRoute, []*dm.SignalPath) {
-	var result []routes.SignalRoute
-	var strackor []*dm.SignalPath
+		routeType := classifySignalRoute(st)
 
-	for _, link := range network.Links() {
-		for _, signal := range link.Signals.Items() {
-			if !signal.IsStopSignal() {
-				continue
-			}
+		// Determine track based on signal type:
+		// Line signals (INF, UBL, MBL) → Linjespar
+		// Station signals (M) → Sparnummer
+		startTrack := findStartTrack(st)
+		endTrack := findEndTrack(st)
 
-			for _, direction := range []dm.LinkDirection{dm.LinkDirectionWith, dm.LinkDirectionAgainst} {
-				if !signal.LinkPosition.IsValid(direction) {
-					continue
-				}
-
-				visitor := networkvisitor.NewSignalPathCreator(signal, direction)
-				dm.Traverse(visitor)
-
-				if visitor.SignalPath == nil {
-					continue
-				}
-
-				signalPath := visitor.SignalPath
-
-				signalRoute := routes.SignalRoute{
-					StartSignal: signalPath.Start.Id.String(),
-					EndSignal:   signalPath.End.Id.String(),
-					StartPlace:  signalPath.Start.Id.TrafikplatsSignatur,
-					EndPlace:    signalPath.End.Id.TrafikplatsSignatur,
-				}
-
-				for _, path := range signalPath.LinkPaths {
-					signalRoute.SegmentProfileRefs = append(signalRoute.SegmentProfileRefs,
-						routes.SegmentProfileReference{
-							SPID:      createProfileId(path.Link.Id, path.Direction),
-							StartPos:  path.Start,
-							EndPos:    path.End,
-							Direction: int(path.Direction),
-						})
-				}
-
-				result = append(result, signalRoute)
-				strackor = append(strackor, signalPath)
-			}
+		key := trackRouteKey{
+			Type:       routeType,
+			StartPlace: sr.StartPlace,
+			EndPlace:   sr.EndPlace,
+			StartTrack: startTrack,
+			EndTrack:   endTrack,
 		}
+
+		ref := routes.SignalRouteRef{
+			StartSignal: sr.StartSignal,
+			EndSignal:   sr.EndSignal,
+		}
+
+		grouped[key] = append(grouped[key], ref)
 	}
 
-	return result, strackor
+	var result []routes.TrackRoute
+	for key, refs := range grouped {
+		tr := routes.TrackRoute{
+			Type:            key.Type,
+			StartPlace:      key.StartPlace,
+			EndPlace:        key.EndPlace,
+			StartTrack:      key.StartTrack,
+			EndTrack:        key.EndTrack,
+			StartSignal:     refs[0].StartSignal,
+			EndSignal:       refs[len(refs)-1].EndSignal,
+			SignalRouteRefs: refs,
+		}
+		result = append(result, tr)
+	}
+
+	return result
 }
 
 // findTrackAtPosition returns the track number (spårnummer) that covers the given
@@ -206,7 +190,7 @@ func classifySignalRoute(st *dm.SignalPath) routes.TrackRouteType {
 	}
 
 	// M → M: use place difference as hint
-	samePlats := st.Start.Id.TrafikplatsSignatur == st.End.Id.TrafikplatsSignatur
+	samePlats := st.Start.Id.PlaceSignature == st.End.Id.PlaceSignature
 	if !samePlats {
 		return routes.TrackRouteLine
 	}
@@ -221,66 +205,4 @@ type trackRouteKey struct {
 	EndPlace   string
 	StartTrack string
 	EndTrack   string
-}
-
-// GenerateTrackRoutes creates track routes by classifying each signal route as
-// Arrival, Departure, or Line based on signal types, then grouping by type and
-// place/track.
-func GenerateTrackRoutes(network *dm.Network, signalRoutes []routes.SignalRoute, signalstrackor []*dm.SignalPath) []routes.TrackRoute {
-	grouped := make(map[trackRouteKey][]routes.SignalRouteRef)
-
-	for i, sr := range signalRoutes {
-		st := signalstrackor[i]
-
-		routeType := classifySignalRoute(st)
-
-		// Determine track based on signal type:
-		// Line signals (INF, UBL, MBL) → Linjespar
-		// Station signals (M) → Sparnummer
-		startTrack := findStartTrack(st)
-		endTrack := findEndTrack(st)
-
-		key := trackRouteKey{
-			Type:       routeType,
-			StartPlace: sr.StartPlace,
-			EndPlace:   sr.EndPlace,
-			StartTrack: startTrack,
-			EndTrack:   endTrack,
-		}
-
-		ref := routes.SignalRouteRef{
-			StartSignal: sr.StartSignal,
-			EndSignal:   sr.EndSignal,
-		}
-
-		grouped[key] = append(grouped[key], ref)
-	}
-
-	var result []routes.TrackRoute
-	for key, refs := range grouped {
-		tr := routes.TrackRoute{
-			Type:            key.Type,
-			StartPlace:      key.StartPlace,
-			EndPlace:        key.EndPlace,
-			StartTrack:      key.StartTrack,
-			EndTrack:        key.EndTrack,
-			StartSignal:     refs[0].StartSignal,
-			EndSignal:       refs[len(refs)-1].EndSignal,
-			SignalRouteRefs: refs,
-		}
-		result = append(result, tr)
-	}
-
-	return result
-}
-
-// GenerateRoutes generates all routes (signal routes and track routes) for the network.
-func GenerateRoutes(network *dm.Network) *routes.Routes {
-	signalRoutes, signalstrackor := GenerateSignalRoutesWithDomain(network)
-	trackRoutes := GenerateTrackRoutes(network, signalRoutes, signalstrackor)
-
-	return &routes.Routes{
-		SignalRoutes: signalRoutes,
-		TrackRoutes:  trackRoutes,
-	}
 }

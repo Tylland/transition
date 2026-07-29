@@ -1,11 +1,11 @@
 package domainmodel
 
 // LinkDirection represents direction along a link (Med = with, Mot = against).
-type LinkDirection int
+type LinkDirection string
 
 const (
-	LinkDirectionWith LinkDirection = iota
-	LinkDirectionAgainst
+	LinkDirectionWith    LinkDirection = "With"
+	LinkDirectionAgainst LinkDirection = "Against"
 )
 
 func (ld LinkDirection) String() string {

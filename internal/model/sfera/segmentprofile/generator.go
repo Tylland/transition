@@ -1,28 +1,28 @@
-package sfera
+package segmentprofile
 
 import (
 	"fmt"
 	"math"
 
-	dm "github.com/tylland/transition/internal/domainmodel"
+	dm "github.com/tylland/transition/internal/model/domainmodel"
 	"github.com/tylland/transition/internal/schema/sfera"
 )
 
-// GenerateSegmentProfiles generates SFERA segment profiles for both directions
+// Generate generates SFERA segment profiles for both directions
 // and writes them using the given writer.
-func GenerateSegmentProfiles(network *dm.Network, writer SegmentProfileWriter) {
-	GenerateSegmentProfilesForDirection(network, dm.LinkDirectionWith, writer)
-	GenerateSegmentProfilesForDirection(network, dm.LinkDirectionAgainst, writer)
+func Generate(network *dm.Network, writer Writer) {
+	GenerateForDirection(network, dm.LinkDirectionWith, writer)
+	GenerateForDirection(network, dm.LinkDirectionAgainst, writer)
 }
 
-// GenerateSegmentProfilesForDirection generates SFERA segment profiles for a
+// GenerateForDirection generates SFERA segment profiles for a
 // specific direction and writes them using the given writer.
-func GenerateSegmentProfilesForDirection(network *dm.Network, direction dm.LinkDirection, writer SegmentProfileWriter) {
+func GenerateForDirection(network *dm.Network, direction dm.LinkDirection, writer Writer) {
 	for _, link := range network.Links() {
 		imID := uint16(74)
 
 		segment := &sfera.SegmentProfile{
-			SPID:           CreateProfileId(link.Id, direction),
+			SPID:           createProfileId(link.Id, direction),
 			SPName:         "namn",
 			SPZone:         sfera.SPZone{IMID: &imID},
 			SPVersionMajor: 1,
@@ -226,13 +226,13 @@ func CreateGradientAverage(link *dm.Link, direction dm.LinkDirection) sfera.Grad
 		if i == 0 {
 			ga.Start = &sfera.GradientComplexType{
 				GradientValue:     math.Abs(slope.Gradient),
-				GradientDirection: GetGradientDirection(slope, direction),
+				GradientDirection: getGradientDirection(slope, direction),
 			}
 		} else {
 			ga.Changes = append(ga.Changes, sfera.GradientAverageChange{
 				GradientComplexType: sfera.GradientComplexType{
 					GradientValue:     math.Abs(slope.Gradient),
-					GradientDirection: GetGradientDirection(slope, direction),
+					GradientDirection: getGradientDirection(slope, direction),
 				},
 				Location: slope.Extent.GetStartDistance(direction),
 			})
@@ -240,4 +240,22 @@ func CreateGradientAverage(link *dm.Link, direction dm.LinkDirection) sfera.Grad
 	}
 
 	return ga
+}
+
+// createProfileId creates a SFERA segment profile ID from a LankId and direction.
+func createProfileId(linkId dm.LinkId, direction dm.LinkDirection) string {
+	return fmt.Sprintf("%v:%s", linkId, direction)
+}
+
+// getGradientDirection returns the SFERA gradient direction for a Slope.
+func getGradientDirection(slope *dm.Slope, direction dm.LinkDirection) sfera.GradientDirectionType {
+	gradient := slope.Gradient
+	if direction == dm.LinkDirectionAgainst {
+		gradient = -gradient
+	}
+
+	if gradient >= 0 {
+		return sfera.GradientDirectionUphill
+	}
+	return sfera.GradientDirectionDownhill
 }

@@ -1,20 +1,20 @@
 package facilitydata
 
 import (
-	dm "github.com/tylland/transition/internal/domainmodel"
+	dm "github.com/tylland/transition/internal/model/domainmodel"
 	fd "github.com/tylland/transition/internal/schema/facilitydata"
 )
 
-// DomainModelBuilder creates a Nat (network) from FacilityData schema data.
-type DomainModelBuilder struct {
+// NetworkBuilder creates a Nat (network) from FacilityData schema data.
+type NetworkBuilder struct {
 	Infrastructure fd.Infrastructure
 	Facility       fd.Facility
 	Divisions      []fd.Division
 }
 
-// NewDomainModelBuilder creates a new FacilityDataNatSource from a FacilityData Root.
-func NewDomainModelBuilder(baseRoot fd.Root) *DomainModelBuilder {
-	return &DomainModelBuilder{
+// NewNetworkBuilder creates a new FacilityDataNatSource from a FacilityData Root.
+func NewNetworkBuilder(baseRoot fd.Root) *NetworkBuilder {
+	return &NetworkBuilder{
 		Infrastructure: baseRoot.Infrastructure,
 		Facility:       baseRoot.Facility,
 		Divisions:      baseRoot.Divisions,
@@ -22,7 +22,7 @@ func NewDomainModelBuilder(baseRoot fd.Root) *DomainModelBuilder {
 }
 
 // Build builds a domain model Network from the FacilityData.
-func (s *DomainModelBuilder) Build() *dm.Network {
+func (s *NetworkBuilder) Build() *dm.Network {
 	network := dm.NewNetwork()
 
 	// Import nodes

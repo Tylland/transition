@@ -5,9 +5,9 @@ import (
 	"fmt"
 	"os"
 
-	dm "github.com/tylland/transition/internal/domainmodel"
+	dm "github.com/tylland/transition/internal/model/domainmodel"
 
-	conv "github.com/tylland/transition/internal/convertion/facilitydata"
+	conv "github.com/tylland/transition/internal/model/facilitydata"
 	fd "github.com/tylland/transition/internal/schema/facilitydata"
 )
 
@@ -15,7 +15,7 @@ func main() {
 	data, _ := os.ReadFile("testdata/FacilityDataExport_SWE_Svv-Bjf_2022_06_30_09_09_41.xml")
 	var facilityData fd.FacilityData
 	xml.Unmarshal(data, &facilityData)
-	source := conv.NewDomainModelBuilder(facilityData.BaseRoot)
+	source := conv.NewNetworkBuilder(facilityData.BaseRoot)
 	nat := source.Build()
 
 	// Count totals
@@ -45,7 +45,7 @@ func main() {
 		for _, lank := range nat.Links() {
 			hasSignalAtPlace := false
 			for _, sig := range lank.Signals.Items() {
-				if sig.Id.TrafikplatsSignatur == place {
+				if sig.Id.PlaceSignature == place {
 					hasSignalAtPlace = true
 					break
 				}
@@ -53,7 +53,7 @@ func main() {
 			if hasSignalAtPlace {
 				fmt.Printf("  Link %v (len=%.1f):\n", lank.Id, lank.Length)
 				for _, sig := range lank.Signals.Items() {
-					if sig.Id.TrafikplatsSignatur == place {
+					if sig.Id.PlaceSignature == place {
 						fmt.Printf("    Signal: %s typ=%s pos=%.4f\n", sig.Id, sig.Type, sig.LinkPosition.Position)
 					}
 				}

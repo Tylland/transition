@@ -27,17 +27,17 @@ func IsStopSignalTyp(typ string) bool {
 
 // SignalId uniquely identifies a signal.
 type SignalId struct {
-	TrafikplatsSignatur string
-	Namn                string
-	Typ                 string
+	PlaceSignature string
+	Name           string
+	Type           string
 }
 
 // NewSignalId creates a new SignalId.
-func NewSignalId(trafikplatsSignatur, namn, typ string) *SignalId {
+func NewSignalId(placeSignature, name, t string) *SignalId {
 	return &SignalId{
-		TrafikplatsSignatur: trafikplatsSignatur,
-		Namn:                namn,
-		Typ:                 typ,
+		PlaceSignature: placeSignature,
+		Name:           name,
+		Type:           t,
 	}
 }
 
@@ -52,7 +52,7 @@ func ParseSignalId(id string) (*SignalId, error) {
 
 // String returns a string representation.
 func (s *SignalId) String() string {
-	return fmt.Sprintf("%s.%s.%s", s.TrafikplatsSignatur, s.Namn, s.Typ)
+	return fmt.Sprintf("%s.%s.%s", s.PlaceSignature, s.Name, s.Type)
 }
 
 // Equals checks equality with another SignalId.
@@ -60,9 +60,9 @@ func (s *SignalId) Equals(other *SignalId) bool {
 	if other == nil {
 		return false
 	}
-	return s.TrafikplatsSignatur == other.TrafikplatsSignatur &&
-		s.Namn == other.Namn &&
-		s.Typ == other.Typ
+	return s.PlaceSignature == other.PlaceSignature &&
+		s.Name == other.Name &&
+		s.Type == other.Type
 }
 
 // Signal represents a signal on the network.

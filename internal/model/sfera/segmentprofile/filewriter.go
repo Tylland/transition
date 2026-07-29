@@ -1,4 +1,4 @@
-package sfera
+package segmentprofile
 
 import (
 	"encoding/xml"
@@ -10,18 +10,17 @@ import (
 	"github.com/tylland/transition/internal/schema/sfera"
 )
 
-// SegmentProfileFileWriter writes SegmentProfile objects as XML files to a folder.
-type SegmentProfileFileWriter struct {
+// FileWriter writes SegmentProfile objects as XML files to a folder.
+type FileWriter struct {
 	FolderPath string
 }
 
-// NewSegmentProfileFileWriter creates a new SegmentProfileFileWriter.
-func NewSegmentProfileFileWriter(folderPath string) *SegmentProfileFileWriter {
-	return &SegmentProfileFileWriter{FolderPath: folderPath}
+func NewFileWriter(folderPath string) *FileWriter {
+	return &FileWriter{FolderPath: folderPath}
 }
 
 // Write serializes a SegmentProfile to an XML file and returns the file path.
-func (w *SegmentProfileFileWriter) Write(segment *sfera.SegmentProfile) (string, error) {
+func (w *FileWriter) Write(segment *sfera.SegmentProfile) (string, error) {
 	fileName := strings.ReplaceAll(segment.SPID, ":", "-") + ".xml"
 	filePath := filepath.Join(w.FolderPath, fileName)
 
