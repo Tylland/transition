@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Mit XMLSpy v2009 sp1 (http://www.altova.com) von Volker Hahn (DB Systel GmbH) bearbeitet -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" 
+xmlns="http://www.uic.org/xml/passenger/01"
+targetNamespace="http://www.uic.org/xml/passenger/01"
+elementFormDefault="unqualified" 
+attributeFormDefault="unqualified">
+	<xs:include schemaLocation="passengercomplextypes.xsd"/>
+	<xs:element name="AddPersonalDataRequest">
+		<xs:annotation>
+			<xs:documentation>This can be used for an update as well. The old data will be replaced completely by the new data.</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="RequestingRailway" type="xs:string">
+					<xs:annotation>
+						<xs:documentation>RICS code</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="BookingReference">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="BookingId" type="xs:string">
+								<xs:annotation>
+									<xs:documentation>Reservation reference number (element 34) in case of reservations and IRTs</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="Train" type="xs:string" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>train number (element 20)  - To be used with systems where the bookingId is not unique</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="DepartureDate" type="xs:date" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>To be used with systems where the bookingId is not unique</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="Passenger" type="PassengerType" minOccurs="0" maxOccurs="unbounded"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

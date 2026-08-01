@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Mit XMLSpy v2009 sp1 (http://www.altova.com) von Volker Hahn (DB Systel GmbH) bearbeitet -->
+<!-- edited with XMLSpy v2006 rel. 3 sp2 (http://www.altova.com) by GantertC (DB Systems GmbH) -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://www.uic.org/xml/passenger/01" targetNamespace="http://www.uic.org/xml/passenger/01" elementFormDefault="unqualified" attributeFormDefault="unqualified">
+	<xs:include schemaLocation="uic_reservationcomplextypes.xsd"/>
+	<xs:element name="LayoutReply">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="AllocatingSystem" type="xs:int">
+					<xs:annotation>
+						<xs:documentation>system taht delivers the layouts. Layouts codes are unique within the scope of the allocating system.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:choice>
+					<xs:element name="LayoutData">
+						<xs:annotation>
+							<xs:documentation>The message delivers up to twenty layouts. In acse there are more layouts available a new request to load subsequent layouts must be sent.
+</xs:documentation>
+						</xs:annotation>
+						<xs:complexType>
+							<xs:sequence>
+								<xs:element name="Layout" maxOccurs="20">
+									<xs:complexType>
+										<xs:complexContent>
+											<xs:extension base="CoachLayoutDescriptionType">
+												<xs:attribute name="LoadingId" type="xs:int">
+													<xs:annotation>
+														<xs:documentation>The Id is used to check in a  data request whether the layout might have been modified since the last request. Data are delivered only if data are changed.</xs:documentation>
+													</xs:annotation>
+												</xs:attribute>
+												<xs:attribute name="Final" type="xs:boolean" default="false">
+													<xs:annotation>
+														<xs:documentation>indicates, that a request for subsequent layouts will not return further data</xs:documentation>
+													</xs:annotation>
+												</xs:attribute>
+											</xs:extension>
+										</xs:complexContent>
+									</xs:complexType>
+								</xs:element>
+							</xs:sequence>
+						</xs:complexType>
+					</xs:element>
+					<xs:element name="LayoutUnchanged" type="xs:boolean">
+						<xs:annotation>
+							<xs:documentation>true: the layouts have not been changed since the loadingId of the request was generated.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="ReplyCode" type="xs:int">
+						<xs:annotation>
+							<xs:documentation>error reply code:           
+
+    001 - syntax error in request
+    010 - no layouts available
+    100 - technical error 
+    110 - service temporarily unavailable
+</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:choice>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

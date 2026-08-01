@@ -1,0 +1,901 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" 
+xmlns="http://www.uic.org/xml/passenger/01"
+targetNamespace="http://www.uic.org/xml/passenger/01"
+elementFormDefault="unqualified" 
+attributeFormDefault="unqualified">
+	<xs:include schemaLocation="passengercomplextypes.xsd"/>
+	<xs:simpleType name="AlternativeServiceCodeType">
+		<xs:annotation>
+			<xs:documentation>Leaflet 918 element 62</xs:documentation>
+			<xs:documentation>
+			A - Seats 1st Class smoking compartment coach
+			B - Seats 1st Class smoking open saloon coach
+			C - Seats 1st Class non-smoking compartment coach
+			D - Seats 1st Class non-smoking open saloon coach
+			E - Seats 2nd Class smoking compartment coach
+			F - Seats 2nd Class non-smoking compartment coach
+			G - Seats 2nd Class smoking open saloon coach
+			H - Seats with meal at seat 1st Class smoking
+			T - Seats with meal at seat 1st Class non-smoking
+			J - Seats 2nd Class non-smoking open saloon coach
+			K - Seats with meal at seat 2nd Class smoking
+			L - Seats with meal at seat 2nd Class non-smoking
+			M - Couchette 2nd Class smoking, four-berth
+			N - Couchette 1st Class smoking
+			O - Couchette 1st Class non-smoking
+			P - Couchette 2nd Class non-smoking, four-berth
+			Q - Couchette 2nd Class smoking
+			R - Couchette 2nd Class non-smoking
+			S - Single sleeping berth
+			T - Special sleeping berth
+			U - Double sleeping berth
+			V - T2 sleeping berth
+			W - T3 sleeping berth
+			X - T4 sleeping berth
+			Y - Restaurant car
+			</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:length value="1"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="AllocatedCoachTypeType">
+		<xs:annotation>
+			<xs:documentation>Leaflet 918 element 51 digit one and  two</xs:documentation>
+			<xs:documentation>
+					1 - In a side-corridor coach
+					2 - In a central-gangway coach
+					3 - In a coach with central-gangway and side corridor
+					4 - In a coach with meals at seat
+					5 - Seat at table in the central-gangway coach
+					6 - wheelchair places with an additional seat
+					14 - In air-conditioned couchette or sleeping ca
+					16 - In panorama coach
+					17 - In compartment with shower and WC
+					18 - In compartment with shower
+					19 - In Sleeperette
+					21 -Manager compartment/business
+					22 - Video compartment
+					23 - Conference room
+					24 - Bicycle compartment (including seat)
+					25 - EURAFFAIRES
+					26 - Sleeping car with shower
+					27 - Club
+					28 - Preferente
+					29 - Tourist
+					31 - Pram compartment
+					32 - Only bicycle storage space
+					33 - Cabin8
+					35 - Only tandem-bicycle storage space
+					39 - Cabin-couchette coach
+					52 - Silence
+					53 - Office
+					56 - wheelchair places without an additional seat
+					</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:int">
+			<xs:minInclusive value="0"/>
+			<xs:maxInclusive value="99"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="AllocatedCompartmentTypeType">
+		<xs:annotation>
+			<xs:documentation>Leaflet 918 element 51 third and fourth digit</xs:documentation>
+			<xs:documentation>
+					1 - Passenger needing assistance/disabled passenger
+					2 - Unaccompanied child/young person
+					7 - Woman and child compartment
+					8 - places with easy access - PRMs 
+					9 - Complete compartment
+					10 - Family compartment
+					11 - Quiet compartment
+					12 - Conference compartment
+					13 - Four-berth couchette compartment
+					15 - Compartment without animals
+					20 - Couchette coach without equipment
+					34 - Seat near restaurant car
+					36 - Seat with drink
+					37 - Seat with meal
+					38 - Seat with electric power point
+					40 - PREMIUM
+					41 - Place with animals
+					42 - Breakfast included
+					43 - Area with amplifiers for mobile telephones
+					44 - SOLO (individual seat)
+					45 - Duo face to face (2 seats facing)
+					46 - Duo side by side (2 seats side by side)
+					47 - Club Duo (2 seats facing in a separate compartment) 
+					48 - Club 4 (4 seats facing normally 1st Class)
+					49 - Carré (4 seats facing normally 2nd Class) 
+					50 - Salon (6 seats facing in a separate compartment)
+					51 - Kiosque (special seat in the edge area)
+					54 - Five-berth couchette compartment
+					55 - Double bed (Suite DeLuxe)
+					57 - place close to place with animals
+					</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:int">
+			<xs:minInclusive value="0"/>
+			<xs:maxInclusive value="99"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="AllocatedContingentTypeType">
+		<xs:annotation>
+			<xs:documentation>Leaflet 918 element 51 fith and sixth digit</xs:documentation>
+			<xs:documentation>
+					11 - Railtour (at present SBB - FS offer)
+					12 - Frantour (at present SNCF offer)
+					13 - Wasteels (at present SBB - FS offer)
+					14 - CIT (Compagnia Italiana Turismo) (at present SBB - FS offer)
+					15 - Geerinck (at present SNCF - SBB offer)
+					16 - Trans (at present SNCF offer) 
+					30 - Female compartment in couchette coach
+			</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:int">
+			<xs:minInclusive value="0"/>
+			<xs:maxInclusive value="99"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="ApplicationVersionType">
+		<xs:annotation>
+			<xs:documentation>Leaflet 918 element 9</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:integer"/>
+	</xs:simpleType>
+	<xs:simpleType name="BerthCodeType">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">Type of a berth. </xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="ServiceCodeType">
+			<xs:length value="1"/>
+			<xs:enumeration value="L"/>
+			<xs:enumeration value="M"/>
+			<xs:enumeration value="N"/>
+			<xs:enumeration value="P"/>
+			<xs:enumeration value="Q"/>
+			<xs:enumeration value="R"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="BoatCategoryType">
+		<xs:annotation>
+			<xs:documentation>Leaflet 918 element 29</xs:documentation>
+			<xs:documentation xml:lang="en">
+			1 - boat less than 3,81 m in length and with a roof width up to 1,35 m.
+			2 - boat between 3,81 m up to 4,42 m in length and with a roof width up to 1,35 m
+			3 - boat more than 4,42 m in length and with a roof width up to 1,35 m
+			6 - boat less than 3,81 m in length and with a roof width between 1,36 m and 1,55 m
+			7 - boat between 3,81 m and 4,42 m in length and with a roof width between 1,36 m and 1,55 m
+			8 - boat more than 4,42 m in length and with a roof width between 1,36 m and 1,55 m
+			</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:integer">
+			<xs:enumeration value="1"/>
+			<xs:enumeration value="2"/>
+			<xs:enumeration value="3"/>
+			<xs:enumeration value="6"/>
+			<xs:enumeration value="7"/>
+			<xs:enumeration value="8"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="DialogueNumberType">
+		<xs:annotation>
+			<xs:documentation>Leaflet 918 element 3</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:integer">
+			<xs:minInclusive value="1"/>
+			<xs:maxInclusive value="99999"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="DispositionElementType">
+		<xs:annotation>
+			<xs:documentation>Leaflet 918 element 10</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:length value="2"/>
+			<xs:whiteSpace value="preserve"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="GridPositionType">
+		<xs:restriction base="xs:int">
+			<xs:minInclusive value="1"/>
+			<xs:maxInclusive value="9999"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="InfoTextType">
+		<xs:restriction base="xs:token">
+			<xs:minLength value="1"/>
+			<xs:maxLength value="30"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="JourneyIdentifierType">
+		<xs:restriction base="xs:integer">
+			<xs:minInclusive value="0"/>
+			<xs:maxInclusive value="99"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="LocalReferenceNumberType">
+		<xs:annotation>
+			<xs:documentation>Leaflet 918 element 34 last 10 digits</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:length value="10"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="LoadingListIdType">
+		<xs:restriction base="xs:integer">
+			<xs:minInclusive value="1"/>
+			<xs:maxInclusive value="999"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="NumberOfNightStagesType">
+		<xs:restriction base="xs:integer">
+			<xs:minInclusive value="1"/>
+			<xs:maxInclusive value="9"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="NumberOfPositionsType">
+		<xs:restriction base="NumberOfPassengerType">
+			<xs:maxInclusive value="2"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="OverbookedPlacesType">
+		<xs:restriction base="NumberOfPassengerType"/>
+	</xs:simpleType>
+	<xs:simpleType name="PassengerSexType">
+		<xs:annotation>
+			<xs:documentation source="Code 1 = male, code 2 = female, copde 3 = mixed (to be used in reservations without gender separation)." xml:lang="en"/>
+		</xs:annotation>
+		<xs:restriction base="xs:integer">
+			<xs:enumeration value="1"/>
+			<xs:enumeration value="2"/>
+			<xs:enumeration value="3"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="PlaceCodeType">
+		<xs:annotation>
+			<xs:documentation>Leaflet 918 element 50 the last digit
+
+</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="A"/>
+			<xs:enumeration value="B"/>
+			<xs:enumeration value="C"/>
+			<xs:enumeration value="D"/>
+			<xs:enumeration value="E"/>
+			<xs:enumeration value="F"/>
+			<xs:enumeration value="G"/>
+			<xs:enumeration value="H"/>
+			<xs:enumeration value="I"/>
+			<xs:enumeration value="J"/>
+			<xs:enumeration value="K"/>
+			<xs:enumeration value="L"/>
+			<xs:enumeration value="M"/>
+			<xs:enumeration value="N"/>
+			<xs:enumeration value="O"/>
+			<xs:enumeration value="P"/>
+			<xs:enumeration value="Q"/>
+			<xs:enumeration value="R"/>
+			<xs:enumeration value="S"/>
+			<xs:enumeration value="T"/>
+			<xs:enumeration value="U"/>
+			<xs:enumeration value="V"/>
+			<xs:enumeration value="W"/>
+			<xs:enumeration value="X"/>
+			<xs:enumeration value="Y"/>
+			<xs:enumeration value="Z"/>
+			<xs:enumeration value="0"/>
+			<xs:enumeration value="1"/>
+			<xs:enumeration value="2"/>
+			<xs:enumeration value="3"/>
+			<xs:enumeration value="4"/>
+			<xs:enumeration value="5"/>
+			<xs:enumeration value="6"/>
+			<xs:enumeration value="7"/>
+			<xs:enumeration value="8"/>
+			<xs:enumeration value="9"/>
+			<xs:enumeration value=")"/>
+			<xs:enumeration value="("/>
+			<xs:enumeration value=","/>
+			<xs:enumeration value="+"/>
+			<xs:enumeration value="-"/>
+			<xs:enumeration value="."/>
+			<xs:enumeration value="/"/>
+			<xs:enumeration value=":"/>
+			<xs:enumeration value="="/>
+			<xs:enumeration value="a"/>
+			<xs:enumeration value="b"/>
+			<xs:enumeration value="c"/>
+			<xs:enumeration value="d"/>
+			<xs:enumeration value="e"/>
+			<xs:enumeration value="f"/>
+			<xs:enumeration value="g"/>
+			<xs:enumeration value="h"/>
+			<xs:enumeration value="i"/>
+			<xs:enumeration value="j"/>
+			<xs:enumeration value="k"/>
+			<xs:enumeration value="l"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="PlaceNumberType">
+		<xs:restriction base="xs:string">
+			<xs:minLength value="2"/>
+			<xs:maxLength value="3"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="PositionOfPlaceType">
+		<xs:annotation>
+			<xs:documentation>corresponding to Leaflet 918 element 36 (new coding schema) </xs:documentation>
+			<xs:documentation>
+               W - window seat
+               A - aile seat
+               M - middle seat
+               S - single window seat
+               U - upper level berth or couchette
+               I - middle level berth or couchette
+               L - lower level berth or couchette
+               </xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:length value="1"/>
+			<xs:enumeration value="W"/>
+			<xs:enumeration value="A"/>
+			<xs:enumeration value="M"/>
+			<xs:enumeration value="S"/>
+			<xs:enumeration value="U"/>
+			<xs:enumeration value="I"/>
+			<xs:enumeration value="L"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="PositionOfCompartmentType">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">Leaflet 918 element 38</xs:documentation>
+			<xs:documentation xml:lang="en">
+					1 - lower level. Request is  treated as optional
+					2 - upper level. Request is treated as optional
+					3 - compartment on both levels. value to be applied in response mesages only 
+					</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:integer">
+			<xs:enumeration value="1"/>
+			<xs:enumeration value="2"/>
+			<xs:enumeration value="3"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="ReasonForCancellationType">
+		<xs:annotation>
+			<xs:documentation>Leaflet 918 element 74</xs:documentation>
+			<xs:documentation>
+					1 - Operating error
+					2 - Strike
+					3 - exchange
+					4 - cancellation before payment
+					5 - automatic cancelation on a reservation subject to a bilaterally agreed cancellation time limit
+					</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:integer">
+			<xs:enumeration value="1"/>
+			<xs:enumeration value="2"/>
+			<xs:enumeration value="3"/>
+			<xs:enumeration value="4"/>
+			<xs:enumeration value="5"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="RequestedCoachTypeType">
+		<xs:annotation>
+			<xs:documentation>Leaflet 918 element 37 first two digit</xs:documentation>
+			<xs:documentation>
+       		          1 - Definitely side-corridor coach
+              		  2 - Definitely central-gangway coach
+  		              3 - If possible side-corridor coach
+  		              4 - If possible central-gangway coach
+  		              5 - If possible seats at table in central-gangway coach
+  		              6 - wheelchair places with an additional seat
+					14 - In air-conditioned couchette or sleeping ca
+					16 - In panorama coach
+					17 - In compartment with shower and WC
+					18 - In compartment with shower
+					19 - In Sleeperette
+					21 -Manager compartment/business
+					22 - Video compartment
+					23 - Conference room
+					24 - Bicycle compartment (including seat)
+					25 - EURAFFAIRES
+					26 - Sleeping car with shower
+					27 - Club
+					28 - Preferente
+					29 - Tourist
+					31 - Pram compartment
+					32 - Only bicycle storage space
+					33 - Cabin8
+					35 - Only tandem-bicycle storage space
+					39 - Cabin-couchette coach
+					52 - Silence
+					53 - Office  		
+					56 - wheelchair places without an additional seat   
+  		   </xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:int">
+			<xs:minInclusive value="0"/>
+			<xs:maxInclusive value="99"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="RequestedCompartmentTypeType">
+		<xs:annotation>
+			<xs:documentation>Leaflet 918 element 37 third and fourth digit</xs:documentation>
+			<xs:documentation>
+					1 - Passenger needing assistance/disabled passenger
+					2 - Unaccompanied child/young person
+					7 - Woman and child compartment
+					8 - places with easy access - PRMs 
+					9 - Complete compartment
+					10 - Family compartment
+					11 - Quiet compartment
+					12 - Conference compartment
+					13 - Four-berth couchette compartment
+					15 - Compartment without animals
+					20 - Couchette coach without equipment
+					34 - Seat near restaurant car
+					36 - Seat with drink
+					37 - Seat with meal
+					38 - Seat with electric power point
+					40 - PREMIUM
+					41 - Place with animals
+					42 - Breakfast included
+					43 - Area with amplifiers for mobile telephones
+					44 - SOLO (individual seat)
+					45 - Duo face to face (2 seats facing)
+					46 - Duo side by side (2 seats side by side)
+					47 - Club Duo (2 seats facing in a separate compartment) 
+					48 - Club 4 (4 seats facing normally 1st Class)
+					49 - Carré (4 seats facing normally 2nd Class) 
+					50 - Salon (6 seats facing in a separate compartment)
+					51 - Kiosque (special seat in the edge area)
+					54 - Five-berth couchette compartment
+					55 - Double bed (Suite DeLuxe)
+					57 - place close to place with animals
+					</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:int">
+			<xs:minInclusive value="0"/>
+			<xs:maxInclusive value="99"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="RequestedContingentTypeType">
+		<xs:annotation>
+			<xs:documentation>Leaflet 918 element 37 last two digit</xs:documentation>
+			<xs:documentation>
+					11 - Railtour (at present SBB - FS offer)
+					12 - Frantour (at present SNCF offer)
+					13 - Wasteels (at present SBB - FS offer)
+					14 - CIT (Compagnia Italiana Turismo) (at present SBB - FS offer)
+					15 - Geerinck (at present SNCF - SBB offer)
+					16 - Trans (at present SNCF offer) 
+					30 - Female compartment in couchette coach
+			</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:int">
+			<xs:minInclusive value="0"/>
+			<xs:maxInclusive value="99"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="ReplyCodeType">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">Leaflet 918 element 63 -- The code gives the reason for the negative reply. </xs:documentation>
+			<xs:documentation xml:lang="en"> 
+			1 - Syntax error: general reply with erroneous coding or erroneous construction of request.
+			10 - 	Reservation blocked: the reservation equipment is not attainable in the logic sense.
+			20 - Request cannot be processed because there is no provision for: - the type of request (e.g. adjacent place, specific place) or - the type of service (e.g. partial cancellation, exchange) or - the service (e.g. ferry, mealtime, tax at station) or - a reservation in more than one compartment or in more than one type of berth.
+			30 - Erroneous cancellation data (reference number, train, date, number of places), or cancellation already carried out.
+			31 - Incompatibility of the place designations when specific or adjacent places are requested.
+			32 - Train category and tariff details incompatible.
+			33 - Erroneous cancellation data (reference number, train, date, number of places).
+			34 -	Already cancelled.
+			40 - Beginning of allocation time or closing of booking period not observed.
+			50 - Train cannot be reserved on the sector requested and/or on the day requested.
+			51 - train temporarily not bookable
+			52 - unknown station code in origin or destination station
+			60 - Service in the train requested or in the reservation sector requested not available on the day requested.
+			61 -	Service (e.g. couchette coach) and requested reservation sector not compatible on the day requested (61 should not be used in future implementations).
+			70 -	Request for "definitely smoking" or "definitely non-smoking" cannot be met.
+			71 -	Compartment request cannot be met.
+			72 -	Request for a specific seat position cannot be met.
+			73 -	Special offer/quota not available.
+			74 -   Requested separate or mixed gender allocation not possible
+			75 -   Individual ticketing for this request cannot be met.
+			80 -	Service on the requested travel day, train and requested route sold out
+			81 -	Not possible to accommodate together; divide reservation request.
+			82 - Service class not available.
+			83 -	Invalid tariff combination.
+			84 -	Cancellation not permitted.
+			85 -	Partial cancellation not permitted.
+			86 -	Tariff requested no longer available.
+			87 -	Tariff not valid for number of people or service.
+			88 -	Tariff code necessary for train.
+			100 -	Allocation possible; addition to negative partial replies to a combined request.
+			110 - Reservation temporarily not possible; allocation from the requested place allocation temporarily not possible for operating or data-processing reasons.
+			111 - Reservation not possible; electronic allocation from the requested place allocation will not be possible for operating  or data-processing reasons for a considerable time.
+			120 - Cancellation message: processing not possible.
+			200 - Request not permitted an account of the conditions of sale.		
+            201 - Request does not correspond to the definition of the product.
+            202 - Refund not possible for this product.			
+			</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:integer">
+			<xs:minInclusive value="0"/>
+			<xs:maxInclusive value="999"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="ReservationSystemType">
+		<xs:annotation>
+			<xs:documentation>Leaflet 918-1 reservation system code</xs:documentation>
+			<xs:documentation>
+			10	Duetto 
+15	Resarail-Eurostar
+18	Resarail-THALYS
+20	EXPRESS 3-RZD 
+21	EXPRESS 3-BC 
+22	ASO PT UZ 
+23	EXPRESS 3-CFM
+24	EXPRESS 3-LG
+25	EXPRESS 3-LDZ
+26	EXPRESS 3-EVR
+27	EXPRESS 3-KZH
+29	EXPRESS 3-UTI
+34    FYRA International
+43	EPA-MAV
+45	EPA-SBB
+51	PKP
+53	EPA-CFR
+54	ARES 
+55	MAV-RES
+56	KVC 
+59	EXPRESS 3-KRG
+66	EXPRESS 3-TZD
+70	ATOC
+71	SIRE-RENFE
+72	EPA-ZS  
+73	OSE
+74	PETRA
+75	TCDD
+76	PLADS90-NSB
+77	Railbest
+78	EPA-HZ
+79	EPA-SZ
+80	EPA-DB
+81	EPA-ÖBB
+82	EPA-CFL
+83	SIPAX
+84	EPA-NS
+85	EPR
+86	PLADS90-DSB
+87	Resarail-SNCF
+88	EPA-SNCB
+94	SIRE-CP
+			</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:int">
+			<xs:minInclusive value="1"/>
+			<xs:maxInclusive value="99"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="ReservationSystemEnumType">
+		<xs:annotation>
+			<xs:documentation>Leaflet 918 reservation system code same as ReservationSystemCodeType but defined as enumeration</xs:documentation>
+			<xs:documentation>
+			10	Duetto 
+15	Resarail-Eurostar
+18	Resarail-THALYS
+20	EXPRESS 3-RZD 
+21	EXPRESS 3-BC 
+22	ASO PT UZ 
+23	EXPRESS 3-CFM
+24	EXPRESS 3-LG
+25	EXPRESS 3-LDZ
+26	EXPRESS 3-EVR
+27	EXPRESS 3-KZH
+29	EXPRESS 3-UTI
+34    FYRA International
+43	EPA-MAV
+45	EPA-SBB
+51	PKP
+53	EPA-CFR
+54	ARES 
+55	MAV-RES
+56	KVC 
+59	EXPRESS 3-KRG
+66	EXPRESS 3-TZD
+70	ATOC
+71	SIRE-RENFE
+72	EPA-ZS  
+73	OSE
+74	PETRA
+75	TCDD
+76	PLADS90-NSB
+77	Railbest
+78	EPA-HZ
+79	EPA-SZ
+80	EPA-DB
+81	EPA-ÖBB
+82	EPA-CFL
+83	SIPAX
+84	EPA-NS
+85	EPR
+86	PLADS90-DSB
+87	Resarail-SNCF
+88	EPA-SNCB
+94	SIRE-CP
+			</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:integer">
+			<xs:enumeration value="10"/>
+			<xs:enumeration value="15"/>
+			<xs:enumeration value="18"/>
+			<xs:enumeration value="20"/>
+			<xs:enumeration value="21"/>
+			<xs:enumeration value="22"/>
+			<xs:enumeration value="23"/>
+			<xs:enumeration value="24"/>
+			<xs:enumeration value="25"/>
+			<xs:enumeration value="26"/>
+			<xs:enumeration value="27"/>
+			<xs:enumeration value="29"/>
+			<xs:enumeration value="34"/>
+			<xs:enumeration value="43"/>
+			<xs:enumeration value="45"/>
+			<xs:enumeration value="51"/>
+			<xs:enumeration value="53"/>
+			<xs:enumeration value="54"/>
+			<xs:enumeration value="55"/>
+			<xs:enumeration value="56"/>
+			<xs:enumeration value="66"/>
+			<xs:enumeration value="70"/>
+			<xs:enumeration value="71"/>
+			<xs:enumeration value="72"/>
+			<xs:enumeration value="73"/>
+			<xs:enumeration value="74"/>
+			<xs:enumeration value="75"/>
+			<xs:enumeration value="76"/>
+			<xs:enumeration value="77"/>
+			<xs:enumeration value="78"/>
+			<xs:enumeration value="79"/>
+			<xs:enumeration value="80"/>
+			<xs:enumeration value="81"/>
+			<xs:enumeration value="82"/>
+			<xs:enumeration value="83"/>
+			<xs:enumeration value="84"/>
+			<xs:enumeration value="85"/>
+			<xs:enumeration value="86"/>
+			<xs:enumeration value="87"/>
+			<xs:enumeration value="88"/>
+			<xs:enumeration value="94"/>
+			<xs:enumeration value="50"/>
+			<xs:enumeration value="59"/>
+			<xs:enumeration value="93"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="SequenceIdType">
+		<xs:annotation>
+			<xs:documentation>Leaflet 918 element 17</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:integer">
+			<xs:minInclusive value="1"/>
+			<xs:maxInclusive value="99"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="SmokerType">
+		<xs:annotation>
+			<xs:documentation>Leaflet 918 element 35</xs:documentation>
+			<xs:documentation>
+					1 - Smoking
+					2 - Non-smoking
+			</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:integer">
+			<xs:enumeration value="1"/>
+			<xs:enumeration value="2"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="SynchroCodeType">
+		<xs:annotation>
+			<xs:documentation>Leaflet 918 element 10</xs:documentation>
+			<xs:documentation xml:lang="en">
+			0 - The original request was processed. Reservation will be cancelled.
+			10 - a time-out occurred
+			20 - The receiving application cannot effect resumption.
+			30 - The original request was not processed
+			</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:integer">
+			<xs:enumeration value="10"/>
+			<xs:enumeration value="0"/>
+			<xs:enumeration value="20"/>
+			<xs:enumeration value="30"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="TrailerSizeType">
+		<xs:annotation>
+			<xs:documentation>Leaflet 918 element 45</xs:documentation>
+			<xs:documentation>
+					1 - Trailer less than 2,31 m in length
+					2 - Trailer between 2,31 m and 2,50 m in length
+					3 - Trailer between 2,51 m and 3,80 m in length
+					4 - Trailer between 3,81 m and 4,42 m in length
+					5 - Trailer between 4,42 m and 5,30 m in length				
+					</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:integer">
+			<xs:enumeration value="1"/>
+			<xs:enumeration value="2"/>
+			<xs:enumeration value="3"/>
+			<xs:enumeration value="4"/>
+			<xs:enumeration value="5"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="TypeOfJourneyType">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">Leaflet 918 element 33 -- Shows that the request refers to a single journey or to one of a number of sections of a journey.</xs:documentation>
+			<xs:documentation xml:lang="en">
+					1 - single journey
+					2 - multiple journeys
+					3 - single return
+					4 - multiple return
+					</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:integer">
+			<xs:enumeration value="1"/>
+			<xs:enumeration value="2"/>
+			<xs:enumeration value="3"/>
+			<xs:enumeration value="4"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="TypeOfMealType">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">
+			B - breakfast
+			L - lunch
+			D - dinner</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="B"/>
+			<xs:enumeration value="L"/>
+			<xs:enumeration value="D"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="VehicleCategoryType">
+		<xs:annotation>
+			<xs:documentation>Leaflet 918 element 29</xs:documentation>
+			<xs:documentation xml:lang="en">
+					1 - Motor vehicle less than 3,81 m in length and with a roof width up to 1,35 m.
+					2 - Motor vehicle between 3,81 m up to 4,42 m in length and with a roof width up to 1,35 m
+					3 - Motor vehicle or boat between 4,42 m up to 5,30 m in length and with a roof width up to 1,35 m
+					4 - Motorcycle
+					5 - Motorcycle and sidecar
+					6 - Motor vehicle less than 3,81 m in length and with a roof width between 1,36 m and 1,55 m
+					7 - Motor vehicle between 3,81 m and 4,42 m in length and with a roof width between 1,36 m and 1,55 m
+					8 - Motor vehicle or boat between 4,42 m up to 5,30 m in length and with a roof width between 1,36 m and 1,55 m
+					</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:integer">
+			<xs:enumeration value="1"/>
+			<xs:enumeration value="2"/>
+			<xs:enumeration value="3"/>
+			<xs:enumeration value="4"/>
+			<xs:enumeration value="5"/>
+			<xs:enumeration value="6"/>
+			<xs:enumeration value="7"/>
+			<xs:enumeration value="8"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="VehicleHeigthType">
+		<xs:restriction base="xs:integer">
+			<xs:minInclusive value="1"/>
+			<xs:maxInclusive value="999"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="VehicleRegistrationNumberType">
+		<xs:restriction base="xs:token">
+			<xs:minLength value="1"/>
+			<xs:maxLength value="10"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="GbStatusType">
+		<xs:annotation>
+			<xs:documentation>Status for grafical booking (1 = allocated, 2 = free, 3 = restricted)</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:int">
+			<xs:enumeration value="1"/>
+			<xs:enumeration value="2"/>
+			<xs:enumeration value="3"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="TrainHeadType">
+		<xs:annotation>
+			<xs:documentation>Indicates if a coach is at the head (front or back) of a traind and whether it might be copled with another train part (without dorway to the other train)
+
+0 = no information available
+3 = train head (or end)
+4 = trainhed (or end) connected to a second train part</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:length value="1"/>
+			<xs:enumeration value="0"/>
+			<xs:enumeration value="3"/>
+			<xs:enumeration value="4"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="DirectionOfTravelType">
+		<xs:annotation>
+			<xs:documentation>Direction of travel
+U =unspecified, 
+D = in direction 
+O = opposite to direction
+C = changing
+E = starting in direction but changing later
+F = starting oposite to direction, but changing later</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:token">
+			<xs:enumeration value="D"/>
+			<xs:enumeration value="O"/>
+			<xs:enumeration value="C"/>
+			<xs:enumeration value="U"/>
+			<xs:enumeration value="E"/>
+			<xs:enumeration value="F"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="LayoutServiceType">
+		<xs:annotation>
+			<xs:documentation>Leaflet 918 element 15
+			Only a subset of codes is used, as most defined codes refere to services not implemented </xs:documentation>
+			<xs:documentation>
+					01 - Seats in trains
+					02 - Couchettes in trains
+					03 - Berths in trains
+				</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:int">
+			<xs:enumeration value="01"/>
+			<xs:enumeration value="02"/>
+			<xs:enumeration value="03"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="LayoutPlaceRemarkType">
+		<xs:annotation>
+			<xs:documentation>remark on a place:
+				value 1: place might have a table
+				value 2: table at the place might be missing 				 
+				value 3: place might have a different direction
+				value 4: place might have a table and a different direction
+				value 5: table at the place might be missing and place might have a different direction
+				value 6: place might be in compartment
+
+				value 7: 	place might be in open space			  
+					</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:int">
+			<xs:enumeration value="1"/>
+			<xs:enumeration value="2"/>
+			<xs:enumeration value="3"/>
+			<xs:enumeration value="4"/>
+			<xs:enumeration value="5"/>
+			<xs:enumeration value="6"/>
+			<xs:enumeration value="7"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="SpecialCoachType">
+		<xs:annotation>
+			<xs:documentation>Indicates special coaches:
+
+1 = luggage coach
+2 = restaurant coach
+5 = bicycle transport coach</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="1"/>
+			<xs:enumeration value="2"/>
+			<xs:enumeration value="5"/>
+		</xs:restriction>
+	</xs:simpleType>
+</xs:schema>

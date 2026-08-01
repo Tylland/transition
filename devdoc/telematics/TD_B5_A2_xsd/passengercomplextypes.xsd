@@ -1,0 +1,723 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://www.uic.org/xml/passenger/01" targetNamespace="http://www.uic.org/xml/passenger/01" elementFormDefault="unqualified" attributeFormDefault="unqualified">
+	<xs:include schemaLocation="passengersimpletypes.xsd"/>
+	<xs:complexType name="CustomerCode">
+		<xs:annotation>
+			<xs:documentation>Identifies the railway customer</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="CountryCode" type="CountryCodeISO2AType"/>
+			<xs:element name="PrimaryCode" type="xs:string"/>
+			<xs:element name="AdditionalCode" type="xs:string" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="DimensionValue">
+		<xs:annotation>
+			<xs:documentation>Measurement Values of Length, Height and Width</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="Length">
+				<xs:annotation>
+					<xs:documentation>Length in milimetres</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:int">
+						<xs:minInclusive value="1"/>
+						<xs:maxInclusive value="999999"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="Height">
+				<xs:annotation>
+					<xs:documentation>Height in milimetres</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:integer">
+						<xs:minInclusive value="1"/>
+						<xs:maxInclusive value="999999"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="Width">
+				<xs:annotation>
+					<xs:documentation>Width in milimetres</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:int">
+						<xs:minInclusive value="1"/>
+						<xs:maxInclusive value="999999"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="LocationIdent">
+		<xs:annotation>
+			<xs:documentation>Indication of the Railway location in TSI context</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:restriction base="StationCodeType">
+				<xs:sequence>
+					<xs:element name="CountryCode" type="CountryCodeISO2AType"/>
+					<xs:element name="LocationPrimaryCode" type="StationLocalCodeType"/>
+					<xs:element name="LocationSubsidiaryCode" type="LocationSubsidiaryType" minOccurs="0"/>
+				</xs:sequence>
+				<xs:attribute name="Context" type="ContextType" use="prohibited" fixed="TSI"/>
+			</xs:restriction>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="LocationSubsidiaryType">
+		<xs:attribute name="LocationSubsidiaryTypeCode" type="xs:string"/>
+	</xs:complexType>
+	<xs:complexType name="TicketSecurityType">
+		<xs:sequence>
+			<xs:element name="FulfillmentMedium" type="xs:string" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>Fulfillment media where this feature can be used. If this is missing all media are possible.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="ControlId" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Id of the ticket to be controlled on board of the train by checking the booking status online. </xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="PassengerId" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Id of the passenger to be controlled on board of the train by checking the booking status online. </xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="PassengerName" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>in case of security features linked to a specific passenger</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="TicketLink" type="xs:anyURI" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>URI to download the ticket </xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="TicketLinkType" type="xs:string" default="pdf" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Type of the document to be downloaded via the TicletLink. (Default: pdf)</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="SecurityFeature" minOccurs="0" maxOccurs="unbounded">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="FeatureType">
+							<xs:annotation>
+								<xs:documentation>"rawBc" binary data too be included in an bar code
+"matrixBc" binary data of the black and white pixel matrix of a square bar code
+"pngBc" png image data of a bar code
+"jpgBc" jpg data of a bar code
+"pngVe" png image data of a visual element
+"jpgVe" jpg data of a visual element
+"gifVe" gif data of a visual element</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="Data" type="xs:base64Binary"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="SecurityFeatureLink" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>for future use</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="FeatureLinkType" type="xs:string">
+							<xs:annotation>
+								<xs:documentation>"visual element"   download of visual security element (formats jpg, png, gif)
+"barcode"   download of barcode as image (formats jpg, png
+</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="URI" type="xs:anyURI"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="UsageMandatory" type="xs:boolean">
+				<xs:annotation>
+					<xs:documentation>in case of mandatory usage the security feature has to be provided to the traveler </xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="SecurePaperTicketOnly" type="xs:boolean" default="false">
+				<xs:annotation>
+					<xs:documentation>RCT-2 or RCCST no print@home</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="StationCodeType">
+		<xs:sequence>
+			<xs:choice>
+				<xs:element name="CountryCode" type="CountryCodeType"/>
+				<xs:element name="Country" type="CountryCodeType"/>
+			</xs:choice>
+			<xs:choice>
+				<xs:element name="LocationPrimaryCode" type="StationLocalCodeType"/>
+				<xs:element name="LocalCode" type="StationLocalCodeType"/>
+			</xs:choice>
+			<xs:element name="LocationSubsidiaryCode" type="LocationSubsidiaryType" minOccurs="0"/>
+		</xs:sequence>
+		<xs:attribute name="Context" type="ContextType" use="optional" default="UIC"/>
+	</xs:complexType>
+	<xs:complexType name="StationCode918Type">
+		<xs:annotation>
+			<xs:documentation> Leaflet 918 element 22</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:restriction base="StationCodeType">
+				<xs:sequence>
+					<xs:element name="Country" type="CountryCodeUICType"/>
+					<xs:element name="LocalCode" type="StationLocalCodeType"/>
+				</xs:sequence>
+				<xs:attribute name="Context" type="ContextType" fixed="918"/>
+			</xs:restriction>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="ServiceBrandInformationType">
+		<xs:annotation>
+			<xs:documentation>Informations on the service brand</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="Code" type="ServiceBrandCodeType">
+				<xs:annotation>
+					<xs:documentation>service btrand code according to the UIC service brand code list </xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Abbreviation" type="ServiceBrandAbbreviationType" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>The abbreviation has to be included if there is an abbreviation defined for the service brand. </xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Description" type="ServiceBrandDescriptionType" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>The description text has to be included if the service brand has defined a description text for printing.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="TariffCodeType">
+		<xs:attribute name="Context" type="ContextType"/>
+		<xs:attribute name="Code" type="TariffCodeCodeType"/>
+	</xs:complexType>
+	<xs:complexType name="TariffCodeUICType">
+		<xs:annotation>
+			<xs:documentation>Leaflet 918 element  42</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:restriction base="TariffCodeType">
+				<xs:attribute name="Context" type="ContextType" fixed="UIC"/>
+				<xs:attribute name="Code" type="TariffCodeCodeType"/>
+			</xs:restriction>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="TariffCode108Type">
+		<xs:complexContent>
+			<xs:restriction base="TariffCodeType">
+				<xs:attribute name="Context" type="ContextType" fixed="108"/>
+				<xs:attribute name="Code">
+					<xs:simpleType>
+						<xs:restriction base="TariffCodeCodeType">
+							<xs:minInclusive value="1"/>
+							<xs:maxInclusive value="999"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:attribute>
+			</xs:restriction>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="TrainIdent">
+		<xs:annotation>
+			<xs:documentation>Unique identification of a contracted train.  This is not the Train Service Number.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="PathIdent">
+				<xs:simpleType>
+					<xs:restriction base="PathIdent"/>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="ScheduledDepartureDateTime" type="xs:dateTime"/>
+			<xs:element name="PathDepartureLocation" type="LocationIdent"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="TrainStopType">
+		<xs:annotation>
+			<xs:documentation source="iedntification of a train stop" xml:lang="en"/>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="Station" type="StationCodeType"/>
+			<xs:element name="Train">
+				<xs:complexType>
+					<xs:attribute name="TrainNb" type="TrainServiceIdType" use="required"/>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="Platform" minOccurs="0">
+				<xs:complexType>
+					<xs:attribute name="Platform" type="PlatformType" use="optional"/>
+					<xs:attribute name="Track" type="TrackType" use="optional"/>
+					<xs:attribute name="Section" type="PlatformSectionType" use="optional"/>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="Time" type="xs:dateTime" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="SimpleNegativeReplyType">
+		<xs:sequence>
+			<xs:element name="ReplyCode" type="xs:int"/>
+			<xs:element name="CodeTable" type="xs:string" default="RES" minOccurs="0"/>
+			<xs:element name="ErrorDescription" minOccurs="0" maxOccurs="unbounded">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="MissingData" type="xs:string" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>tag name of missing or incorrect data element</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="Text" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>description of the error in English for testing purpose, not designed to be displayed to customers. </xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="PassengerType">
+		<xs:sequence>
+			<xs:element name="PassengerDetails" minOccurs="0">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="Title" type="xs:string" minOccurs="0"/>
+						<xs:element name="FirstNameICAO" minOccurs="0"/>
+						<xs:element name="LastNameICAO" type="xs:string" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>ICAO transliteration - subset of ASCII characters according to the ICAO specification</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="FirstName" type="xs:string" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>UTF-8</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="LastName" type="xs:string" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>UTF-8
+
+in case of multiple last names all names are placed here in Last Name</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="Email" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+						<xs:element name="Phone" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+						<xs:element name="SocialMediaAccount" minOccurs="0" maxOccurs="unbounded">
+							<xs:complexType>
+								<xs:sequence>
+									<xs:element name="type" type="xs:string">
+										<xs:annotation>
+											<xs:documentation>values:
+facebook
+whatsapp
+skype
+wechat
+</xs:documentation>
+										</xs:annotation>
+									</xs:element>
+									<xs:element name="account" type="xs:string"/>
+								</xs:sequence>
+							</xs:complexType>
+						</xs:element>
+						<xs:element name="Language" type="xs:string" minOccurs="0" maxOccurs="unbounded">
+							<xs:annotation>
+								<xs:documentation>Languages spoken by the traveler (ISO Language code)</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="DateOfBirth" type="xs:date" minOccurs="0"/>
+						<xs:element name="TrainStaffInfo" type="xs:string" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>TODO: use cases?, Legal aspects? Information Text provided by the sissuing system in a controled way (e.g. "VIP customer") - To be decided on Dezember meeting</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="PassengerPassport" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Travel document data to be exchanged for border control in case of legal requirements</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="DocumentType" type="DocumentTypeType">
+							<xs:annotation>
+								<xs:documentation>1 = passport
+2 = id-card
+3 = diplomatic passport
+4 = refugee travel document</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="DocumentId" type="xs:string" minOccurs="0"/>
+						<xs:element name="Name" type="xs:string">
+							<xs:annotation>
+								<xs:documentation>ICAO transliteration identical as written in the document</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="CityOfResidence" type="xs:string" minOccurs="0"/>
+						<xs:element name="CountryOfResidence" type="xs:string" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>ISO Country Code</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="CityOfBirth" type="xs:string" minOccurs="0"/>
+						<xs:element name="CountryOfBirth" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>ISO Country code 2-alphabetic</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="Gender" type="xs:int" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>1 = male
+2 = female</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="CountryOfIssue" type="xs:string" minOccurs="0"/>
+						<xs:element name="CityOfIssue" type="xs:string" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>place where the document is issued</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="DateOfIssue" type="xs:date" minOccurs="0"/>
+						<xs:element name="LimitOfValidity" type="xs:date" minOccurs="0"/>
+						<xs:element name="Nationality" type="xs:string" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>ISO Country code 2-alphabetic(2-alphabetiuc</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="CustomerCard" minOccurs="0" maxOccurs="unbounded">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="CardIssuer" type="xs:string">
+							<xs:annotation>
+								<xs:documentation>RICS code in case of Railways, otherwise starting with "X"</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="CardType" type="xs:string">
+							<xs:annotation>
+								<xs:documentation>Code table to be defined in tariff description data</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="CardId" type="xs:string" minOccurs="0"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="Tariff" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>identification of the tariff used for this passenger. The tariff must be the same as used in the tariff element for the booking.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="AddressType">
+		<xs:sequence>
+			<xs:element name="Country" type="CountryCodeISO2AType"/>
+			<xs:element name="City" type="xs:string"/>
+			<xs:element name="Street" type="xs:token"/>
+			<xs:element name="PostalCode" type="xs:token"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="CustomerType">
+		<xs:sequence>
+			<xs:element name="FirstName" type="xs:token"/>
+			<xs:element name="LastName" type="xs:token"/>
+			<xs:element name="Title" type="xs:token" minOccurs="0"/>
+			<xs:element name="DateOfBirth" type="xs:date" minOccurs="0"/>
+			<xs:element name="Phone" minOccurs="0">
+				<xs:complexType>
+					<xs:simpleContent>
+						<xs:extension base="xs:token">
+							<xs:attribute name="Preferred" type="xs:boolean" use="optional" default="false"/>
+						</xs:extension>
+					</xs:simpleContent>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="MobilePhone" minOccurs="0">
+				<xs:complexType>
+					<xs:simpleContent>
+						<xs:extension base="xs:token">
+							<xs:attribute name="Preferred" type="xs:boolean" use="optional" default="false"/>
+						</xs:extension>
+					</xs:simpleContent>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="E-mail" minOccurs="0">
+				<xs:complexType>
+					<xs:simpleContent>
+						<xs:extension base="xs:token">
+							<xs:attribute name="Preferred" type="xs:boolean" use="optional" default="false"/>
+						</xs:extension>
+					</xs:simpleContent>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="Language" type="LanguageType" minOccurs="0" maxOccurs="10"/>
+			<xs:element name="Comment" type="xs:string" minOccurs="0"/>
+			<xs:element name="Address" type="AddressType" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="TrainBookingDetailsType">
+		<xs:annotation>
+			<xs:documentation>booking description </xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="BookingId" type="xs:string"/>
+			<xs:element name="Train" type="xs:string"/>
+			<xs:element name="DepartureDate" type="xs:dateTime">
+				<xs:annotation>
+					<xs:documentation>date and time as booked, might differ from current train departure due to rescheduling</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="ArrivalDate" type="xs:dateTime"/>
+			<xs:element name="ServiceBrand" type="ServiceBrandInformationType"/>
+			<xs:element name="DepartureStation" type="StationCodeType"/>
+			<xs:element name="ArrivalStation" type="StationCodeType"/>
+			<xs:element name="Carrier" type="xs:int" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>RICS Code</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Places" minOccurs="0" maxOccurs="unbounded">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="Coach" type="xs:string" minOccurs="0"/>
+						<xs:element name="Place" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+						<xs:element name="PlaceDescription" type="xs:string" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>Textual representation of places using ranges (e.g. 11-37)</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="LostPlaces" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>places booked but not on the train due to change of vehicle</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="ServiceLevel" type="xs:string" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>Servicelevel codes from 918.1,..</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="ServiceLevelDescription" type="xs:string" minOccurs="0"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="Fares">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="Fare">
+							<xs:complexType>
+								<xs:sequence>
+									<xs:element name="Number" type="xs:int" default="1"/>
+									<xs:element name="Code" type="xs:string"/>
+									<xs:element name="Description" type="xs:string"/>
+									<xs:element name="TravelerName" minOccurs="0" maxOccurs="unbounded"/>
+									<xs:element name="Type">
+										<xs:annotation>
+											<xs:documentation>Reservation, Global Price, ...</xs:documentation>
+										</xs:annotation>
+										<xs:simpleType>
+											<xs:restriction base="xs:int"/>
+										</xs:simpleType>
+									</xs:element>
+								</xs:sequence>
+							</xs:complexType>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="Information">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="Type">
+							<xs:annotation>
+								<xs:documentation>Customerinfo, train staff info</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="Info" type="xs:string"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="Status" type="xs:string">
+				<xs:annotation>
+					<xs:documentation>booked,used,cancdelled, exchanged</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="History" minOccurs="0">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="Event">
+							<xs:annotation>
+								<xs:documentation>booked, used,cancelled,refunded, payment failed, exchanged, checked</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="EventTime" type="xs:dateTime"/>
+						<xs:element name="EventLocation" type="xs:string"/>
+						<xs:element name="Railway" type="xs:int">
+							<xs:annotation>
+								<xs:documentation>Railway initiating the event, RICS code</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="Luggage" minOccurs="0">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="MaxHandLuggagePieces" type="xs:int" minOccurs="0"/>
+						<xs:element name="MaxLuggagePieces" type="xs:int" minOccurs="0"/>
+						<xs:element name="RegisteredLuggage" minOccurs="0" maxOccurs="unbounded">
+							<xs:complexType>
+								<xs:sequence>
+									<xs:element name="RegistrationId" type="xs:string"/>
+									<xs:element name="MaxSize" type="xs:int"/>
+								</xs:sequence>
+							</xs:complexType>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="Passenger" type="PassengerType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="PersonalDataUsageType">
+		<xs:sequence>
+			<xs:element name="FullfillmentType" type="xs:string" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>Codes:
+
+-SID:  eTicket  security in data         (home print format or mobile)
+-SIS:  eTicket  security in system     (home print format or mobile)
+-SIP:  SecurePaperTicket
+</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="NumberOfPassengers" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Range of number of passengers where the rules on passengerData Usage apply</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="from" type="xs:int"/>
+						<xs:element name="to" type="xs:int"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="MandatoryDataItem" type="xs:string" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>PassengerName
+PassengerNameICAO
+PassportData
+DateOfBirth
+...
+
+The tag name of the personal data in the booking messages  is used to identify the data item</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="OptionalDataItem" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>PassengerName
+PassengerNameICAO
+PassportData
+DateOfBirth
+...
+
+The tag name of the personal data in the booking messages  is used to identify the data item</xs:documentation>
+				</xs:annotation>
+				<xs:complexType/>
+			</xs:element>
+			<xs:element name="CustomerCard" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>customer cards with personal informations or ids linked to personal informations required</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="CardIssuer" type="xs:string"/>
+						<xs:element name="CardType" type="xs:string"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="Usage" minOccurs="0" maxOccurs="unbounded">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="PerPassenger" type="xs:int" default="1" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>number of passengers up to which the personal data need to be provided per passenger</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="BorderCrossing" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>The data are required for this border crossing only</xs:documentation>
+							</xs:annotation>
+							<xs:complexType>
+								<xs:sequence>
+									<xs:element name="Country" minOccurs="2" maxOccurs="2"/>
+									<xs:element name="DocumentType" type="DocumentTypeType" maxOccurs="unbounded"/>
+								</xs:sequence>
+							</xs:complexType>
+						</xs:element>
+						<xs:element name="Country" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>The data are reqired inside this country</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="Disability" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>Disability of a passenger in case special data are required for PRMs. The code list is defined in leaflet 918-6.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="PassengerInformation" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>Information to the passenger why and how long his personal data are required.  </xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="Language" type="LanguageType"/>
+						<xs:element name="Text" type="xs:string"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="ValidityPeriodType">
+		<xs:sequence>
+			<xs:element name="StartOfSale" type="xs:date"/>
+			<xs:element name="EndOfSale" type="xs:date"/>
+			<xs:element name="StartOfTravel" type="xs:date"/>
+			<xs:element name="EndOfTravel" type="xs:date"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="SecurityFeatureUsageType">
+		<xs:sequence>
+			<xs:element name="StartOfActivation" type="xs:int" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>hours before start of validity</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="FulfillmentMedium" type="xs:string" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>possible fullfillment formats ordered by preference</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="MinimumRequiredKeySize" type="xs:string" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>Minimum required key size in case the issuer signs bar codes: 
+
+-  "DSA2048": signature with minimum 2048bit key size required for DSA signatures,...</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+</xs:schema>

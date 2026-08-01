@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Mit XMLSpy v2009 (http://www.altova.com) von Volker Hahn (DB Systel GmbH) bearbeitet -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" 
+xmlns="http://www.uic.org/xml/passenger/01"
+targetNamespace="http://www.uic.org/xml/passenger/01"
+elementFormDefault="unqualified" 
+attributeFormDefault="unqualified">
+	<xs:include schemaLocation="uic_reservationcomplextypes.xsd"/>
+	<xs:element name="CancelRequest">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Requestor" type="RequestorType"/>
+				<xs:element name="Dialogue" type="DialogueType"/>
+				<xs:choice>
+					<xs:element name="CancelBooking" type="CancelBookingType"/>
+				</xs:choice>
+			</xs:sequence>
+			<xs:attribute name="InformationOnly" type="xs:boolean" default="false">
+				<xs:annotation>
+					<xs:documentation>In case of messages with this flag the reservation or cancellation is evaluated identical to a real booking, but the booking or cancellation is not made persistent. The reply messages might not include a valid reference number. There must not be accountings for these transactions. There must not be correction or synchronization requests made related to these transactions.</xs:documentation>
+				</xs:annotation>
+			</xs:attribute>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

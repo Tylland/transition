@@ -1,0 +1,27 @@
+<!-- Mit XMLSpy v2009 sp1 (http://www.altova.com) von Volker Hahn (DB Systel GmbH) bearbeitet -->
+<!-- version 1.23 modification 0 -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://www.uic.org/xml/passenger/01" targetNamespace="http://www.uic.org/xml/passenger/01" elementFormDefault="unqualified" attributeFormDefault="unqualified">
+	<xs:include schemaLocation="uic_reservationavailrq.xsd"/>
+	<xs:include schemaLocation="uic_reservationavailrp.xsd"/>
+	<xs:include schemaLocation="uic_reservationbookrq.xsd"/>
+	<xs:include schemaLocation="uic_reservationbookrp.xsd"/>
+	<xs:include schemaLocation="uic_reservationcancelrq.xsd"/>
+	<xs:include schemaLocation="uic_reservationcancelrp.xsd"/>
+	<xs:include schemaLocation="uic_reservationpartialcancelrq.xsd"/>
+	<xs:include schemaLocation="uic_reservationpartialcancelrp.xsd"/>
+	<xs:include schemaLocation="uic_reservationrollbackrq.xsd"/>
+	<xs:include schemaLocation="uic_reservationrollbackrp.xsd"/>
+	<xs:include schemaLocation="uic_reservationsynchrorq.xsd"/>
+	<xs:include schemaLocation="uic_reservationsynchrorp.xsd"/>
+	<xs:include schemaLocation="uic_availgbrq.xsd"/>
+	<xs:include schemaLocation="uic_availgbrp.xsd"/>
+	<xs:include schemaLocation="uic_layoutrq.xsd"/>
+	<xs:include schemaLocation="uic_layoutrp.xsd"/>
+	<xs:include schemaLocation="uic_addpersonaldatarq.xsd"/>
+	<xs:include schemaLocation="uic_addpersonaldatarp.xsd"/>
+	<xs:include schemaLocation="uic_getstoredpersonaldatarq.xsd"/>
+	<xs:include schemaLocation="uic_getstoredpersonaldatarp.xsd"/>
+	<xs:include schemaLocation="uic_getsecurityfeaturesrq.xsd"/>
+	<xs:include schemaLocation="uic_getsecurityfeaturesrp.xsd"/>
+	<xs:include schemaLocation="uic_faredescription.xsd"/>
+</xs:schema>

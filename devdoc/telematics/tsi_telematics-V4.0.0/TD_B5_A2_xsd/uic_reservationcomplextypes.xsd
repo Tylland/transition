@@ -1,0 +1,1710 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://www.uic.org/xml/passenger/01" targetNamespace="http://www.uic.org/xml/passenger/01" elementFormDefault="unqualified" attributeFormDefault="unqualified">
+	<xs:include schemaLocation="passengersimpletypes.xsd"/>
+	<xs:include schemaLocation="passengercomplextypes.xsd"/>
+	<xs:include schemaLocation="uic_reservationsimpletypes.xsd"/>
+	<xs:complexType name="AllocatedPlacesType">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">Range or set of allocated places. The allowed number of chiled elements has been choosen to be in line with the definition of the allocated places in leaflet 918.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:choice maxOccurs="8">
+				<xs:element name="Range" type="PlaceRangeType"/>
+				<xs:element name="Place" type="PlaceType" maxOccurs="2"/>
+			</xs:choice>
+			<xs:element name="DistributedAllocation" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>D = place allocation is distributed
+S = place allocation is in different compartments mixed with other travellers
+</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="AllocatedTrainType">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">All data describing the allocated train and the allocated relation on that train.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="DepartureStationName" type="StationNameType">
+				<xs:annotation>
+					<xs:documentation>station name - element 49</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="ArrivalStationName" type="StationNameType"/>
+			<xs:element name="ServiceBrand" type="ServiceBrandInformationType"/>
+			<xs:element name="Train" type="TrainNumberType"/>
+			<xs:element name="DepartureDateTime" type="xs:dateTime">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">In the requests and in the confirmations, this is the date of departure of the train from the passenger’s origin station or the departure date of the car-carrying train. </xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="ArrivalDateTime" type="xs:dateTime"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="AllocationType">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">Allocated Places optionally including the booked offers.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="Reference" type="ReferenceNumberType">
+				<xs:annotation>
+					<xs:documentation>booking reference - element 34</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:choice>
+				<xs:element name="SeatAllocation" type="SeatAllocationType"/>
+				<xs:element name="CouchetteAllocation" type="CouchetteAllocationType"/>
+				<xs:element name="BerthAllocation" type="BerthAllocationType"/>
+				<xs:element name="VehicleAllocation" type="VehicleAllocationType"/>
+				<xs:element name="MealBooking" type="MealBookingType"/>
+				<xs:element name="RestaurantSeatAllocation" type="RestaurantSeatAllocationType"/>
+			</xs:choice>
+			<xs:element name="InfoText" type="InfoTextType" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>element 66 - text for special offer</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Carrier" type="CompanyCodeType" minOccurs="0" maxOccurs="9">
+				<xs:annotation>
+					<xs:documentation>elements 78 / 79 list of carriers</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="TicketSecurity" type="TicketSecurityType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="SequenceId" type="SequenceIdType" use="required"/>
+		<xs:attribute name="IndividualTicketing" type="xs:boolean" use="optional" default="false"/>
+		<xs:attribute name="TrainChanged" type="xs:boolean" use="optional" default="false">
+			<xs:annotation>
+				<xs:documentation>true: the train differs from the requested train</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="StationChanged" type="xs:boolean" use="optional" default="false">
+			<xs:annotation>
+				<xs:documentation>the station differs from the requested station</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="DateChanged" type="xs:boolean" use="optional" default="false">
+			<xs:annotation>
+				<xs:documentation>the travel date differs from the requested travel date</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="AdjacentSeatRequestType">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">Data to request an allocation of seats adjacent to a specifies seat.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="RequestedTrain" type="RequestedTrainType"/>
+			<xs:element name="Passengers" type="NumberOfPassengerType"/>
+			<xs:element name="Class" type="ClassType"/>
+			<xs:element name="CoachNumber" type="CoachNumberType"/>
+			<xs:element name="ReferencedPlace" type="PlaceNumberType"/>
+			<xs:element name="TravelersWithCar" type="TravelersWithCarType" minOccurs="0"/>
+			<xs:element name="Tariff" type="TariffRequestType" minOccurs="0" maxOccurs="2"/>
+		</xs:sequence>
+		<xs:attribute name="IndividualTicketing" type="xs:boolean" use="optional" default="false"/>
+	</xs:complexType>
+	<xs:complexType name="AdjacentCouchetteRequestType">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">Data to request an allocation of chouchettes adjacent to an specified place.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="RequestedTrain" type="RequestedTrainType"/>
+			<xs:element name="Passengers" type="NumberOfPassengerType"/>
+			<xs:element name="Class" type="ClassType"/>
+			<xs:element name="CoachNumber" type="CoachNumberType"/>
+			<xs:element name="ReferencedPlace" type="PlaceNumberType"/>
+			<xs:element name="TravelersWithCar" type="TravelersWithCarType" minOccurs="0"/>
+			<xs:element name="Tariff" type="TariffRequestType" minOccurs="0" maxOccurs="2"/>
+		</xs:sequence>
+		<xs:attribute name="IndividualTicketing" type="xs:boolean" use="optional" default="false"/>
+	</xs:complexType>
+	<xs:complexType name="AvailabilityType">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">Data containing the available services on a train.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="Train" type="AllocatedTrainType"/>
+			<xs:element name="AvailableService" type="AvailableServiceType" maxOccurs="21"/>
+			<xs:element name="CoachType" type="RequestedCoachTypeType" minOccurs="0"/>
+			<xs:element name="CompartmentType" type="RequestedCompartmentTypeType" minOccurs="0"/>
+			<xs:element name="Contingent" type="RequestedContingentTypeType" minOccurs="0"/>
+			<xs:element name="Coach" type="CoachNumberType" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>if the request was limited to a single coach ansd the allocating system has retrieved the availability for this coach only the coach number is included here.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="SequenceId" type="SequenceIdType" use="required"/>
+		<xs:attribute name="RequestedService" type="ServiceType">
+			<xs:annotation>
+				<xs:documentation>The RequestedService is added to support the translation between binary messges and XML messages in the HitRail translation service . It will not be used after the migration is completed. Systems should therefore not use this element. - element 15</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="AvailableOfferType">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">Available offer</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="Tariff" type="TariffCodeUICType"/>
+			<xs:element name="Scope" type="PriceScopeType" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>price scope - element 348</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Amount" type="AmountEuroCentType" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>amount of the tariff not including reservation fees</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Flexibility" type="PriceFlexibilityType" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>price flexibility - element 350</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Stability" type="PriceStabilityType" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>price stability - element 347</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Description" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>description text of the tariff</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:minLength value="0"/>
+						<xs:maxLength value="20"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:choice maxOccurs="2">
+				<xs:element name="Passengers" type="NumberOfPassengerType">
+					<xs:annotation>
+						<xs:documentation>number of avauilable places if nor separated between smoker and non-smoker</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="Smokers" type="NumberOfPassengerType">
+					<xs:annotation>
+						<xs:documentation>number of available smoker places</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="NonSmokers" type="NumberOfPassengerType">
+					<xs:annotation>
+						<xs:documentation>number of available non-smoker places</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+			</xs:choice>
+		</xs:sequence>
+		<xs:attribute name="Type" type="PriceTypeType" use="required">
+			<xs:annotation>
+				<xs:documentation>element 67 - type of price</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="AvailableServiceType">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">List of available offers.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="Offer" type="AvailableOfferType" maxOccurs="100"/>
+		</xs:sequence>
+		<xs:attribute name="Service" type="ServiceCodeType" use="required">
+			<xs:annotation>
+				<xs:documentation>element 308 - service level positions 1 + 2</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="AvailabilityRequestType">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">All data required to request the available offers on a train.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="RequestedTrain" type="RequestedTrainType"/>
+			<xs:element name="Service" type="ServiceType">
+				<xs:annotation>
+					<xs:documentation>element 15</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Coach" type="CoachNumberType" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>the request can be limited to  one coach. In this case the reply can be limited to the availability of this coach. The allocating system is allowed to ignore this element, in this case the coach will not be indicated in the reply message.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Tariff" type="TariffCodeUICType" minOccurs="0" maxOccurs="8">
+				<xs:annotation>
+					<xs:documentation>the request can be limited to  the tariffs listed. In this case the reply can be limited to the availability of these tariffs. The allocating system is allowed to ignore this element. - element 352</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="SequenceId" type="SequenceIdType" use="required"/>
+		<xs:attribute name="WithPrice" type="xs:boolean" default="true">
+			<xs:annotation>
+				<xs:documentation>The WithPrice flag indicates whether the reply data should include price related data. This element is part of the xml message to suport compatibility with old (classic) 918.1 messages. - element 351</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="AdjacentBerthRequestType">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">Data to request an allocation of berths adjacent to a specified place or in a specified coach.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="RequestedTrain" type="RequestedTrainType"/>
+			<xs:element name="Passengers" type="NumberOfPassengerType"/>
+			<xs:element name="Berths" type="NumberOfBerthsType" minOccurs="0" maxOccurs="2"/>
+			<xs:element name="Class" type="ClassType"/>
+			<xs:element name="CoachNumber" type="CoachNumberType"/>
+			<xs:element name="ReferencedPlace" type="PlaceNumberType"/>
+			<xs:element name="TravelersWithCar" type="TravelersWithCarType" minOccurs="0"/>
+			<xs:element name="Tariff" type="TariffRequestType" minOccurs="0" maxOccurs="2"/>
+		</xs:sequence>
+		<xs:attribute name="IndividualTicketing" type="xs:boolean" use="optional" default="false"/>
+	</xs:complexType>
+	<xs:complexType name="BookedOfferType">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">Data to describe the offer booked.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="Price" type="PriceType" minOccurs="0"/>
+			<xs:element name="Supplements" type="SupplementType" minOccurs="0"/>
+			<xs:element name="CancelationFees" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>information on up to when a cancellation without a fee is allowed by the allocating railway. This information is not given in case of a booking reply.</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="CancelationLimit" maxOccurs="unbounded">
+							<xs:complexType>
+								<xs:sequence>
+									<xs:element name="Reason" type="ReasonForCancellationType" minOccurs="0">
+										<xs:annotation>
+											<xs:documentation>element 74 - reason of cancellation</xs:documentation>
+										</xs:annotation>
+									</xs:element>
+									<xs:element name="TimeLimit" type="xs:dateTime">
+										<xs:annotation>
+											<xs:documentation>time in UTC up to when a free cancellation is possible for that reason without a fee taken by the allocating railway. The time given without a reason applies if the cancellation is made without a reason. </xs:documentation>
+										</xs:annotation>
+									</xs:element>
+								</xs:sequence>
+							</xs:complexType>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="BookedMealType">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">Data to deascribe a booked meal.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="Number" type="NumberOfPassengerType"/>
+			<xs:element name="DateTimeOfMeal" type="xs:dateTime" minOccurs="0"/>
+			<xs:element name="Price" type="AmountEuroCentType" minOccurs="0"/>
+			<xs:element name="Reference" type="ReferenceNumberType" minOccurs="0"/>
+		</xs:sequence>
+		<xs:attribute name="Type" type="TypeOfMealType" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="BerthAllocationType">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">Allocation of berths.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="AllocatedTrain" type="AllocatedTrainType"/>
+			<xs:element name="Passengers" type="NumberOfPassengerType"/>
+			<xs:element name="Class" type="ClassType" minOccurs="0"/>
+			<xs:element name="CoachNumber" type="CoachNumberType"/>
+			<xs:element name="CoachType" type="AllocatedCoachTypeType" default="0" minOccurs="0"/>
+			<xs:element name="CompartmentType" type="AllocatedCompartmentTypeType" default="0" minOccurs="0"/>
+			<xs:element name="Contingent" type="AllocatedContingentTypeType" default="0" minOccurs="0"/>
+			<xs:element name="PassengerSex" type="PassengerSexType" minOccurs="0"/>
+			<xs:element name="ConnectingDoor" type="xs:boolean" default="false" minOccurs="0"/>
+			<xs:element name="OverbookedPlaces" type="OverbookedPlacesType" minOccurs="0"/>
+			<xs:element name="TravelersWithCar" type="TravelersWithCarType" minOccurs="0"/>
+			<xs:element name="AllocatedPlaces" type="AllocatedPlacesType"/>
+			<xs:element name="BookedOffer" type="BookedOfferType" minOccurs="0"/>
+			<xs:element name="PositionOfCompartment" type="PositionOfCompartmentType" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="BerthRequestType">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">Data to request an allocation of berths.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="RequestedTrain" type="RequestedTrainType"/>
+			<xs:element name="Passengers" type="NumberOfPassengerType"/>
+			<xs:element name="Berths" type="NumberOfBerthsType" minOccurs="0" maxOccurs="2"/>
+			<xs:element name="Class" type="ClassType" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Class is usually not applied for berths. In this case the element should be omitted. 
+
+Note on translation to binary messages: A missing class is indicated in the binary messages by a value "0". </xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="CoachType" type="RequestedCoachTypeType" default="0" minOccurs="0"/>
+			<xs:element name="CompartmentType" type="RequestedCompartmentTypeType" default="0" minOccurs="0"/>
+			<xs:element name="Contingent" type="RequestedContingentTypeType" default="0" minOccurs="0"/>
+			<xs:element name="ConnectingDoor" type="xs:boolean" default="false" minOccurs="0"/>
+			<xs:element name="PassengerSex" type="PassengerSexType" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>element 40 - compartment characteristics (genrer of traveler) </xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="TravelersWithCar" type="TravelersWithCarType" minOccurs="0"/>
+			<xs:element name="PositionOfPlaces" type="PositionOfPlaceRequestType" minOccurs="0" maxOccurs="4"/>
+			<xs:element name="PositionOfCompartment" type="PositionOfCompartmentType" minOccurs="0"/>
+			<xs:element name="Tariff" type="TariffRequestType" minOccurs="0" maxOccurs="2"/>
+		</xs:sequence>
+		<xs:attribute name="IndividualTicketing" type="xs:boolean" use="optional" default="false"/>
+	</xs:complexType>
+	<xs:complexType name="CancelBookingConfirmationType">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">Data describing the cancelled booking and the refund.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="Service" type="ServiceType"/>
+			<xs:element name="Train" type="TrainNumberType"/>
+			<xs:element name="DepartureDate" type="xs:date"/>
+			<xs:element name="Reference" type="ReferenceNumberType"/>
+			<xs:element name="DateOfOriginalBooking" type="xs:date"/>
+			<xs:element name="OriginalCancellation" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>this element has to be sent in case the reservation is already cancelled and the allocator wants to repeat the cancellation confirmation</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="Date" type="xs:date">
+							<xs:annotation>
+								<xs:documentation>date and time when the booking was initially cancelled</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="Railway" type="ReservationSystemType">
+							<xs:annotation>
+								<xs:documentation>reservation system code of the railway that made the initial cancellation</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:choice>
+				<xs:sequence>
+					<xs:element name="CancelledSeats" type="NumberOfPassengerType"/>
+					<xs:element name="CancelledMeals" type="RequestedMealType" minOccurs="0" maxOccurs="3"/>
+					<xs:element name="Class" type="ClassType"/>
+				</xs:sequence>
+				<xs:element name="CancelledMeals" type="RequestedMealType" maxOccurs="3"/>
+				<xs:element name="CancelledBerths" type="NumberOfBerthsType" maxOccurs="2"/>
+				<xs:sequence>
+					<xs:element name="CancelledCouchetts" type="NumberOfPassengerType"/>
+					<xs:element name="NightStages" type="NumberOfNightStagesType" default="1" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>element 60 - number of night sectors</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="Class" type="ClassType">
+						<xs:annotation>
+							<xs:documentation>element 24</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+				<xs:sequence>
+					<xs:element name="VehicleCategory" type="VehicleCategoryType"/>
+					<xs:element name="TrailerSize" type="TrailerSizeType" minOccurs="0"/>
+					<xs:element name="BoatCategory" type="BoatCategoryType" minOccurs="0"/>
+				</xs:sequence>
+			</xs:choice>
+			<xs:element name="Refund" type="RefundType"/>
+			<xs:element name="CancelationFee" type="CancellationFeeType" minOccurs="0"/>
+		</xs:sequence>
+		<xs:attribute name="SequenceId" type="SequenceIdType" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="CancellationFeeType">
+		<xs:sequence>
+			<xs:element name="Amount" type="xs:int">
+				<xs:annotation>
+					<xs:documentation>Cancellation Fee in Euro Cent</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="VAT" type="VatDetailType" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>VAT of the cancellation fee</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="CancelBookingType">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">Data to cancel a booking.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="Train" type="TrainNumberType"/>
+			<xs:element name="DepartureDate" type="xs:date"/>
+			<xs:element name="Reference" type="ReferenceNumberType"/>
+			<xs:element name="Service" type="ServiceType" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>element 15 service. This elements is included to support compatibility witrh translation services to old binary messages. In cases where only xml messages are used this element is obsolete.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Reason" type="ReasonForCancellationType" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>reason for cancellation - element 74</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="CouchetteRequestType">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">Data to request an allocation of chouchettes</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="RequestedTrain" type="RequestedTrainType"/>
+			<xs:element name="Passengers" type="NumberOfPassengerType"/>
+			<xs:element name="Class" type="ClassType"/>
+			<xs:element name="Smoker" type="SmokerType" minOccurs="0"/>
+			<xs:element name="CoachType" type="RequestedCoachTypeType" default="0" minOccurs="0"/>
+			<xs:element name="CompartmentType" type="RequestedCompartmentTypeType" default="0" minOccurs="0"/>
+			<xs:element name="Contingent" type="RequestedContingentTypeType" default="0" minOccurs="0"/>
+			<xs:element name="TravelersWithCar" type="TravelersWithCarType" minOccurs="0"/>
+			<xs:element name="PositionOfPlaces" type="PositionOfPlaceRequestType" minOccurs="0" maxOccurs="4"/>
+			<xs:element name="Tariff" type="TariffRequestType" minOccurs="0" maxOccurs="2"/>
+		</xs:sequence>
+		<xs:attribute name="IndividualTicketing" type="xs:boolean" use="optional" default="false"/>
+	</xs:complexType>
+	<xs:complexType name="CouchetteAllocationType">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">Allocation of couchettes</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="AllocatedTrain" type="AllocatedTrainType"/>
+			<xs:element name="Passengers" type="NumberOfPassengerType"/>
+			<xs:element name="Class" type="ClassType"/>
+			<xs:element name="CoachNumber" type="CoachNumberType"/>
+			<xs:element name="CoachType" type="AllocatedCoachTypeType" default="0" minOccurs="0"/>
+			<xs:element name="CompartmentType" type="AllocatedCompartmentTypeType" default="0" minOccurs="0"/>
+			<xs:element name="Contingent" type="AllocatedContingentTypeType" default="0" minOccurs="0"/>
+			<xs:element name="NightStages" type="NumberOfNightStagesType" default="1" minOccurs="0"/>
+			<xs:element name="OverbookedPlaces" type="OverbookedPlacesType" minOccurs="0"/>
+			<xs:element name="TravelersWithCar" type="TravelersWithCarType" minOccurs="0"/>
+			<xs:element name="AllocatedPlaces" type="AllocatedPlacesType"/>
+			<xs:element name="BookedOffer" type="BookedOfferType" minOccurs="0"/>
+			<xs:element name="PositionOfCompartment" type="PositionOfCompartmentType" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="DialogueType">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">Data to identify a dialogue and to describe the type of the dialogue.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="DispositionElement" type="DispositionElementType" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">The field contains information about the requesting system which must be quoted back unchanged by the replying system (not with report messages). </xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="RequestDate" type="xs:date">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">Date on which a request is issued. The date is defined in the time zone of the system senmding the request.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="ApplicationVersion" type="ApplicationVersionType" use="required">
+			<xs:annotation>
+				<xs:documentation>element 9 - application version</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="DialogueId" type="DialogueNumberType" use="required">
+			<xs:annotation>
+				<xs:documentation>element 3 - dialogue number </xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="Test" type="xs:boolean" use="optional" default="false">
+			<xs:annotation>
+				<xs:documentation>distinguishes test and production systems:  true = element 11 value 1, false = element 11 value 0</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="MealRequestType">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">Data to request the booking of a meal.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="RequestedTrain" type="RequestedTrainType"/>
+			<xs:element name="TravelersWithCar" type="TravelersWithCarType" minOccurs="0"/>
+			<xs:element name="PositionOfPlaces" type="PositionOfPlaceRequestType" minOccurs="0" maxOccurs="4"/>
+			<xs:element name="PositionOfCompartment" type="PositionOfCompartmentType" minOccurs="0"/>
+			<xs:element name="Meals" type="RequestedMealType" minOccurs="0" maxOccurs="3"/>
+		</xs:sequence>
+		<xs:attribute name="IndividualTicketing" type="xs:boolean" use="optional" default="false"/>
+	</xs:complexType>
+	<xs:complexType name="MealBookingType">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">Data to request the booking of a meal.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="AllocatedTrain" type="AllocatedTrainType"/>
+			<xs:element name="Meals" type="BookedMealType" maxOccurs="3"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="NegativeReplyType">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">Data to be returned, if a request can not be answered by the desired allocation of train information.</xs:documentation>
+		</xs:annotation>
+		<xs:choice>
+			<xs:element name="ErrorDescription" minOccurs="0" maxOccurs="unbounded">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="MissingData" type="xs:string" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>tag name of missing or incorrect data element</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="Text" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>description of the error in English for testing purpose, not designed to be displayed to customers. </xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="AlternativeService" type="AlternativeServiceCodeType" minOccurs="0" maxOccurs="9">
+				<xs:annotation>
+					<xs:documentation>to be used to inform on alternative services avaialable on the requested train. Codes of element 62 - available services</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="AlternativeTrain" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>to be used to indicate an alternative train and its available services</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="Train" type="TrainNumberType"/>
+						<xs:element name="Departure" type="xs:dateTime"/>
+						<xs:element name="Arrival" type="xs:dateTime"/>
+						<xs:element name="ServiceBrand" type="ServiceBrandInformationType"/>
+						<xs:element name="AlternativeService" type="AlternativeServiceCodeType" minOccurs="0" maxOccurs="9">
+							<xs:annotation>
+								<xs:documentation>codes of element 62 </xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="AlternativeSystem" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>alternative system that hosts the requested train. The train number is given in case the train should be requested with another train number in that system.</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="System" type="ReservationSystemType">
+							<xs:annotation>
+								<xs:documentation>element 1 reservation system code</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="Train" type="TrainNumberType" minOccurs="0"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+		</xs:choice>
+		<xs:attribute name="SequenceId" type="SequenceIdType" use="optional"/>
+		<xs:attribute name="ReplyCode" type="ReplyCodeType" use="optional">
+			<xs:annotation>
+				<xs:documentation>the reply code might not be included in case of a reply to the indicate an alternative system
+
+element 63</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="NumberOfBerthsType">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">Number and type of berths. It is possible to request up to two different types in one request. There might be additional restrictions on the possible combinations depending on the reservation systems. Requests containing more than one berth type can n ot contain more than one tariff.</xs:documentation>
+		</xs:annotation>
+		<xs:simpleContent>
+			<xs:extension base="NumberOfPassengerType">
+				<xs:attribute name="Type" type="BerthCodeType" use="required">
+					<xs:annotation>
+						<xs:documentation>Type of berth: 
+
+    L: Single
+    M: Special
+    N: Double
+    P: T2
+    Q: T3
+    R: T4
+   </xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+			</xs:extension>
+		</xs:simpleContent>
+	</xs:complexType>
+	<xs:complexType name="PartialCancelBookingType">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">Data to cancell some of the places of a booking.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="Train" type="TrainNumberType"/>
+			<xs:element name="DepartureDate" type="xs:date"/>
+			<xs:element name="Reference" type="ReferenceNumberType"/>
+			<xs:element name="Service" type="ServiceType"/>
+			<xs:element name="Reason" type="ReasonForCancellationType" minOccurs="0"/>
+			<xs:element name="PositionOfCompartment" type="PositionOfCompartmentType" minOccurs="0"/>
+			<xs:element name="RemainingPlaces" type="NumberOfPassengerType" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>optional in case of RestaurantSeats</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="RemainingBerths" type="NumberOfBerthsType" minOccurs="0" maxOccurs="2"/>
+			<xs:element name="PositionOfPlaces" type="PositionOfPlaceRequestType" minOccurs="0" maxOccurs="4"/>
+			<xs:element name="Tariff" type="TariffRequestType" minOccurs="0" maxOccurs="2"/>
+			<xs:element name="PassengerSex" type="PassengerSexType" minOccurs="0"/>
+			<xs:element name="RemainingMeals" type="RequestedMealType" minOccurs="0" maxOccurs="3"/>
+			<xs:element name="Passenger" type="PassengerType" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>Travelers remaining in the booking</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="FulfilmentMedium" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="PartialCancelBookingConfirmationType">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">Data confirming a partially cancellation of a booking.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="Reference" type="ReferenceNumberType"/>
+			<xs:choice>
+				<xs:element name="SeatAllocation" type="SeatAllocationType"/>
+				<xs:element name="CouchetteAllocation" type="CouchetteAllocationType"/>
+				<xs:element name="BerthAllocation" type="BerthAllocationType"/>
+				<xs:element name="VehicleAllocation" type="VehicleAllocationType"/>
+				<xs:element name="MealBooking" type="MealBookingType"/>
+				<xs:element name="RestaurantSeatAllocation" type="RestaurantSeatAllocationType"/>
+			</xs:choice>
+			<xs:element name="InfoText" type="InfoTextType" minOccurs="0"/>
+			<xs:element name="Carrier" type="CompanyCodeType" minOccurs="0" maxOccurs="9"/>
+			<xs:element name="CancelledReference" type="ReferenceNumberType"/>
+			<xs:element name="OriginalBookingDate" type="xs:date"/>
+			<xs:choice>
+				<xs:element name="CancelledPassengers" type="NumberOfPassengerType"/>
+				<xs:element name="CancelledBerths" type="NumberOfBerthsType" maxOccurs="2"/>
+				<xs:element name="CancelledMeals" type="RequestedMealType" maxOccurs="3"/>
+				<xs:element name="CancelledTrailerSize" type="TrailerSizeType" minOccurs="0"/>
+			</xs:choice>
+			<xs:element name="Refund" type="RefundType"/>
+			<xs:element name="Fee" type="CancellationFeeType" minOccurs="0"/>
+			<xs:element name="OriginalCancellation" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>this element has to be sent in case the reservation is already cancelled and the allocator wants to repeat the partial cancellation confirmation</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="Date" type="xs:date">
+							<xs:annotation>
+								<xs:documentation>date and time when the booking was initially partially cancelled</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="Railway" type="ReservationSystemType">
+							<xs:annotation>
+								<xs:documentation>reservation system code of the railway that made the initial partial cancellation</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="TicketSecurity" type="TicketSecurityType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="SequenceId" type="SequenceIdType" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="PartialPriceType">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">As a reservation might contain more than one tariff, the partial price can be used to define the price per tariff code. This partial price is needed to calculate the totalm price in different currencies, as the currency conversion has to be aplied on the price per tariff and passenger to avoid rounding errors.
+</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="Tariff" type="TariffCodeUICType"/>
+			<xs:element name="Label" type="TariffCodeDescrType" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>printable label of the tariff</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Passengers" type="NumberOfPassengerType"/>
+			<xs:element name="Amount" type="AmountEuroCentType"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="PlaceRangeType">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">A Range of places. The Range is defined by the first and last place number. The range does not indicate, that all place numbers between these two numbers are allocated, as the coach section might not contain all place numbers. All places taht are contained in the coach between and including the first and the last place number are allocated.</xs:documentation>
+		</xs:annotation>
+		<xs:attribute name="Code" type="PlaceCodeType">
+			<xs:annotation>
+				<xs:documentation>place code - codes as defined in element 50 except for code 0.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="FromPlace" type="PlaceNumberType"/>
+		<xs:attribute name="ToPlace" type="PlaceNumberType"/>
+	</xs:complexType>
+	<xs:complexType name="PlaceType">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">Number and type of a place.</xs:documentation>
+		</xs:annotation>
+		<xs:attribute name="Place" type="PlaceNumberType"/>
+		<xs:attribute name="Code" type="PlaceCodeType">
+			<xs:annotation>
+				<xs:documentation>place codes according to element 50 except for code 0.
+
+code "/"   is replaced by "m"
+code "=" is replaced by "n"</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="PositionOfPlaceRequestType">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">Customer request for a specific location of a place.</xs:documentation>
+		</xs:annotation>
+		<xs:simpleContent>
+			<xs:extension base="NumberOfPositionsType">
+				<xs:attribute name="Mandatory" type="xs:boolean" default="false">
+					<xs:annotation>
+						<xs:documentation>true = the request of the place position is mandatory. In case that the plce position can not be allocated the requrest must fail.</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="Position" type="PositionOfPlaceType">
+					<xs:annotation>
+						<xs:documentation>code of the position of the places: 
+   W = window
+   A  = aile / gangway
+   M  = middle / middle level
+   I  =  isolated window
+   U =  upper level (berth, couchette)
+   L =  lower level (berth, couchette)
+</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+			</xs:extension>
+		</xs:simpleContent>
+	</xs:complexType>
+	<xs:complexType name="PriceType">
+		<xs:annotation>
+			<xs:documentation>This element defines a total price which might be the sum of prices per tariff</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="Amount" type="AmountEuroCentType">
+				<xs:annotation>
+					<xs:documentation>amount in euro cent - element 52</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="PartialPrice" type="PartialPriceType" minOccurs="0" maxOccurs="3">
+				<xs:annotation>
+					<xs:documentation>price parts per tariff</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="VAT" type="VatDetailType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="Type" type="PriceTypeType" default="0">
+			<xs:annotation>
+				<xs:documentation>element 67 - type of the price</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="VatDetailType">
+		<xs:annotation>
+			<xs:documentation>In case only a part of the VAT is provided (e.g. for the contry of sale the amount needs to be included.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="Country" type="CountryCodeISO2AType"/>
+			<xs:element name="Percentage" type="xs:int" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>percentarge in units of 0.1 per cent</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Amount" type="xs:int" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>amount of the VAT in Euro-Cent</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="TaxId" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>TaxId of the company paying the tax</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="RequestorType">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">Data describing the requestor.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="Terminal" type="TerminalType"/>
+		</xs:sequence>
+		<xs:attribute name="RequestingSystem" type="ReservationSystemType" use="required">
+			<xs:annotation>
+				<xs:documentation>System that is addressed in a request: element 1 - receiving system</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="SendingSystem" type="ReservationSystemType" use="required">
+			<xs:annotation>
+				<xs:documentation>element 2 sending system</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="RequestedTrainType">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">All data needed to identify a train in a request.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="Train" type="TrainNumberType">
+				<xs:annotation>
+					<xs:documentation>element 20 traiun number </xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="DepartureDate" type="xs:date"/>
+			<xs:element name="DepartureStation" type="StationCode918Type">
+				<xs:annotation>
+					<xs:documentation>departure station. The code fromm context "918" (reservation station codes) has to be used.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="ArrivalStation" type="StationCode918Type"/>
+		</xs:sequence>
+		<xs:attribute name="AcceptDifferentTrain" type="xs:boolean" default="false">
+			<xs:annotation>
+				<xs:documentation>true = another train different than requested is acceptable (element 44)</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="SequenceId" type="SequenceIdType" use="required">
+			<xs:annotation>
+				<xs:documentation>element 17 serial number</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="JourneyId" type="JourneyIdentifierType" use="optional" default="0">
+			<xs:annotation>
+				<xs:documentation>element 32 journey number </xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="RequestedMealType">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">Data to describe a desired meal.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="NumberOfMeals" type="NumberOfPassengerType"/>
+			<xs:element name="TimeOfMeal" type="xs:time" minOccurs="0"/>
+		</xs:sequence>
+		<xs:attribute name="Type" type="TypeOfMealType" use="required">
+			<xs:annotation>
+				<xs:documentation>type of the meal:
+
+    B: breakfast
+    L: lunch
+    D: dinner
+
+</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="ReferenceNumberType">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">Reference of a reservation. The reference is unique only when combined with travel date and train number.</xs:documentation>
+		</xs:annotation>
+		<xs:attribute name="AllocatingSystem" type="ReservationSystemType"/>
+		<xs:attribute name="LocalReference" type="LocalReferenceNumberType"/>
+	</xs:complexType>
+	<xs:complexType name="RefundType">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">All data converning the refund in cancellations and partial cancellations.</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="BookedOfferType">
+				<xs:attribute name="PriceChanged" type="xs:boolean" use="optional" default="false">
+					<xs:annotation>
+						<xs:documentation>price is changed due to a cancellation fee - element 75 </xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="RestaurantSeatAllocationType">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">Allocation of seats.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="AllocatedTrain" type="AllocatedTrainType"/>
+			<xs:element name="Meals" type="BookedMealType" minOccurs="0" maxOccurs="3"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="RestaurantSeatRequestType">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">Data to request an allocation of a restaurant seat.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="RequestedTrain" type="RequestedTrainType"/>
+			<xs:element name="Meals" type="RequestedMealType" maxOccurs="3"/>
+		</xs:sequence>
+		<xs:attribute name="IndividualTicketing" type="xs:boolean" default="false"/>
+	</xs:complexType>
+	<xs:complexType name="RollbackBookingRequestType">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">Request to cancell a booking caused by technical problems. Cancellations requested by a customer must not be made with this element.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="Train" type="TrainNumberType"/>
+			<xs:element name="DepartureDate" type="xs:date"/>
+			<xs:element name="Reference" type="ReferenceNumberType">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">Reference of the booking, that has to be cancelled.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Service" type="ServiceType">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">Service booked with the original booking.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="ReferenceBreakfast" type="ReferenceNumberType" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">Reference of an additionally booked breakfast.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="ReferenceLunch" type="ReferenceNumberType" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">Reference of an additionally booked lunch.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="ReferenceDinner" type="ReferenceNumberType" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">Reference of an additionally booked dinner.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="OriginalDialogue" type="DialogueNumberType">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">Identification of the original dialogue. The dialogue number can be used to identify the booking only for a few minutes after the orriginal dialogue.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="RollbackBookingConfirmationType">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">Confirmation of a erquested rollback.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="Train" type="TrainNumberType"/>
+			<xs:element name="DepartureDate" type="xs:date"/>
+			<xs:element name="Reference" type="ReferenceNumberType"/>
+			<xs:element name="OriginalDialogNumber" type="DialogueNumberType"/>
+			<xs:element name="Service" type="ServiceType"/>
+			<xs:element name="ReferenceBreakfast" type="ReferenceNumberType" minOccurs="0"/>
+			<xs:element name="ReferenceLunch" type="ReferenceNumberType" minOccurs="0"/>
+			<xs:element name="ReferenceDinner" type="ReferenceNumberType" minOccurs="0"/>
+			<xs:element name="Price" type="AmountEuroCentType"/>
+			<xs:element name="PriceOfBreakfast" type="AmountEuroCentType" minOccurs="0"/>
+			<xs:element name="PriceOfLunch" type="AmountEuroCentType" minOccurs="0"/>
+			<xs:element name="PriceOfDinner" type="AmountEuroCentType" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="SupplementType">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">Type and number of supplements contained in an allocation. </xs:documentation>
+		</xs:annotation>
+		<xs:attribute name="Number" type="NumberOfPassengerType">
+			<xs:annotation>
+				<xs:documentation>element 58 - number of supplements</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="Type" type="SupplementTypeType">
+			<xs:annotation>
+				<xs:documentation>element 59 type of supplement </xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="SeatAllocationType">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">Allocation of seats.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="AllocatedTrain" type="AllocatedTrainType"/>
+			<xs:element name="Passengers" type="NumberOfPassengerType"/>
+			<xs:element name="Class" type="ClassType">
+				<xs:annotation>
+					<xs:documentation>element 24</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="CoachNumber" type="CoachNumberType"/>
+			<xs:element name="CoachType" type="AllocatedCoachTypeType" default="0" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>element 51 - pisition 1 + 2</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="CompartmentType" type="AllocatedCompartmentTypeType" default="0" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>element 51 position 3 + 4</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Contingent" type="AllocatedContingentTypeType" default="0" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>element 51 position 5 + 6</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="OverbookedPlaces" type="OverbookedPlacesType" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>number of overbooked places - element 23C</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="TravelersWithCar" type="TravelersWithCarType" minOccurs="0"/>
+			<xs:element name="AllocatedPlaces" type="AllocatedPlacesType"/>
+			<xs:element name="BookedOffer" type="BookedOfferType" minOccurs="0"/>
+			<xs:element name="Meals" type="BookedMealType" minOccurs="0" maxOccurs="3"/>
+			<xs:element name="PositionOfCompartment" type="PositionOfCompartmentType" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="SeatRequestType">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">Data to request an allocation of seats.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="RequestedTrain" type="RequestedTrainType"/>
+			<xs:element name="Passengers" type="NumberOfPassengerType"/>
+			<xs:element name="Class" type="ClassType">
+				<xs:annotation>
+					<xs:documentation>element 24 </xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Smoker" type="SmokerType" minOccurs="0"/>
+			<xs:element name="CoachType" type="RequestedCoachTypeType" default="0" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>element 37 position 1 + 2</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="CompartmentType" type="RequestedCompartmentTypeType" default="0" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>element 37 position 3 + 4</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Contingent" type="RequestedContingentTypeType" default="0" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>element 37 position 5 + 6</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="TravelersWithCar" type="TravelersWithCarType" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>element 77 - passengers with vehicle </xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="PositionOfPlaces" type="PositionOfPlaceRequestType" minOccurs="0" maxOccurs="4"/>
+			<xs:element name="PositionOfCompartment" type="PositionOfCompartmentType" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>element 38 - position of compatrtment</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Tariff" type="TariffRequestType" minOccurs="0" maxOccurs="2"/>
+			<xs:element name="AdditionalMeals" type="RequestedMealType" minOccurs="0" maxOccurs="3"/>
+		</xs:sequence>
+		<xs:attribute name="IndividualTicketing" type="xs:boolean" use="optional" default="false">
+			<xs:annotation>
+				<xs:documentation>true = element 43 value 1. The reply must provide individual reservations for each passenger.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="SpecificCouchetteRequestType">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">Data to request chouchetts with specified places.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="RequestedTrain" type="RequestedTrainType"/>
+			<xs:element name="Class" type="ClassType"/>
+			<xs:element name="CoachNumber" type="CoachNumberType"/>
+			<xs:element name="Place" type="PlaceNumberType" maxOccurs="99">
+				<xs:annotation>
+					<xs:documentation>multile places are allowed only in case the request is not translated to binary messages</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="TravelersWithCar" type="TravelersWithCarType" minOccurs="0"/>
+			<xs:element name="Tariff" type="TariffRequestType" minOccurs="0" maxOccurs="3">
+				<xs:annotation>
+					<xs:documentation>multile tariffs are allowed only in case the request is not translated to binary messages</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="SpecificSeatRequestType">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">Data to request an allocation of seats with specified seat number.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="RequestedTrain" type="RequestedTrainType"/>
+			<xs:element name="Class" type="ClassType"/>
+			<xs:element name="CoachNumber" type="CoachNumberType"/>
+			<xs:element name="Place" type="PlaceNumberType" maxOccurs="99">
+				<xs:annotation>
+					<xs:documentation>multiple place numbers are allowed only in case the request is not translated to the binary messages.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="TravelersWithCar" type="TravelersWithCarType" minOccurs="0"/>
+			<xs:element name="Tariff" type="TariffRequestType" minOccurs="0" maxOccurs="3">
+				<xs:annotation>
+					<xs:documentation>Multiple tariffs are allowed only in case the request is not translated to binary messages.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="SpecificBerthRequestType">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">Data to request an allocation of berths with specified place.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="RequestedTrain" type="RequestedTrainType"/>
+			<xs:element name="Berths" type="NumberOfBerthsType" minOccurs="0" maxOccurs="2"/>
+			<xs:element name="Class" type="ClassType"/>
+			<xs:element name="CoachNumber" type="CoachNumberType"/>
+			<xs:element name="Place" type="PlaceNumberType" minOccurs="0" maxOccurs="99">
+				<xs:annotation>
+					<xs:documentation>multile places are allowed only in case the request is not translated to binary messages</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="TravelersWithCar" type="TravelersWithCarType" minOccurs="0"/>
+			<xs:element name="Tariff" type="TariffRequestType" minOccurs="0" maxOccurs="3">
+				<xs:annotation>
+					<xs:documentation>multile tariffs are allowed only in case the request is not translated to binary messages</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="TariffRequestType">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">Requested tariff and passenegrnumber requested for this tariff.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="TariffCode" type="TariffCodeUICType"/>
+			<xs:element name="Passengers" type="NumberOfPassengerType"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="TariffDescrType">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">Data describing a booked tariff.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="Tariff" type="TariffCodeUICType"/>
+			<xs:element name="Label" type="TariffCodeDescrType" minOccurs="0"/>
+		</xs:sequence>
+		<xs:attribute name="Type" type="PriceTypeType" use="optional"/>
+	</xs:complexType>
+	<xs:complexType name="TerminalType">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">Data describing the terminal, that issues the request.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="Number" type="TerminalNumberType">
+				<xs:annotation>
+					<xs:documentation>element 7 - number of requesting terminal</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Country" type="CountryCodeISO2AType" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>element 80 - country of requesting terminal</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="TravelOfficeOrganization" type="TravelOfficeOrganizationType" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>element 76 - code of the travel agency organization</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="Type" type="TerminalTypeType">
+			<xs:annotation>
+				<xs:documentation>element 8 - type of requesting office</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="VehicleAllocationType">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">Allocation of a vehicle on a car carriage train.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="AllocatedTrain" type="VehicleLoadingTrainType"/>
+			<xs:element name="JourneyBeginStationName" type="StationNameType" minOccurs="0"/>
+			<xs:element name="JourneyEndStationName" type="StationNameType" minOccurs="0"/>
+			<xs:element name="VehicleCategory" type="VehicleCategoryType"/>
+			<xs:element name="VehicleRegistration" type="VehicleRegistrationNumberType"/>
+			<xs:element name="TypeOfJourney" type="TypeOfJourneyType"/>
+			<xs:element name="TrailerSize" type="TrailerSizeType" minOccurs="0"/>
+			<xs:element name="BoatCategory" type="BoatCategoryType" minOccurs="0"/>
+			<xs:element name="Dogs" type="NumberOfPassengerType" minOccurs="0"/>
+			<xs:element name="VehiclePriceOnlyType" type="xs:boolean" default="true">
+				<xs:annotation>
+					<xs:documentation>element 69</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="LowerPlattformLoading" type="xs:boolean" default="false"/>
+			<xs:element name="VehicleHeigth" type="VehicleHeigthType" minOccurs="0"/>
+			<xs:element name="LoadingListEntry" type="LoadingListIdType" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>reference to the entry oin trhe loading list - element 53</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="BookedOffer" type="BookedOfferType" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="VehicleLoadingType">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">The time ranges to load and unload a vehicle on a car carriage train.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="BeginOfLoading" type="xs:dateTime"/>
+			<xs:element name="EndOfLoading" type="xs:dateTime"/>
+			<xs:element name="BeginOfUnloading" type="xs:dateTime"/>
+			<xs:element name="EndOfUnloading" type="xs:dateTime"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="VehicleLoadingTrainType">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">All data concerning the train for car carriage including the information to load and unload a car.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="DepartureDate" type="xs:date"/>
+			<xs:element name="LoadingStationName" type="StationNameType"/>
+			<xs:element name="UnloadingStationName" type="StationNameType"/>
+			<xs:element name="Train" type="TrainNumberType"/>
+			<xs:element name="Loading" type="VehicleLoadingType" maxOccurs="2"/>
+			<xs:element name="ArrivalDate" type="xs:date"/>
+			<xs:element name="ServiceBrand" type="ServiceBrandInformationType"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="LayoutPlaceType">
+		<xs:attribute name="Type" type="xs:int" use="required">
+			<xs:annotation>
+				<xs:documentation>type of the place according to the codertabel of graphical item types.
+</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="nb" type="xs:string" use="required">
+			<xs:annotation>
+				<xs:documentation>place number</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="direction">
+			<xs:annotation>
+				<xs:documentation>direction of a seat, defined optional as it might be omitted in case of berths in furture. Values R = to right, L = to left, U = up  (from right side of a coach pointing to the middle of the aile), D = down (from right side of the coach pointing to the middle of the aile)</xs:documentation>
+			</xs:annotation>
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:length value="1"/>
+					<xs:enumeration value="R"/>
+					<xs:enumeration value="L"/>
+					<xs:enumeration value="U"/>
+					<xs:enumeration value="D"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="x" type="GridPositionType" use="required">
+			<xs:annotation>
+				<xs:documentation>position of the center of this graphical item within the grid</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="y" type="GridPositionType" use="required">
+			<xs:annotation>
+				<xs:documentation>position of the center of this graphical item within the grid</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="zOrder" type="xs:int">
+			<xs:annotation>
+				<xs:documentation>graphical layer where this item has to be placed. 
+
+0 = lowest layer usually used for walls 
+1 = middle layer usually used by places
+2 = top layer usually used by icons</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="remark" type="LayoutPlaceRemarkType">
+			<xs:annotation>
+				<xs:documentation>remark on a place:
+				value 1: place might have a table
+				value 2: table at the place might be missing 				 
+				value 3: place might have a different direction
+			 value 4: place might have a table and a different direction
+				value 5: table at the place might be missing and place might have a different direction
+			value 6: place might be in compartment
+
+value 7: 	place might be in open space			  
+					</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="LayoutInternalType">
+		<xs:attribute name="Type" type="xs:int" use="required">
+			<xs:annotation>
+				<xs:documentation>type of the item according to the codertabel of graphical item types.
+</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="x" type="GridPositionType" use="required"/>
+		<xs:attribute name="y" type="GridPositionType" use="required"/>
+		<xs:attribute name="zOrder" type="xs:int"/>
+		<xs:attribute name="mounting" default="F">
+			<xs:annotation>
+				<xs:documentation>indicates, that the item is located at the upper border (U), the lower border (L), goes from upper to lower border (E) or is placed free (F)</xs:documentation>
+			</xs:annotation>
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="U"/>
+					<xs:enumeration value="L"/>
+					<xs:enumeration value="F"/>
+					<xs:enumeration value="E"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="LayoutSignType">
+		<xs:attribute name="Type" type="xs:int" use="required">
+			<xs:annotation>
+				<xs:documentation>type of the icon according to the codertabel of graphical item types.
+</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="x" type="GridPositionType" use="required"/>
+		<xs:attribute name="y" type="GridPositionType" use="required"/>
+		<xs:attribute name="zOrder" type="xs:int"/>
+	</xs:complexType>
+	<xs:complexType name="CoachLayoutDescriptionType">
+		<xs:annotation>
+			<xs:documentation>coach layout description to display different coach layouts</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="LayoutNT">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="GridSize">
+							<xs:annotation>
+								<xs:documentation>Total size of the grid that contains all graphical items. All items listed must be within the grid. 
+
+The Corners of the grid are:
+
+  upper left corner:            (0,0)
+  upper right corned:         (0,y)
+  lower left corner:            (x,0)
+  lower right cormner:       (x,y)
+
+
+Items are places within the grid. 
+
+The granularity of the grid can be finer that the number of places in a row.
+
+A good choice for the vertical grid size would be 25 for coaches up to 4 places in a row and 30 in case of 5 places in a row. The graphical elements for places and icons are approximately of size 5 x 5, so they have a well defined center at (3,3). In any case the size should be even to provide a well defined center.
+
+Graphical items for places and icons should be sized to have an empty frame around them to show underlying compartment walls.
+</xs:documentation>
+								<xs:documentation>Items are places within the grid. 
+
+The granularity of the grid can be finer that the number of places in a row.
+
+A good choice for the vertical grid size would be 25 for coaches up to 4 places in a row and 30 in case of 5 places in a row. The graphical elements for places and icons are approximately of size 5 x 5, so they have a well defined center at (3,3). In any case the size should be even to provide a well defined center.
+
+Graphical items for places and icons should be sized to have an empty frame around them to show underlying compartment walls.
+</xs:documentation>
+							</xs:annotation>
+							<xs:complexType>
+								<xs:attribute name="x" type="GridPositionType" use="required"/>
+								<xs:attribute name="y" type="GridPositionType" use="required"/>
+							</xs:complexType>
+						</xs:element>
+						<xs:element name="Items">
+							<xs:complexType>
+								<xs:sequence>
+									<xs:element name="Place" type="LayoutPlaceType" maxOccurs="200">
+										<xs:annotation>
+											<xs:documentation>places that can be linked to the availability infoirmation on places. Places have a direction within the grid representing the coach (This is not the direction of travel!).</xs:documentation>
+										</xs:annotation>
+									</xs:element>
+									<xs:element name="Internal" type="LayoutInternalType" minOccurs="0" maxOccurs="100">
+										<xs:annotation>
+											<xs:documentation>complex graphical objects repüresenting funriture and walls of compartments.
+
+These items can be attached to the upper boundary of the grid or to the lower boundary of the grid.
+
+Usually places and icons are drawn abouve these itemms, so the zOrder should be 0.</xs:documentation>
+										</xs:annotation>
+									</xs:element>
+									<xs:element name="Sign" type="LayoutSignType" minOccurs="0" maxOccurs="200">
+										<xs:annotation>
+											<xs:documentation>simple graphical elements like icons</xs:documentation>
+										</xs:annotation>
+									</xs:element>
+								</xs:sequence>
+							</xs:complexType>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="LayoutCode" type="xs:token" use="required">
+			<xs:annotation>
+				<xs:documentation>unique id of the layout within the scope of the allocating system</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="ContainerType" type="xs:int">
+			<xs:annotation>
+				<xs:documentation>for future use, currently only one container available (rectangle)</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="AvailabilityGBType">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">Data containing the available services on a train.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="Train" type="AllocatedTrainType"/>
+			<xs:element name="avCoach" maxOccurs="25">
+				<xs:annotation>
+					<xs:documentation>coaches of the train or a part of the coaches of the train, at least one coach.</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="avCmp" minOccurs="0" maxOccurs="20">
+							<xs:complexType>
+								<xs:sequence>
+									<xs:element name="avP" minOccurs="0" maxOccurs="10">
+										<xs:complexType>
+											<xs:attribute name="nb" type="PlaceNumberType" use="required"/>
+											<xs:attribute name="sta" type="GbStatusType" use="optional" default="2">
+												<xs:annotation>
+													<xs:documentation>1 = allocated, 2 = free, 3 = restricted</xs:documentation>
+												</xs:annotation>
+											</xs:attribute>
+										</xs:complexType>
+									</xs:element>
+								</xs:sequence>
+								<xs:attribute name="Contingent" type="AllocatedContingentTypeType" use="optional">
+									<xs:annotation>
+										<xs:documentation>element 51 - Type of compartment  - Position 5 and 6</xs:documentation>
+										<xs:documentation/>
+										<xs:documentation>element 51 - Type of compartment  - Position 1 and 2 </xs:documentation>
+									</xs:annotation>
+								</xs:attribute>
+								<xs:attribute name="Type" type="AllocatedCompartmentTypeType" use="optional">
+									<xs:annotation>
+										<xs:documentation source="Abteilart" xml:lang="de">element 51 - Type of compartment  - Position 1 and 2 </xs:documentation>
+									</xs:annotation>
+								</xs:attribute>
+								<xs:attribute name="Sex" type="PassengerSexType" use="optional">
+									<xs:annotation>
+										<xs:documentation source="used with sleeper coaches only" xml:lang="en">mixed or male/femalre compartment for sleepers</xs:documentation>
+									</xs:annotation>
+								</xs:attribute>
+							</xs:complexType>
+						</xs:element>
+					</xs:sequence>
+					<xs:attribute name="layout" type="xs:token" use="optional">
+						<xs:annotation>
+							<xs:documentation>at least one layout must be provided . The description of the layout was retrieved via the layoutRequest. </xs:documentation>
+						</xs:annotation>
+					</xs:attribute>
+					<xs:attribute name="lowerDeckLayout" type="xs:token" use="optional">
+						<xs:annotation>
+							<xs:documentation>layout describing the lower deck in case of a double deck coach</xs:documentation>
+						</xs:annotation>
+					</xs:attribute>
+					<xs:attribute name="upperDeckLayout" type="xs:token" use="optional">
+						<xs:annotation>
+							<xs:documentation>layout describing the upper deck in case of a double deck coach</xs:documentation>
+						</xs:annotation>
+					</xs:attribute>
+					<xs:attribute name="layoutProvider">
+						<xs:annotation>
+							<xs:documentation>system which provides the layout. Corresponds to allocating system in the layout reply</xs:documentation>
+						</xs:annotation>
+					</xs:attribute>
+					<xs:attribute name="gbStatus" type="GbStatusType" use="required">
+						<xs:annotation>
+							<xs:documentation>1 = allocated, 2 = free, 3 = restricted</xs:documentation>
+						</xs:annotation>
+					</xs:attribute>
+					<xs:attribute name="number" type="CoachNumberType" use="required"/>
+					<xs:attribute name="trainHead" type="TrainHeadType" use="optional">
+						<xs:annotation>
+							<xs:documentation>0 = no information available
+3 = train head (or end)
+4 = trainhed (or end) connected to a second train part</xs:documentation>
+						</xs:annotation>
+					</xs:attribute>
+					<xs:attribute name="service" type="LayoutServiceType" use="required"/>
+					<xs:attribute name="specialCoach" type="SpecialCoachType" use="optional">
+						<xs:annotation>
+							<xs:documentation>1 = luggage coach
+2 = restaurant coach
+5 = bicycle coach</xs:documentation>
+						</xs:annotation>
+					</xs:attribute>
+					<xs:attribute name="Direction" type="DirectionOfTravelType" default="U">
+						<xs:annotation>
+							<xs:documentation>U =unspecified, 
+D = in direction 
+O = opposite to direction
+C = changing
+E = starting in direction but changing later</xs:documentation>
+						</xs:annotation>
+					</xs:attribute>
+					<xs:attribute name="coachOwner">
+						<xs:annotation>
+							<xs:documentation>optional coachOwner. This can be used to indicate the owner at the coach display.</xs:documentation>
+						</xs:annotation>
+					</xs:attribute>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="AllocationOffer" type="AllocationOfferType" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>The allcation offer describes the prefered selectionm the allocating systems recommends for booking. The display for the customer should start with the coach indicated here and it should present the places as a preselection. IN case the issuing system shows only one coach this is the coach to be shown.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="AllocationOfferType">
+		<xs:sequence>
+			<xs:element name="CoachNb" type="CoachNumberType"/>
+			<xs:element name="Place" type="PlaceNumberType" maxOccurs="8"/>
+			<xs:element name="IgnoredPreferences" minOccurs="0">
+				<xs:complexType>
+					<xs:attribute name="PositionOfPlace" type="xs:boolean" default="true"/>
+					<xs:attribute name="DirectionOfTravel" type="xs:boolean" default="true"/>
+					<xs:attribute name="DirectionOfPlace" type="xs:boolean" default="true"/>
+					<xs:attribute name="CompartmentType" type="xs:boolean"/>
+					<xs:attribute name="CoachType" type="xs:boolean"/>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="AvailabilityGBTrainRequestType">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">All data required to request available places for grafical booking on a train.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="RequestedTrain" type="RequestedTrainType"/>
+			<xs:element name="Service" type="LayoutServiceType" maxOccurs="3"/>
+			<xs:element name="Coach" type="CoachNumberType" minOccurs="0"/>
+			<xs:element name="Preferences" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>The preferences of the customer are required to select the appropriate places for the first display of the coach layout. In case not all coaches are shown these informations are used to select the coiaches to be displayed.</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="SeatRequirements" type="SeatRequirementsType" minOccurs="0"/>
+						<xs:element name="BerthRequirements" type="BerthRequirementsType" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>for future use</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="CouchetteRequirements" type="CouchetteRequirementsType" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>for future use</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="SeatRequirementsType">
+		<xs:sequence>
+			<xs:element name="Passengers" type="NumberOfPassengerType"/>
+			<xs:element name="Class" type="ClassType"/>
+			<xs:element name="CoachType" type="RequestedCoachTypeType" minOccurs="0"/>
+			<xs:element name="CompartmentType" type="RequestedCompartmentTypeType" minOccurs="0"/>
+			<xs:element name="Contingent" type="RequestedContingentTypeType" minOccurs="0"/>
+			<xs:element name="PositionOfPlaces" type="PositionOfPlaceRequestType" minOccurs="0" maxOccurs="4"/>
+			<xs:element name="PositionOfCompartment" type="PositionOfCompartmentType" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>not supported by DB</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="DirectionOfTravel" minOccurs="0">
+				<xs:complexType>
+					<xs:simpleContent>
+						<xs:extension base="DirectionOfTravelType">
+							<xs:attribute name="Manadtory" type="xs:boolean" default="false"/>
+							<xs:attribute name="Direction" type="DirectionOfTravelType"/>
+						</xs:extension>
+					</xs:simpleContent>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="CouchetteRequirementsType">
+		<xs:sequence>
+			<xs:element name="Passengers" type="NumberOfPassengerType"/>
+			<xs:element name="Class" type="ClassType"/>
+			<xs:element name="CoachType" type="RequestedCoachTypeType" minOccurs="0"/>
+			<xs:element name="CompartmentType" type="RequestedCompartmentTypeType" minOccurs="0"/>
+			<xs:element name="Contingent" type="RequestedContingentTypeType" minOccurs="0"/>
+			<xs:element name="PositionOfPlaces" type="PositionOfPlaceRequestType" minOccurs="0" maxOccurs="4"/>
+			<xs:element name="PositionOfCompartment" type="PositionOfCompartmentType" minOccurs="0"/>
+			<xs:element name="passengerSex" type="PassengerSexType" minOccurs="0"/>
+			<xs:element name="Berths" type="NumberOfBerthsType" minOccurs="0" maxOccurs="2"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="BerthRequirementsType">
+		<xs:sequence>
+			<xs:element name="Passengers" type="NumberOfPassengerType"/>
+			<xs:element name="CoachType" type="RequestedCoachTypeType" minOccurs="0"/>
+			<xs:element name="CompartmentType" type="RequestedCompartmentTypeType" minOccurs="0"/>
+			<xs:element name="Contingent" type="RequestedContingentTypeType" minOccurs="0"/>
+			<xs:element name="PositionOfPlaces" type="PositionOfPlaceRequestType" minOccurs="0" maxOccurs="4"/>
+			<xs:element name="PositionOfCompartment" type="PositionOfCompartmentType" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>not supported by DB</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="DirectionOfTravel" minOccurs="0">
+				<xs:complexType>
+					<xs:simpleContent>
+						<xs:extension base="DirectionOfTravelType">
+							<xs:attribute name="Manadtory" type="xs:boolean" default="false"/>
+							<xs:attribute name="Direction" type="DirectionOfTravelType"/>
+						</xs:extension>
+					</xs:simpleContent>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="VehicleRequestType">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">Data to request an allocation of a vehicle on a car carriage train.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="RequestedTrain" type="RequestedTrainType"/>
+			<xs:element name="VehicleCategory" type="VehicleCategoryType">
+				<xs:annotation>
+					<xs:documentation>category of the vehicle - codes of element 29</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="VehicleRegistration" type="VehicleRegistrationNumberType">
+				<xs:annotation>
+					<xs:documentation>plate of the vehicle</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="TypeOfJourney" type="TypeOfJourneyType">
+				<xs:annotation>
+					<xs:documentation>element 33 - journey code</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="TrailerSize" type="TrailerSizeType" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>codes to indicate the size of a trailer - element 45 - trailers </xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="BoatCategory" type="BoatCategoryType" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>category of a boat - codes of element 29 when refereing to a boat</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Dogs" type="NumberOfPassengerType" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>number of dogs</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="VehiclePriceOnlyType" type="xs:boolean" default="true"/>
+			<xs:element name="LowerPlattformOnly" type="xs:boolean" default="false" minOccurs="0"/>
+			<xs:element name="VehicleHeigth" type="VehicleHeigthType" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>vehicle heigth in cm</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Tariff" type="TariffRequestType" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+</xs:schema>

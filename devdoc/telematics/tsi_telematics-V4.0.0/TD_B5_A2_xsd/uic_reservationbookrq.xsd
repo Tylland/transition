@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Mit XMLSpy v2009 sp1 (http://www.altova.com) von Volker Hahn (DB Systel GmbH) bearbeitet -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" 
+xmlns="http://www.uic.org/xml/passenger/01"
+targetNamespace="http://www.uic.org/xml/passenger/01"
+elementFormDefault="unqualified" 
+attributeFormDefault="unqualified">
+	<xs:include schemaLocation="uic_reservationcomplextypes.xsd"/>
+	<xs:include schemaLocation="passengercomplextypes.xsd"/>
+	<xs:element name="ReservationRequest">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Requestor" type="RequestorType"/>
+				<xs:element name="Dialogue" type="DialogueType"/>
+				<xs:choice>
+					<xs:element name="SeatRequest" type="SeatRequestType"/>
+					<xs:element name="SpecificSeatRequest" type="SpecificSeatRequestType"/>
+					<xs:element name="AdjacentSeatRequest" type="AdjacentSeatRequestType"/>
+					<xs:element name="CouchetteRequest" type="CouchetteRequestType"/>
+					<xs:element name="SpecificCouchetteRequest" type="SpecificCouchetteRequestType"/>
+					<xs:element name="AdjacentCouchetteRequest" type="AdjacentCouchetteRequestType"/>
+					<xs:element name="BerthRequest" type="BerthRequestType"/>
+					<xs:element name="SpecificBerthRequest" type="SpecificBerthRequestType"/>
+					<xs:element name="AdjacentBerthRequest" type="AdjacentBerthRequestType"/>
+					<xs:element name="MealRequest" type="MealRequestType"/>
+					<xs:element name="VehicleRequest" type="VehicleRequestType"/>
+					<xs:element name="RestaurantSeatRequest" type="RestaurantSeatRequestType"/>
+				</xs:choice>
+				<xs:element name="Passengers" type="PassengerType" minOccurs="0" maxOccurs="unbounded"/>
+				<xs:element name="FulfillmentMedium" type="xs:string" minOccurs="0" maxOccurs="unbounded">
+					<xs:annotation>
+						<xs:documentation>preferred fullfilment format for security features</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="ExchangeInformation" minOccurs="0">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="ExchangeReference" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>reference to reservation that is going to be exchanged by the new reservation</xs:documentation>
+								</xs:annotation>
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="ReferenceNumber" type="ReferenceNumberType"/>
+										<xs:element name="DepartureDate" type="xs:date"/>
+										<xs:element name="TrainNumber" type="TrainNumberType"/>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="ExchangedTraveler" minOccurs="0" maxOccurs="unbounded">
+								<xs:annotation>
+									<xs:documentation>Traveler Ids of cancelled travelers in case not all travelers are cancelled</xs:documentation>
+								</xs:annotation>
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="TravelerId"/>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+			<xs:attribute name="InformationOnly" type="xs:boolean" default="false">
+				<xs:annotation>
+					<xs:documentation>In case of messages with this flag the reservation or cancellation is evaluated identical to a real booking, but the booking or cancellation is not made persistent. The reply messages might not include a valid reference number. There must not be accountings for these transactions. There must not be correction or synchronization requests made related to these transactions.</xs:documentation>
+				</xs:annotation>
+			</xs:attribute>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>
