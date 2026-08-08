@@ -1,13 +1,72 @@
 package specs
 
 import (
+	"fmt"
 	"strings"
 	"testing"
 	"unicode"
 )
 
-type Scenario struct {
-	context *ScenarioContext
+type TestResult string
+
+const (
+	TestResultFailed    TestResult = "Failed"
+	TestResultSucceeded TestResult = "Succeeded"
+)
+
+type StepResult struct {
+	title  string
+	result TestResult
+	err    error
+}
+
+func NewStepResult(format string, a ...any) *StepResult {
+	return &StepResult{title: fmt.Sprintf(format, a...)}
+}
+
+func (r *StepResult) Err() error {
+	return r.err
+}
+
+func (r *StepResult) With(result *StepResult) *StepResult {
+	if result.err != nil && r.err == nil {
+		r.WithError(result.err)
+	}
+
+	return r
+}
+
+func (r *StepResult) WithResult(result TestResult) *StepResult {
+	r.result = result
+
+	return r
+}
+
+func (r *StepResult) WithError(err error) *StepResult {
+	r.err = err
+	r.result = TestResultFailed
+
+	return r
+}
+
+func (r *StepResult) WithErrorMessage(msg string) *StepResult {
+	r.err = fmt.Errorf("%s", msg)
+	r.result = TestResultFailed
+
+	return r
+}
+
+func (r *StepResult) WithErrorf(format string, a ...any) *StepResult {
+	r.err = fmt.Errorf(format, a...)
+	r.result = TestResultFailed
+
+	return r
+}
+
+func (r *StepResult) Success() *StepResult {
+	r.result = TestResultSucceeded
+
+	return r
 }
 
 func camelAppend(str string) string {
@@ -20,80 +79,139 @@ func camelAppend(str string) string {
 	return string(w)
 }
 
-func NewScenario(story *Story, t *testing.T) *Scenario {
-	return &Scenario{context: &ScenarioContext{t: t, story: story, title: camelAppend(strings.TrimPrefix(t.Name(), "Test"))}}
+type scenarioStepResult struct {
+	title  string
+	result string
 }
 
-func (s *Scenario) WithDebug(value bool) *Scenario {
-	s.context.debug = value
-
-	return s
+type Scenario struct {
+	t     *testing.T
+	story *Story
+	title string
+	steps []scenarioStepResult
 }
 
-func (s *Scenario) Given(action interface{}, args ...interface{}) *GivenStepBlock {
-	return NewGivenStepBlock(s.context, NewStep(Given, action, args...))
+func NewScenario(t *testing.T) *Scenario {
+	return &Scenario{t: t, title: camelAppend(strings.TrimPrefix(t.Name(), "Test"))}
+}
+
+func (s *Scenario) HandleStepResult(prefix string, sr *StepResult) {
+	title := prefix + " " + sr.title
+	result := string(sr.result)
+
+	if sr.result == TestResultFailed {
+		result += ": " + sr.err.Error()
+
+		s.t.Fatalf("%-60s - %s", title, result)
+	} else {
+		s.t.Logf("%-60s - %s", title, result)
+	}
+
+	s.steps = append(s.steps, scenarioStepResult{title: title, result: result})
+}
+
+func (s *Scenario) Given(sr *StepResult) *GivenStepBlock {
+	s.HandleStepResult("Given", sr)
+
+	return NewGivenStepBlock(s)
+}
+
+func (s *Scenario) Background(sr *StepResult) *GivenStepBlock {
+	s.HandleStepResult("Background", sr)
+
+	return NewGivenStepBlock(s)
+}
+
+type BackgroundStepBlock struct {
+	scenario *Scenario
+}
+
+func NewBackgroundStepBlock(scenario *Scenario) *BackgroundStepBlock {
+	return &BackgroundStepBlock{scenario: scenario}
+}
+
+func (sb *BackgroundStepBlock) Given(sr *StepResult) *GivenStepBlock {
+	sb.scenario.HandleStepResult("Given", sr)
+
+	return NewGivenStepBlock(sb.scenario)
 }
 
 type GivenStepBlock struct {
-	context *ScenarioContext
+	scenario *Scenario
 }
 
-func NewGivenStepBlock(context *ScenarioContext, step Step) *GivenStepBlock {
-	context.Add(step)
-
-	return &GivenStepBlock{context: context}
+func NewGivenStepBlock(scenario *Scenario) *GivenStepBlock {
+	return &GivenStepBlock{scenario: scenario}
 }
 
-func (sb *GivenStepBlock) And(action interface{}, args ...interface{}) *GivenStepBlock {
-	sb.context.Add(NewStep(And, action, args...))
+func (sb *GivenStepBlock) Given(sr *StepResult) *GivenStepBlock {
+	sb.scenario.HandleStepResult("Given", sr)
 
 	return sb
 }
 
-func (sb *GivenStepBlock) When(action interface{}, args ...interface{}) *WhenStepBlock {
+func (sb *GivenStepBlock) And(sr *StepResult) *GivenStepBlock {
+	sb.scenario.HandleStepResult("  And", sr)
 
-	return NewWhenStepBlock(sb.context, NewStep(When, action, args...))
+	return sb
+}
+
+func (sb *GivenStepBlock) When(sr *StepResult) *WhenStepBlock {
+	sb.scenario.HandleStepResult("When", sr)
+
+	return NewWhenStepBlock(sb.scenario)
 }
 
 type WhenStepBlock struct {
-	context *ScenarioContext
+	scenario *Scenario
 }
 
-func NewWhenStepBlock(context *ScenarioContext, step Step) *WhenStepBlock {
-	context.Add(step)
-
-	return &WhenStepBlock{context: context}
+func NewWhenStepBlock(scenario *Scenario) *WhenStepBlock {
+	return &WhenStepBlock{scenario: scenario}
 }
 
-func (sb *WhenStepBlock) Then(action interface{}, args ...interface{}) *ThenStepBlock {
-	return NewThenStepBlock(sb.context, NewStep(Then, action, args...))
+func (sb *WhenStepBlock) Then(sr *StepResult) *ThenStepBlock {
+	sb.scenario.HandleStepResult("Then", sr)
+
+	return NewThenStepBlock(sb.scenario)
 }
 
 type ThenStepBlock struct {
-	context *ScenarioContext
+	scenario *Scenario
 }
 
-func NewThenStepBlock(context *ScenarioContext, step Step) *ThenStepBlock {
-	context.Add(step)
-
-	return &ThenStepBlock{context: context}
+func NewThenStepBlock(scenario *Scenario) *ThenStepBlock {
+	return &ThenStepBlock{scenario: scenario}
 }
 
-func (sb *ThenStepBlock) And(action interface{}, args ...interface{}) *ThenStepBlock {
-	sb.context.Add(NewStep(And, action, args...))
+func (sb *ThenStepBlock) And(sr *StepResult) *ThenStepBlock {
+	sb.scenario.HandleStepResult("  And", sr)
 
 	return sb
 }
 
-func (sb *ThenStepBlock) WithVariables(variables ...interface{}) *ExampleBlock {
-
-	table := ExampleTable{headers: Headers(variables)}
-
-	sb.context.examples = table
-
-	return NewExampleBlock(sb.context)
-}
-
 func (sb *ThenStepBlock) Execute() {
-	sb.context.Execute(sb.context.t, false)
+	fmt.Println("")
+	fmt.Println("Scenario: " + sb.scenario.title)
+
+	maxTitleWidth := 0
+
+	for _, s := range sb.scenario.steps {
+		if len(s.title) > maxTitleWidth {
+			maxTitleWidth = len(s.title)
+		}
+	}
+
+	maxTitleWidth = int(maxTitleWidth/10+1) * 10
+
+	maxWidth := maxTitleWidth + len(TestResultSucceeded)
+
+	bar := strings.Repeat("-", maxWidth)
+	fmt.Println(bar)
+
+	for _, s := range sb.scenario.steps {
+		fmt.Printf("%-*s%s\n", maxTitleWidth, s.title, s.result)
+	}
+
+	fmt.Println(bar)
 }

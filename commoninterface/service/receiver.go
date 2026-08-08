@@ -1,4 +1,4 @@
-package ci
+package service
 
 import (
 	"crypto/tls"
@@ -11,6 +11,9 @@ import (
 	"os"
 	"strings"
 	"time"
+
+	"github.com/tylland/transition/commoninterface/message"
+	"github.com/tylland/transition/commoninterface/repository"
 )
 
 // MessageHandler is called by the Receiver for each successfully parsed inbound message.
@@ -35,6 +38,8 @@ type ReceiverConfig struct {
 	LIInstanceNumber string
 	// Handler processes validated inbound messages.
 	Handler MessageHandler
+	// Validator validates inbound message payloads. Optional; nil skips validation.
+	Validator *repository.SchemaRepository
 	// AllowedSenders is an optional set of partner company codes.
 	// When non-empty only messages whose uicmh:messageLiHost matches a known partner
 	// IP prefix are accepted.  Use nil to accept all TLS-authenticated senders.
@@ -51,6 +56,7 @@ type Receiver struct {
 }
 
 const inboundPath = "/LIMessageProcessing/http/UICCCMessageProcessing/UICCCMessageProcessingInboundWS"
+const inboundMessagePattern = "POST " + inboundPath
 
 // NewReceiver creates a Receiver.  Call ListenAndServe to start accepting connections.
 func NewReceiver(cfg ReceiverConfig) (*Receiver, error) {
@@ -80,7 +86,7 @@ func NewReceiver(cfg ReceiverConfig) (*Receiver, error) {
 
 	r := &Receiver{cfg: cfg}
 	mux := http.NewServeMux()
-	mux.HandleFunc(inboundPath, r.handleSOAP)
+	mux.HandleFunc(inboundMessagePattern, r.handleInboundMessage)
 
 	r.server = &http.Server{
 		Addr:         cfg.ListenAddr,
@@ -104,7 +110,7 @@ func (r *Receiver) Close() error {
 }
 
 // handleSOAP processes one inbound SOAP request.
-func (r *Receiver) handleSOAP(w http.ResponseWriter, req *http.Request) {
+func (r *Receiver) handleInboundMessage(w http.ResponseWriter, req *http.Request) {
 	if req.Method != http.MethodPost {
 		http.Error(w, "Method Not Allowed", http.StatusMethodNotAllowed)
 		return
@@ -128,6 +134,14 @@ func (r *Receiver) handleSOAP(w http.ResponseWriter, req *http.Request) {
 	senderIP := env.Header.MessageLiHost
 	payload := env.Body.UICMessage.Message
 
+	if r.cfg.Validator != nil {
+		if err := r.cfg.Validator.Validate(payload); err != nil {
+			log.Printf("ci receiver: schema validation failed for message %s: %v", msgID, err)
+			writeAck(w, r.cfg, msgID, senderIP, payload, "NACK")
+			return
+		}
+	}
+
 	// Call the application-level handler.
 	if handlerErr := r.cfg.Handler(msgID, senderIP, payload); handlerErr != nil {
 		log.Printf("ci receiver: handler rejected message %s: %v", msgID, handlerErr)
@@ -139,10 +153,10 @@ func (r *Receiver) handleSOAP(w http.ResponseWriter, req *http.Request) {
 }
 
 // parseEnvelope decodes the SOAP request body.
-func parseEnvelope(data []byte) (Envelope, error) {
-	var env Envelope
+func parseEnvelope(data []byte) (message.Envelope, error) {
+	var env message.Envelope
 	if err := xml.Unmarshal(data, &env); err != nil {
-		return Envelope{}, err
+		return message.Envelope{}, err
 	}
 	return env, nil
 }
@@ -151,10 +165,10 @@ func parseEnvelope(data []byte) (Envelope, error) {
 func writeAck(w http.ResponseWriter, cfg ReceiverConfig, msgID, senderIP, _ string, status string) {
 	ackID := "ACKID" + msgID
 
-	ack := AckResponse{
+	ack := message.AckResponse{
 		ResponseStatus:            status,
 		AckIdentifier:             ackID,
-		MessageReference:          MessageReference{MessageIdentifier: msgID},
+		MessageReference:          message.MessageReference{MessageIdentifier: msgID},
 		RemoteLIName:              cfg.LIName,
 		RemoteLIInstanceNumber:    cfg.LIInstanceNumber,
 		MessageTransportMechanism: "WEBSERVICE",
@@ -175,9 +189,9 @@ func writeAck(w http.ResponseWriter, cfg ReceiverConfig, msgID, senderIP, _ stri
 }
 
 // buildAckEnvelope wraps an AckResponse in a SOAP envelope.
-func buildAckEnvelope(ack AckResponse) outAckEnvelope {
+func buildAckEnvelope(ack message.AckResponse) outAckEnvelope {
 	return outAckEnvelope{
-		NsSOAP: NsSOAP,
+		NsSOAP: message.NsSOAP,
 		Body:   outAckBody{Response: ack},
 	}
 }
@@ -190,7 +204,7 @@ type outAckEnvelope struct {
 }
 
 type outAckBody struct {
-	Response AckResponse `xml:"response"`
+	Response message.AckResponse `xml:"response"`
 }
 
 // WSDLHandler returns an http.HandlerFunc that serves a minimal WSDL description

@@ -1,7 +1,7 @@
 // Package ci implements the ERA TD 104 Common Interface transport layer.
 // CI-to-CI communication uses SOAP over HTTPS (push model).
 // Reference: ERA_TD_104 v4.0, Chapter 5.
-package ci
+package message
 
 import "encoding/xml"
 
@@ -14,18 +14,19 @@ const (
 
 // Envelope is a SOAP 1.1 envelope (ERA TD 104 §5.2).
 type Envelope struct {
-	XMLName xml.Name `xml:"soapenv:Envelope"`
-	NsSOAP  string   `xml:"xmlns:soapenv,attr"`
-	NsUICMH string   `xml:"xmlns:uicmh,attr"`
-	NsUICM  string   `xml:"xmlns:uicm,attr"`
-	Header  Header   `xml:"soapenv:Header"`
-	Body    Body     `xml:"soapenv:Body"`
+	XMLName xml.Name `xml:"http://schemas.xmlsoap.org/soap/envelope/ Envelope"`
+	//XMLName xml.Name `xml:"soapenv:Envelope"`
+	NsSOAP  string `xml:"xmlns:soapenv,attr"`
+	NsUICMH string `xml:"xmlns:uicmh,attr"`
+	NsUICM  string `xml:"xmlns:uicm,attr"`
+	Header  Header
+	Body    Body
 }
 
 // Header carries the CI routing metadata (ERA TD 104 §5.2.1).
 type Header struct {
 	// MessageIdentifier uniquely identifies the message (16-byte GUID, 36-char string).
-	MessageIdentifier string `xml:"uicmh:messageIdentifier"`
+	MessageIdentifier string `xml:"messageIdentifier"`
 	// Compressed indicates whether the payload in Body.UICMessage.Message is zlib-compressed.
 	Compressed bool `xml:"uicmh:compressed"`
 	// Encrypted indicates whether the payload is encrypted.
@@ -33,12 +34,12 @@ type Header struct {
 	// Signed indicates whether the payload carries a digital signature.
 	Signed bool `xml:"uicmh:signed"`
 	// MessageLiHost is the public IP address of the sending CI instance.
-	MessageLiHost string `xml:"uicmh:messageLiHost"`
+	MessageLiHost string `xml:"messageLiHost"`
 }
 
 // Body wraps the UICMessage payload.
 type Body struct {
-	UICMessage UICMessage `xml:"uicm:UICMessage"`
+	UICMessage UICMessage `xml:"UICMessage"`
 }
 
 // UICMessage is the SOAP body payload (ERA TD 104 §5.2.2).

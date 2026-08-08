@@ -1,4 +1,4 @@
-package ci
+package service
 
 import (
 	"bytes"
@@ -10,6 +10,9 @@ import (
 	"net/http"
 	"os"
 	"time"
+
+	"github.com/tylland/transition/commoninterface/message"
+	"github.com/tylland/transition/commoninterface/repository"
 )
 
 // PartnerConfig holds the bilaterally agreed connection parameters for one CI partner.
@@ -38,6 +41,8 @@ type SenderConfig struct {
 	CACertFile string
 	// Timeout for each HTTP request.  Defaults to 30 s when zero.
 	Timeout time.Duration
+	// Validator validates outbound message payloads before sending. Optional; nil skips validation.
+	Validator *repository.SchemaRepository
 }
 
 // Sender posts TAF/TAP TSI XML messages to partner CI instances via SOAP/HTTPS.
@@ -109,7 +114,13 @@ func (s *Sender) Send(receiverCode, msgID, payload string) (SendResult, error) {
 		return SendResult{}, fmt.Errorf("ci sender: unknown partner %q", receiverCode)
 	}
 
-	env := NewEnvelope(msgID, s.cfg.LocalIP, payload)
+	if s.cfg.Validator != nil {
+		if err := s.cfg.Validator.Validate(payload); err != nil {
+			return SendResult{}, fmt.Errorf("ci sender: %w", err)
+		}
+	}
+
+	env := message.NewEnvelope(msgID, s.cfg.LocalIP, payload)
 
 	xmlBytes, err := xml.Marshal(env)
 	if err != nil {
@@ -146,7 +157,7 @@ func (s *Sender) Send(receiverCode, msgID, payload string) (SendResult, error) {
 
 // parseAck decodes the SOAP acknowledgement envelope returned by the partner CI.
 func parseAck(data []byte) (SendResult, error) {
-	var env AckEnvelope
+	var env message.AckEnvelope
 	if err := xml.Unmarshal(data, &env); err != nil {
 		return SendResult{}, fmt.Errorf("ci sender: unmarshal ACK: %w", err)
 	}

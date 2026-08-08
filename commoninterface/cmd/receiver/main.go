@@ -25,7 +25,7 @@ import (
 	"path/filepath"
 	"time"
 
-	ci "github.com/tylland/transition/commoninterface"
+	"github.com/tylland/transition/commoninterface/service"
 )
 
 func main() {
@@ -58,7 +58,7 @@ func main() {
 		return nil
 	}
 
-	cfg := ci.ReceiverConfig{
+	cfg := service.ReceiverConfig{
 		ListenAddr:       *addr,
 		TLSCertFile:      *certFile,
 		TLSKeyFile:       *keyFile,
@@ -68,7 +68,7 @@ func main() {
 		Handler:          handler,
 	}
 
-	recv, err := ci.NewReceiver(cfg)
+	recv, err := service.NewReceiver(cfg)
 	if err != nil {
 		log.Fatalf("create receiver: %v", err)
 	}

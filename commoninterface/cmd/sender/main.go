@@ -24,7 +24,7 @@ import (
 	"os"
 
 	"github.com/google/uuid"
-	ci "github.com/tylland/transition/commoninterface"
+	ci "github.com/tylland/transition/commoninterface/service"
 )
 
 func main() {
