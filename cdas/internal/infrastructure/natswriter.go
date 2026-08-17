@@ -28,9 +28,10 @@ func subjectFromProfile(segment *sfera.SegmentProfile) (string, error) {
 		return "", fmt.Errorf("unexpected SPID format %q: expected 6 colon-separated parts", segment.SPID)
 	}
 
-	imID := uint16(0)
+	var imID *sfera.Numeric44
+
 	if segment.SPZone.IMID != nil {
-		imID = *segment.SPZone.IMID
+		imID = segment.SPZone.IMID
 	}
 
 	// Reorder: trafikplats IDs before node numbers for useful wildcard subscriptions.

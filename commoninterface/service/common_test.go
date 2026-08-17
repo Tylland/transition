@@ -19,6 +19,11 @@ const (
 	malformedPayload = `<NotClosed`
 )
 
+const (
+	defaultCompanyCode = "0000099"
+	defaultMsgID       = "msg-001"
+)
+
 type CIMessage struct {
 	companyCode string
 	msgID       string
@@ -45,7 +50,7 @@ func (c *serviceTestContext) RepositoryWithSchemaFor(types ...string) *specs.Ste
 	res := specs.NewStepResult("a schema repository that contains schema(s) for %q", strings.Join(types, " and "))
 
 	for _, msgType := range types {
-		os.WriteFile(filepath.Join(c.schemasDir, msgType+"xsd"), minimalXSD, 0644)
+		os.WriteFile(filepath.Join(c.schemasDir, msgType+".xsd"), minimalXSD, 0644)
 	}
 
 	c.repo = specs.Must(repository.NewSchemaRepository(c.schemasDir))

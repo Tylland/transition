@@ -126,7 +126,7 @@ func (r *Receiver) handleInboundMessage(w http.ResponseWriter, req *http.Request
 	env, err := parseEnvelope(body)
 	if err != nil {
 		log.Printf("ci receiver: parse SOAP envelope: %v", err)
-		writeAck(w, r.cfg, "", "", "", "NACK")
+		writeAck(w, r.cfg, "", "", "", message.ResponseStatusNotAccepted)
 		return
 	}
 
@@ -137,7 +137,7 @@ func (r *Receiver) handleInboundMessage(w http.ResponseWriter, req *http.Request
 	if r.cfg.Validator != nil {
 		if err := r.cfg.Validator.Validate(payload); err != nil {
 			log.Printf("ci receiver: schema validation failed for message %s: %v", msgID, err)
-			writeAck(w, r.cfg, msgID, senderIP, payload, "NACK")
+			writeAck(w, r.cfg, msgID, senderIP, payload, message.ResponseStatusNotAccepted)
 			return
 		}
 	}
@@ -145,11 +145,11 @@ func (r *Receiver) handleInboundMessage(w http.ResponseWriter, req *http.Request
 	// Call the application-level handler.
 	if handlerErr := r.cfg.Handler(msgID, senderIP, payload); handlerErr != nil {
 		log.Printf("ci receiver: handler rejected message %s: %v", msgID, handlerErr)
-		writeAck(w, r.cfg, msgID, senderIP, payload, "NACK")
+		writeAck(w, r.cfg, msgID, senderIP, payload, message.ResponseStatusNotAccepted)
 		return
 	}
 
-	writeAck(w, r.cfg, msgID, senderIP, payload, "ACK")
+	writeAck(w, r.cfg, msgID, senderIP, payload, message.ResponseStatusAccepted)
 }
 
 // parseEnvelope decodes the SOAP request body.
@@ -162,7 +162,7 @@ func parseEnvelope(data []byte) (message.Envelope, error) {
 }
 
 // writeAck sends a SOAP ACK or NACK response back to the caller.
-func writeAck(w http.ResponseWriter, cfg ReceiverConfig, msgID, senderIP, _ string, status string) {
+func writeAck(w http.ResponseWriter, cfg ReceiverConfig, msgID, senderIP, _ string, status message.ResponseStatus) {
 	ackID := "ACKID" + msgID
 
 	ack := message.AckResponse{
@@ -174,7 +174,7 @@ func writeAck(w http.ResponseWriter, cfg ReceiverConfig, msgID, senderIP, _ stri
 		MessageTransportMechanism: "WEBSERVICE",
 	}
 
-	respEnv := buildAckEnvelope(ack)
+	respEnv := message.NewAckEnvelope(ack)
 	xmlBytes, err := xml.MarshalIndent(respEnv, "", "  ")
 	if err != nil {
 		log.Printf("ci receiver: marshal ACK: %v", err)
@@ -186,25 +186,6 @@ func writeAck(w http.ResponseWriter, cfg ReceiverConfig, msgID, senderIP, _ stri
 	w.WriteHeader(http.StatusOK)
 	_, _ = w.Write([]byte(xml.Header))
 	_, _ = w.Write(xmlBytes)
-}
-
-// buildAckEnvelope wraps an AckResponse in a SOAP envelope.
-func buildAckEnvelope(ack message.AckResponse) outAckEnvelope {
-	return outAckEnvelope{
-		NsSOAP: message.NsSOAP,
-		Body:   outAckBody{Response: ack},
-	}
-}
-
-// outAckEnvelope is used only for marshalling ACK responses.
-type outAckEnvelope struct {
-	XMLName xml.Name   `xml:"soapenv:Envelope"`
-	NsSOAP  string     `xml:"xmlns:soapenv,attr"`
-	Body    outAckBody `xml:"soapenv:Body"`
-}
-
-type outAckBody struct {
-	Response message.AckResponse `xml:"response"`
 }
 
 // WSDLHandler returns an http.HandlerFunc that serves a minimal WSDL description

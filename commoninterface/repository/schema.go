@@ -8,10 +8,25 @@ import (
 	"strings"
 )
 
+type ErrSchemaNotRegistred struct {
+	msgType string
+}
+
+func (e ErrSchemaNotRegistred) Error() string {
+	return fmt.Sprintf("no schema registered for message type %q", e.msgType)
+}
+
+type SchemaRecord struct {
+	messageTypeCode int
+	messageType     string
+	schema          string
+}
+
 // SchemaRepository holds TAF/TAP TSI XSD schemas indexed by MessageType name.
 // MessageType equals the root element name of the payload XML
 // (ERA TD 105 taf_cat_complete.xsd: "This message Type is same as the Common Schema Root Element name").
 type SchemaRepository struct {
+	codes   map[int]string    // code → messageType
 	schemas map[string][]byte // messageType → raw XSD bytes
 }
 
@@ -58,7 +73,7 @@ func (r *SchemaRepository) Validate(payload string) error {
 		return fmt.Errorf("schema validation: malformed XML: %w", err)
 	}
 	if !r.HasSchema(msgType) {
-		return fmt.Errorf("schema validation: no schema registered for message type %q", msgType)
+		return ErrSchemaNotRegistred{msgType: msgType}
 	}
 	return nil
 }

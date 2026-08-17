@@ -2,6 +2,7 @@ package service
 
 import (
 	"encoding/xml"
+	"errors"
 	"fmt"
 	"net/http"
 	"net/http/httptest"
@@ -10,6 +11,7 @@ import (
 	"testing"
 
 	"github.com/tylland/transition/commoninterface/message"
+	"github.com/tylland/transition/commoninterface/repository"
 	"github.com/tylland/transition/specs"
 )
 
@@ -48,9 +50,9 @@ func NewSenderTestContext(t *testing.T) *SenderTestContext {
 func (c *SenderTestContext) createSender() (*Sender, error) {
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
 		c.called = true
-		ack := outAckEnvelope{
+		ack := message.AckEnvelope{
 			NsSOAP: message.NsSOAP,
-			Body:   outAckBody{Response: message.AckResponse{ResponseStatus: "ACK", AckIdentifier: "ACKID-test"}},
+			Body:   message.AckBody{Response: message.AckResponse{ResponseStatus: "ACK", AckIdentifier: "ACKID-test"}},
 		}
 		data, _ := xml.Marshal(ack)
 		w.Header().Set("Content-Type", "text/xml")
@@ -82,6 +84,14 @@ func (c *SenderTestContext) OutboundMessage(companyCode, msgID, body string) *sp
 	return res.Success()
 }
 
+func (c *SenderTestContext) ValidOutboundMessage() *specs.StepResult {
+	res := specs.NewStepResult("valid outbound message")
+
+	c.outboundMessage = &CIMessage{companyCode: defaultCompanyCode, msgID: defaultMsgID, body: validPayload}
+
+	return res.Success()
+}
+
 // ── Step functions — When (actions) ─────────────────────────────────────────
 
 func (c *SenderTestContext) Sending() *specs.StepResult {
@@ -96,7 +106,7 @@ func (c *SenderTestContext) Sending() *specs.StepResult {
 	sr := specs.NewStepResult("sending %s/%s", companyCode, msgID)
 
 	sender := specs.Must(c.createSender())
-	_, _ = sender.Send(companyCode, msgID, body)
+	_, c.err = sender.Send(companyCode, msgID, body)
 
 	return sr.Success()
 }
@@ -123,6 +133,26 @@ func (c *SenderTestContext) NoRequestWasMade() *specs.StepResult {
 	return sr.Success()
 }
 
+func (c *SenderTestContext) PartnerNotRegistredError() *specs.StepResult {
+	sr := specs.NewStepResult("partner not registred error")
+
+	if _, ok := errors.AsType[ErrPartnerNotRegistred](c.err); !ok {
+		return sr.WithErrorMessage("No or wrong error received")
+	}
+
+	return sr.Success()
+}
+
+func (c *SenderTestContext) SchemaNotRegistredError() *specs.StepResult {
+	sr := specs.NewStepResult("schema not registred error")
+
+	if _, ok := errors.AsType[repository.ErrSchemaNotRegistred](c.err); !ok {
+		return sr.WithErrorMessage("No or wrong error received")
+	}
+
+	return sr.Success()
+}
+
 // ── Outbound validation (Sender) tests ───────────────────────────────────────
 
 func TestValidOutboundMessageIsSent(t *testing.T) {
@@ -130,7 +160,7 @@ func TestValidOutboundMessageIsSent(t *testing.T) {
 
 	senderStory.Scenario(t).
 		Given(c.RepositoryWithSchemaFor("TrainRunningInformationMessage")).
-		And(c.OutboundMessage("0000099", "test-msg-id", validPayload)).
+		And(c.ValidOutboundMessage()).
 		When(c.Sending()).
 		Then(c.RequestWasMade()).
 		Execute()
@@ -152,10 +182,9 @@ func TestSendingMessageWithNoRegisteredSchemaReturnsError(t *testing.T) {
 
 	senderStory.Scenario(t).
 		Given(c.RepositoryLacksSchemaFor("PathRequestMessage")).
-		And(c.OutboundMessage("0000099", "test-msg-id", wrongRootPayload)).
+		And(c.ValidOutboundMessage()).
 		When(c.Sending()).
 		Then(c.NoRequestWasMade()).
+		And(c.SchemaNotRegistredError()).
 		Execute()
 }
-
-// ── Inbound validation (Receiver) tests ──────────────────────────────────────

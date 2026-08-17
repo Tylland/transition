@@ -15,12 +15,13 @@ const (
 // Envelope is a SOAP 1.1 envelope (ERA TD 104 §5.2).
 type Envelope struct {
 	XMLName xml.Name `xml:"http://schemas.xmlsoap.org/soap/envelope/ Envelope"`
-	//XMLName xml.Name `xml:"soapenv:Envelope"`
-	NsSOAP  string `xml:"xmlns:soapenv,attr"`
-	NsUICMH string `xml:"xmlns:uicmh,attr"`
+
+	NsSOAP  string `xml:"xmlns:soap,attr"`
 	NsUICM  string `xml:"xmlns:uicm,attr"`
-	Header  Header
-	Body    Body
+	NsUICMH string `xml:"xmlns:uicmh,attr"`
+
+	Header Header `xml:"Header"`
+	Body   Body   `xml:"Body"`
 }
 
 // Header carries the CI routing metadata (ERA TD 104 §5.2.1).
@@ -28,13 +29,18 @@ type Header struct {
 	// MessageIdentifier uniquely identifies the message (16-byte GUID, 36-char string).
 	MessageIdentifier string `xml:"messageIdentifier"`
 	// Compressed indicates whether the payload in Body.UICMessage.Message is zlib-compressed.
-	Compressed bool `xml:"uicmh:compressed"`
+	Compressed bool `xml:"compressed"`
 	// Encrypted indicates whether the payload is encrypted.
-	Encrypted bool `xml:"uicmh:encrypted"`
+	Encrypted bool `xml:"encrypted"`
 	// Signed indicates whether the payload carries a digital signature.
-	Signed bool `xml:"uicmh:signed"`
+	Signed bool `xml:"signed"`
 	// MessageLiHost is the public IP address of the sending CI instance.
 	MessageLiHost string `xml:"messageLiHost"`
+}
+
+type MessageIdentifier struct {
+	NsUICMH string `xml:"xmlns,attr"`
+	Value   string `xml:",chardata"`
 }
 
 // Body wraps the UICMessage payload.
@@ -46,19 +52,28 @@ type Body struct {
 type UICMessage struct {
 	// Message is the TAF/TAP TSI XML payload.
 	// If compressed, encrypted, or signed it is base64-encoded.
-	Message string `xml:"uicm:message"`
+	Message string `xml:"message"`
 	// Signature is the optional digital signature (SHA256withECDSA).
-	Signature string `xml:"uicm:signature,omitempty"`
+	Signature string `xml:"signature,omitempty"`
 	// SenderAlias is the alias of the sender's TLS certificate in the receiver's truststore.
-	SenderAlias string `xml:"uicm:senderAlias,omitempty"`
+	SenderAlias string `xml:"senderAlias,omitempty"`
 	// Encoding is the character encoding of the message (e.g. "UTF-8").
-	Encoding string `xml:"uicm:encoding"`
+	Encoding string `xml:"encoding"`
 }
 
 // AckEnvelope is the SOAP response envelope containing the acknowledgement.
 type AckEnvelope struct {
 	XMLName xml.Name `xml:"Envelope"`
+	NsSOAP  string   `xml:"xmlns:soap,attr"`
 	Body    AckBody  `xml:"Body"`
+}
+
+// buildAckEnvelope wraps an AckResponse in a SOAP envelope.
+func NewAckEnvelope(ack AckResponse) AckEnvelope {
+	return AckEnvelope{
+		NsSOAP: NsSOAP,
+		Body:   AckBody{Response: ack},
+	}
 }
 
 // AckBody wraps the acknowledgement XML.
@@ -66,10 +81,17 @@ type AckBody struct {
 	Response AckResponse `xml:"response"`
 }
 
+type ResponseStatus string
+
+const (
+	ResponseStatusAccepted    = "ACK"
+	ResponseStatusNotAccepted = "NACK"
+)
+
 // AckResponse is the acknowledgement body (ERA TD 104 §5.3).
 type AckResponse struct {
 	// ResponseStatus is "ACK" (accepted) or "NACK" (rejected).
-	ResponseStatus string `xml:"ResponseStatus"`
+	ResponseStatus ResponseStatus `xml:"ResponseStatus"`
 	// AckIdentifier is prefixed with "ACKID" followed by the original MessageIdentifier.
 	AckIdentifier string `xml:"AckIndentifier"` // sic: spec uses "AckIndentifier"
 	// MessageReference echoes key fields from the received message header.
@@ -97,9 +119,9 @@ type MessageReference struct {
 // payload is the raw TAF/TAP TSI XML (plain, uncompressed, unencrypted).
 func NewEnvelope(msgID, senderIP, payload string) Envelope {
 	return Envelope{
-		NsSOAP:  NsSOAP,
-		NsUICMH: NsHeader,
-		NsUICM:  NsBody,
+		NsSOAP: NsSOAP,
+		//NsUICMH: NsHeader,
+		NsUICM: NsBody,
 		Header: Header{
 			MessageIdentifier: msgID,
 			Compressed:        false,

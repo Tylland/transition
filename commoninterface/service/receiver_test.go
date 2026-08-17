@@ -2,7 +2,6 @@ package service
 
 import (
 	"bytes"
-	"encoding/json"
 	"encoding/xml"
 	"fmt"
 	"net/http"
@@ -41,6 +40,28 @@ func NewReceiverTestContext(t *testing.T) *ReceiverTestContext {
 
 // ── Step functions — Given (input state) ────────────────────────────────────
 
+func (c *ReceiverTestContext) InboundMessage(companyCode, msgID, body string) *specs.StepResult {
+	res := specs.NewStepResult("inbound message %s/%s", companyCode, msgID)
+
+	c.inboundMessage = &CIMessage{companyCode: companyCode, msgID: msgID, body: body}
+
+	return res.Success()
+}
+
+func (c *ReceiverTestContext) ValidInboundMessage() *specs.StepResult {
+	res := specs.NewStepResult("valid inbound message")
+
+	c.inboundMessage = &CIMessage{companyCode: defaultCompanyCode, msgID: defaultMsgID, body: validPayload}
+
+	return res.Success()
+}
+
+func MessageWithWrongPayload() *specs.StepResult {
+	return specs.NewStepResult("inbound message with non-conforming payload").Success()
+}
+
+// ── Step functions — When (actions) ─────────────────────────────────────────
+
 func (c *ReceiverTestContext) Receiving() *specs.StepResult {
 	res := specs.NewStepResult("receiving message").Success()
 
@@ -54,78 +75,30 @@ func (c *ReceiverTestContext) Receiving() *specs.StepResult {
 
 	env := message.NewEnvelope(c.inboundMessage.companyCode, c.inboundMessage.msgID, c.inboundMessage.body)
 
-	data := specs.Must(xml.Marshal(env))
+	reqData := specs.Must(xml.Marshal(env))
 
-	body := bytes.NewReader(data)
+	body := bytes.NewReader(reqData)
 
-	req := httptest.NewRequest(http.MethodPost, "/hello", body)
+	req := httptest.NewRequest(http.MethodPost, inboundPath, body)
 	rr := httptest.NewRecorder()
 
 	receiver.handleInboundMessage(rr, req)
 
 	c.responseCode = rr.Code
 
-	// Parse JSON response
-	var resp outAckEnvelope
+	var resp message.AckEnvelope
 
-	if err := json.Unmarshal(rr.Body.Bytes(), &resp); err == nil {
+	respData := rr.Body.Bytes()
+
+	if err := xml.Unmarshal(respData, &resp); err == nil {
 		c.response = &resp.Body.Response
+	} else {
+		fmt.Print(string(respData))
+		c.err = err
 	}
 
 	return res.Success()
 }
-
-func (c *ReceiverTestContext) InboundMessage(companyCode, msgID, body string) *specs.StepResult {
-	res := specs.NewStepResult("inbound message %s/%s", companyCode, msgID)
-
-	c.inboundMessage = &CIMessage{companyCode: companyCode, msgID: msgID, body: body}
-
-	return res.Success()
-}
-
-func payload(text string) *specs.StepResult {
-	return specs.NewStepResult("inbound payload").Success()
-}
-
-// func SchemaExists(messageType string) *specs.StepResult {
-// 	sr := specs.NewStepResult("schema exists for %q", messageType)
-// 	dir, err := os.MkdirTemp("", "")
-// 	if err != nil {
-// 		return sr.WithError(err)
-// 	}
-// 	if err := os.WriteFile(filepath.Join(dir, messageType+".xsd"), minimalXSD, 0644); err != nil {
-// 		return sr.WithError(err)
-// 	}
-// 	repo, err := repository.NewSchemaRepository(dir)
-// 	if err != nil {
-// 		return sr.WithError(err)
-// 	}
-// 	f := new(bool)
-// 	forwarded = f
-// 	r = &Receiver{cfg: ReceiverConfig{
-// 		Validator: repo,
-// 		Handler:   func(_, _, _ string) error { *f = true; return nil },
-// 	}}
-// 	return sr.Success()
-// }
-
-func MessageWithWrongPayload() *specs.StepResult {
-	return specs.NewStepResult("inbound message with non-conforming payload").Success()
-}
-
-// ── Step functions — When (actions) ─────────────────────────────────────────
-
-// func validating(r *Receiver, text string) *specs.StepResult {
-// 	sr := specs.NewStepResult("validating inbound payload")
-// 	if err := r.cfg.Validator.Validate(text); err == nil {
-// 		_ = r.cfg.Handler("test-id", "127.0.0.1", text)
-// 	}
-// 	return sr.Success()
-// }
-
-// func Validating() *specs.StepResult {
-// 	return validating(r, wrongRootPayload)
-// }
 
 // ── Step functions — Then (assertions) ──────────────────────────────────────
 
@@ -138,15 +111,29 @@ func (c *ReceiverTestContext) MessageIsForwarded() *specs.StepResult {
 }
 
 func (c *ReceiverTestContext) MessageIsNotForwarded() *specs.StepResult {
-	sr := specs.NewStepResult("the message is not forwarded and a NACK is returned")
+	sr := specs.NewStepResult("the message is not forwarded")
 	if c.forwarded {
 		return sr.WithErrorMessage("handler was called despite validation failure")
 	}
 	return sr.Success()
 }
 
+func (c *ReceiverTestContext) MessageIsAccepted() *specs.StepResult {
+	sr := specs.NewStepResult("message accepted, ACK is returned")
+
+	if c.response == nil {
+		return sr.WithErrorMessage("no response received")
+	}
+
+	if c.response.ResponseStatus != "ACK" {
+		return sr.WithErrorMessage(fmt.Sprintf("expected %q but got %q", "ACK", c.response.ResponseStatus))
+	}
+
+	return sr.Success()
+}
+
 func (c *ReceiverTestContext) MessageIsNotAccepted() *specs.StepResult {
-	sr := specs.NewStepResult("message not accepted")
+	sr := specs.NewStepResult("message not accepted, NACK is returned")
 
 	if c.response == nil {
 		return sr.WithErrorMessage("no response received")
@@ -166,9 +153,10 @@ func TestValidInboundMessageIsAcceptedAndForwarded(t *testing.T) {
 
 	receiverStory.Scenario(t).
 		Given(c.RepositoryWithSchemaFor("TrainRunningInformationMessage")).
-		Given(c.InboundMessage("99", "mrg-001", validPayload)).
+		Given(c.ValidInboundMessage()).
 		When(c.Receiving()).
-		Then(c.MessageIsForwarded()).
+		Then(c.MessageIsAccepted()).
+		And(c.MessageIsForwarded()).
 		Execute()
 }
 
@@ -189,7 +177,7 @@ func TestInboundMessageWithNoRegisteredSchemaIsNACKed(t *testing.T) {
 
 	receiverStory.Scenario(t).
 		Given(c.RepositoryLacksSchemaFor("PathRequestMessage")).
-		Given(c.InboundMessage("99", "mrg-001", wrongRootPayload)).
+		Given(c.ValidInboundMessage()).
 		When(c.Receiving()).
 		Then(c.MessageIsNotAccepted()).
 		And(c.MessageIsNotForwarded()).

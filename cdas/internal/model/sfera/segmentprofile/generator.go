@@ -8,6 +8,10 @@ import (
 	"github.com/tylland/transition/internal/schema/sfera"
 )
 
+func ptr[T any](t T) *T {
+	return &t
+}
+
 // Generate generates SFERA segment profiles for both directions
 // and writes them using the given writer.
 func Generate(network *dm.Network, writer Writer) {
@@ -19,16 +23,19 @@ func Generate(network *dm.Network, writer Writer) {
 // specific direction and writes them using the given writer.
 func GenerateForDirection(network *dm.Network, direction dm.LinkDirection, writer Writer) {
 	for _, link := range network.Links() {
-		imID := uint16(74)
+		imID := sfera.Numeric44(74)
+		name := "namn"
 
 		segment := &sfera.SegmentProfile{
-			SPID:           createProfileId(link.Id, direction),
-			SPName:         "namn",
-			SPZone:         sfera.SPZone{IMID: &imID},
+			SegmentProfileIdentificationComplexType: &sfera.SegmentProfileIdentificationComplexType{
+				SPID:   createProfileId(link.Id, direction),
+				SPZone: &sfera.SPZoneComplexType{IMID: &imID}},
+
+			SPName:         &name,
 			SPVersionMajor: 1,
 			SPVersionMinor: 0,
 			SPLength:       link.Length,
-			SPStatus:       sfera.SegmentProfileStatusValid,
+			SPStatus:       sfera.SPStatusValid,
 		}
 
 		// Points
@@ -45,7 +52,7 @@ func GenerateForDirection(network *dm.Network, direction dm.LinkDirection, write
 			}
 
 			if stationTrack != nil {
-				points.TimingPoints = append(points.TimingPoints, CreateTimingPoint(placeCenter, stationTrack, direction))
+				points.TimingPoint = append(points.TimingPoint, CreateTimingPoint(placeCenter, stationTrack, direction))
 			}
 		}
 
@@ -54,32 +61,30 @@ func GenerateForDirection(network *dm.Network, direction dm.LinkDirection, write
 			if signal.LinkPosition.IsValid(direction) {
 				signalId := sfera.SignalID{
 					SignalIDPhysical: signal.Id.String(),
-					SignalIDObject:   signal.Id.String(),
+					SignalIDObject:   ptr(signal.Id.String()),
 					Location:         signal.LinkPosition.GetDistance(direction),
 				}
-				points.Signals = append(points.Signals, sfera.SignalComplexType{SignalID: signalId})
+				points.Signal = append(points.Signal, &sfera.SignalComplexType{SignalID: &signalId})
 			}
 		}
 
 		// Balise tavlor
 		for _, baliseBoard := range link.Boards.Items() {
 			if baliseBoard.Id.Type == "Bal" && baliseBoard.LinkPosition.IsValid(direction) {
-				balise := sfera.Balise{
-					Identifier: baliseBoard.Id.String(),
+				balise := &sfera.Balise{SPGenericPointComplexType: &sfera.SPGenericPointComplexType{
+					Identifier: ptr(baliseBoard.Id.String()),
 					Location:   baliseBoard.LinkPosition.GetDistance(direction),
-				}
-				points.Balises = append(points.Balises, balise)
+				}}
+
+				points.Balise = append(points.Balise, balise)
 			}
 		}
 
 		// Unprotected level crossings
 		for _, vagskydd := range link.Levelcrossings.Items() {
 			if !vagskydd.HasProtection {
-				points.UnprotectedLevelCrossingStops = append(points.UnprotectedLevelCrossingStops,
-					sfera.UnprotectedLevelCrossingStop{
-						Identifier: vagskydd.Name,
-						Location:   vagskydd.Extent.GetStartDistance(direction),
-					})
+				points.UnprotectedLevelCrossingStop = append(points.UnprotectedLevelCrossingStop,
+					&sfera.UnprotectedLevelCrossingStop{SPGenericPointComplexType: createSPGenericPoint(vagskydd.Name, vagskydd.Extent.GetStartDistance(direction))})
 			}
 		}
 
@@ -90,8 +95,8 @@ func GenerateForDirection(network *dm.Network, direction dm.LinkDirection, write
 		for _, platform := range link.Platforms.Items() {
 			startLoc := platform.Extent.GetStartDistance(direction)
 			endLoc := platform.Extent.GetEndDistance(direction)
-			areas.Platforms = append(areas.Platforms, sfera.SPGenericArea{
-				Identifier:        platform.Name,
+			areas.Platform = append(areas.Platform, &sfera.SPGenericAreaComplexType{
+				Identifier:        ptr(platform.Name),
 				StartLocation:     &startLoc,
 				EndLocation:       &endLoc,
 				StartEndQualifier: sfera.StartEndQualifierStartsEnds,
@@ -112,12 +117,12 @@ func GenerateForDirection(network *dm.Network, direction dm.LinkDirection, write
 		}
 
 		if defaultSpeedProfile != nil {
-			characteristics.StaticSpeedProfiles = append(characteristics.StaticSpeedProfiles,
+			characteristics.StaticSpeedProfile = append(characteristics.StaticSpeedProfile,
 				CreateStaticSpeedProfile(defaultSpeedProfile, direction, true))
 		}
 
 		for _, hastighetsprofil := range link.SpeedProfiles.Items() {
-			characteristics.StaticSpeedProfiles = append(characteristics.StaticSpeedProfiles,
+			characteristics.StaticSpeedProfile = append(characteristics.StaticSpeedProfile,
 				CreateStaticSpeedProfile(hastighetsprofil, direction, false))
 		}
 
@@ -130,22 +135,33 @@ func GenerateForDirection(network *dm.Network, direction dm.LinkDirection, write
 
 		for _, board := range link.Boards.Items() {
 			if kmBoard, ok := isKilometerBoard(board); ok {
-				contextInfo.KilometreReferencePoints = append(contextInfo.KilometreReferencePoints,
-					sfera.KilometreReferencePoint{
-						Identifier: kmBoard.Id.Information,
-						Location:   kmBoard.LinkPosition.GetDistance(direction),
-						KmRef:      float64(*kmBoard.Kilometer),
-					})
+				contextInfo.KilometreReferencePoint = append(contextInfo.KilometreReferencePoint,
+					&sfera.KilometreReferencePoint{
+						SPGenericPointComplexType: createSPGenericPoint(kmBoard.Id.Information, kmBoard.LinkPosition.GetDistance(direction)),
+						KmRef:                     float64(*kmBoard.Kilometer)},
+				)
 			}
 		}
 
 		contextInfo.LineAndTrackIdentifier = &sfera.LineAndTrackIdentifier{
-			Start: &sfera.LineAndTrackIdentifierData{},
+			LineAndTrackIdentifierStart: &sfera.LineAndTrackIdentifierComplexType{},
 		}
-		segment.SPContextInfo = contextInfo
+
+		segment.SPContextInformation = contextInfo
 
 		writer.Write(segment)
 	}
+}
+
+func createSPGenericPoint(id string, loc float64) *sfera.SPGenericPointComplexType {
+	return &sfera.SPGenericPointComplexType{
+		Identifier: ptr(id),
+		Location:   loc,
+	}
+}
+
+func createSPGenericArea(id string, start, end float64) *sfera.SPGenericAreaComplexType {
+	return &sfera.SPGenericAreaComplexType{Identifier: ptr(id), StartLocation: &start, EndLocation: &end}
 }
 
 // isKilometerBoard checks if a Board is a Kilometertavla and returns it if so.
@@ -154,22 +170,22 @@ func isKilometerBoard(board *dm.Board) (*dm.Board, bool) {
 }
 
 // CreateTimingPoint creates a SFERA TimingPoint from domain model entities.
-func CreateTimingPoint(placeCenter *dm.PlaceCenter, track *dm.StationTrack, direction dm.LinkDirection) sfera.TimingPoint {
-	tp := sfera.TimingPoint{
+func CreateTimingPoint(placeCenter *dm.PlaceCenter, track *dm.StationTrack, direction dm.LinkDirection) *sfera.TimingPoint {
+	tp := &sfera.TimingPoint{
 		TPID:         fmt.Sprintf("%d:%s", placeCenter.Place.PLC, track.Number),
 		Location:     placeCenter.LinkPosition.GetDistance(direction),
-		StationTrack: track.Number,
+		StationTrack: ptr(track.Number),
 	}
-	tp.TPNames = append(tp.TPNames, sfera.TPName{
+	tp.TPName = append(tp.TPName, &sfera.TPName{
 		Name:     fmt.Sprintf("%s, %s", track.Name, placeCenter.Place.Name),
-		Language: "se",
+		Language: ptr("se"),
 	})
 	return tp
 }
 
 // CreateStaticSpeedProfile creates a SFERA StaticSpeedProfile from domain model entities.
-func CreateStaticSpeedProfile(speedProfile *dm.SpeedProfile, direction dm.LinkDirection, isDefaultProfile bool) sfera.StaticSpeedProfile {
-	ssp := sfera.StaticSpeedProfile{}
+func CreateStaticSpeedProfile(speedProfile *dm.SpeedProfile, direction dm.LinkDirection, isDefaultProfile bool) *sfera.StaticSpeedProfile {
+	ssp := &sfera.StaticSpeedProfile{}
 
 	segments := dm.ExtentEntitiesInDirection(speedProfile.Segments.Items(), direction)
 
@@ -183,33 +199,33 @@ func CreateStaticSpeedProfile(speedProfile *dm.SpeedProfile, direction dm.LinkDi
 			if !isDefaultProfile {
 				category := sfera.SpecificSSPCategoryOtherReplaces
 				ncDiff := sfera.NCTrainTypePassenger
-				start.SpecificSSPs = append(start.SpecificSSPs, sfera.SpecificSSP{
+				start.SpecificSSP = append(start.SpecificSSP, &sfera.SpecificSSPComplexType{
 					OtherSpecificSSP: &sfera.OtherSpecificSSP{
-						TrainCategoryCode: string(segment.Category),
-						SSPNCDIFF:         &ncDiff,
+						TrainCategoryCode: ptr(string(segment.Category)),
+						SSPNCDIFF:         ptr(string(ncDiff)),
 					},
-					Category: &category,
+					SpecificSSPCategory: ptr(string(category)),
 				})
 			}
 
-			ssp.Start = start
+			ssp.StaticSpeedProfileStart = start
 		} else {
-			change := sfera.StaticSpeedProfileChange{
-				SSPComplexType: sfera.SSPComplexType{
+			change := &sfera.StaticSpeedProfileChange{
+				SSPComplexType: &sfera.SSPComplexType{
 					SSPSpeed: &speed,
 				},
 				Location: segment.Extent.GetStartDistance(direction),
 			}
 
 			if !isDefaultProfile {
-				change.SpecificSSPs = append(change.SpecificSSPs, sfera.SpecificSSP{
+				change.SpecificSSP = append(change.SpecificSSP, &sfera.SpecificSSPComplexType{
 					OtherSpecificSSP: &sfera.OtherSpecificSSP{
-						TrainCategoryCode: string(segment.Category),
+						TrainCategoryCode: ptr(string(segment.Category)),
 					},
 				})
 			}
 
-			ssp.Changes = append(ssp.Changes, change)
+			ssp.StaticSpeedProfileChange = append(ssp.StaticSpeedProfileChange, change)
 		}
 	}
 
@@ -224,13 +240,13 @@ func CreateGradientAverage(link *dm.Link, direction dm.LinkDirection) sfera.Grad
 
 	for i, slope := range slopes {
 		if i == 0 {
-			ga.Start = &sfera.GradientComplexType{
+			ga.GradientAverageStart = &sfera.GradientComplexType{
 				GradientValue:     math.Abs(slope.Gradient),
 				GradientDirection: getGradientDirection(slope, direction),
 			}
 		} else {
-			ga.Changes = append(ga.Changes, sfera.GradientAverageChange{
-				GradientComplexType: sfera.GradientComplexType{
+			ga.GradientAverageChange = append(ga.GradientAverageChange, &sfera.GradientAverageChange{
+				GradientComplexType: &sfera.GradientComplexType{
 					GradientValue:     math.Abs(slope.Gradient),
 					GradientDirection: getGradientDirection(slope, direction),
 				},

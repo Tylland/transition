@@ -103,6 +103,14 @@ type SendResult struct {
 	ErrorDetail string
 }
 
+type ErrPartnerNotRegistred struct {
+	companyCode string
+}
+
+func (e ErrPartnerNotRegistred) Error() string {
+	return fmt.Sprintf("Partner with company code %q not registred", e.companyCode)
+}
+
 // Send wraps payload in a SOAP envelope and POSTs it to the partner identified by
 // receiverCode.  It returns the parsed acknowledgement or an error.
 //
@@ -111,7 +119,7 @@ type SendResult struct {
 func (s *Sender) Send(receiverCode, msgID, payload string) (SendResult, error) {
 	partner, ok := s.cfg.Partners[receiverCode]
 	if !ok {
-		return SendResult{}, fmt.Errorf("ci sender: unknown partner %q", receiverCode)
+		return SendResult{}, ErrPartnerNotRegistred{companyCode: receiverCode}
 	}
 
 	if s.cfg.Validator != nil {
@@ -163,7 +171,7 @@ func parseAck(data []byte) (SendResult, error) {
 	}
 	ack := env.Body.Response
 	return SendResult{
-		Status:        ack.ResponseStatus,
+		Status:        string(ack.ResponseStatus),
 		AckIdentifier: ack.AckIdentifier,
 	}, nil
 }

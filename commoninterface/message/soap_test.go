@@ -2,6 +2,7 @@ package message
 
 import (
 	"encoding/xml"
+	"fmt"
 	"testing"
 )
 
@@ -11,12 +12,54 @@ const (
 	malformedPayload = `<NotClosed`
 )
 
-func TestRoundtrip(t *testing.T) {
+func TestEnvelopeRoundtrip(t *testing.T) {
 	senv := NewEnvelope("1123", "99", validPayload)
 
-	data, _ := xml.MarshalIndent(senv, "", "")
+	data, _ := xml.MarshalIndent(senv, "", "  ")
+
+	fmt.Print(string(data))
 
 	var renv Envelope
 
-	xml.Unmarshal(data, &renv)
+	err := xml.Unmarshal(data, &renv)
+	if err != nil {
+		fmt.Print(string(data))
+		t.Fatal(err)
+	}
+
+	if renv.Header.MessageIdentifier != senv.Header.MessageIdentifier {
+		fmt.Print(string(data))
+		t.Fatalf("MessageIdentifier expected %q got %q", senv.Header.MessageIdentifier, renv.Header.MessageIdentifier)
+	}
+
+	if renv.Header.MessageLiHost != senv.Header.MessageLiHost {
+		fmt.Print(string(data))
+		t.Fatalf("MessageLiHost expected %q got %q", senv.Header.MessageLiHost, renv.Header.MessageLiHost)
+	}
+
+	if renv.Body.UICMessage.Message != senv.Body.UICMessage.Message {
+		fmt.Print(string(data))
+		t.Fatalf("UICMessage expected %q got %q", senv.Body.UICMessage.Message, renv.Body.UICMessage.Message)
+	}
+}
+
+func TestAckEnvelopeRoundtrip(t *testing.T) {
+	sack := AckResponse{ResponseStatus: ResponseStatusAccepted, AckIdentifier: "ACKID-test"}
+	sackenv := NewAckEnvelope(sack)
+
+	data, _ := xml.MarshalIndent(sackenv, "", "")
+
+	var rackenv AckEnvelope
+	xml.Unmarshal(data, &rackenv)
+
+	rack := rackenv.Body.Response
+
+	if rack.ResponseStatus != sack.ResponseStatus {
+		t.Fatalf("MessageIdentifier expected %q got %q", sack.ResponseStatus, rack.ResponseStatus)
+	}
+
+	if rack.AckIdentifier != sack.AckIdentifier {
+		t.Fatalf("MessageIdentifier expected %q got %q", sack.AckIdentifier, rack.AckIdentifier)
+	}
+
 }
