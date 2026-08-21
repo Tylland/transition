@@ -86,7 +86,9 @@ func NewReceiver(cfg ReceiverConfig) (*Receiver, error) {
 
 	r := &Receiver{cfg: cfg}
 	mux := http.NewServeMux()
-	mux.HandleFunc(inboundMessagePattern, r.handleInboundMessage)
+
+	mux.Handle(inboundMessagePattern, corsHandler(http.HandlerFunc(r.handleInboundMessage), []string{"*"}))
+	mux.HandleFunc("GET /", WSDLHandler(cfg.ListenAddr))
 
 	r.server = &http.Server{
 		Addr:         cfg.ListenAddr,
@@ -111,6 +113,7 @@ func (r *Receiver) Close() error {
 
 // handleSOAP processes one inbound SOAP request.
 func (r *Receiver) handleInboundMessage(w http.ResponseWriter, req *http.Request) {
+
 	if req.Method != http.MethodPost {
 		http.Error(w, "Method Not Allowed", http.StatusMethodNotAllowed)
 		return
@@ -191,7 +194,6 @@ func writeAck(w http.ResponseWriter, cfg ReceiverConfig, msgID, senderIP, _ stri
 // WSDLHandler returns an http.HandlerFunc that serves a minimal WSDL description
 // for the inbound web service (ERA TD 104 §5.1 / §5.4.1).
 func WSDLHandler(baseURL string) http.HandlerFunc {
-	wsdl := buildWSDL(baseURL)
 	return func(w http.ResponseWriter, req *http.Request) {
 		if !strings.HasSuffix(req.URL.RawQuery, "wsdl") &&
 			!strings.EqualFold(req.URL.Query().Get("wsdl"), "") {
@@ -199,7 +201,7 @@ func WSDLHandler(baseURL string) http.HandlerFunc {
 			return
 		}
 		w.Header().Set("Content-Type", "text/xml; charset=utf-8")
-		_, _ = w.Write([]byte(wsdl))
+		_, _ = w.Write([]byte(buildWSDL(baseURL)))
 	}
 }
 
