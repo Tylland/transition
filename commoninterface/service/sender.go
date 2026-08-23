@@ -123,7 +123,7 @@ func (s *Sender) Send(receiverCode, msgID, payload string) (SendResult, error) {
 	}
 
 	if s.cfg.Validator != nil {
-		if err := s.cfg.Validator.Validate(payload); err != nil {
+		if err := s.cfg.Validator.Validate(nil, payload); err != nil {
 			return SendResult{}, fmt.Errorf("ci sender: %w", err)
 		}
 	}

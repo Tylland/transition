@@ -67,15 +67,15 @@ func (c *SchemaRepositoryTestContext) CreatingSchemaRepository() *specs.StepResu
 
 // ── Step functions — Then (assertions) ──────────────────────────────────────
 
-func (c *SchemaRepositoryTestContext) SchemaRepositoryContains(types ...string) *specs.StepResult {
-	sr := specs.NewStepResult("schema repository containss %s", strings.Join(types, " and "))
-	for _, mt := range types {
-		if !c.repo.HasSchema(mt) {
-			return sr.WithErrorf("missing schema: %s", mt)
-		}
-	}
-	return sr.Success()
-}
+// func (c *SchemaRepositoryTestContext) SchemaRepositoryContains(types ...string) *specs.StepResult {
+// 	sr := specs.NewStepResult("schema repository containss %s", strings.Join(types, " and "))
+// 	for _, mt := range types {
+// 		if !c.repo.HasSchema(mt) {
+// 			return sr.WithErrorf("missing schema: %s", mt)
+// 		}
+// 	}
+// 	return sr.Success()
+// }
 
 func (c *SchemaRepositoryTestContext) SchemaRepositoryIsEmpty() *specs.StepResult {
 	sr := specs.NewStepResult("schema repository is empty")

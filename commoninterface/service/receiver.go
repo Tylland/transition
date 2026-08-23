@@ -4,6 +4,7 @@ import (
 	"crypto/tls"
 	"crypto/x509"
 	"encoding/xml"
+	"errors"
 	"fmt"
 	"io"
 	"log"
@@ -13,6 +14,7 @@ import (
 	"time"
 
 	"github.com/tylland/transition/commoninterface/message"
+	"github.com/tylland/transition/commoninterface/message/telematics"
 	"github.com/tylland/transition/commoninterface/repository"
 )
 
@@ -51,11 +53,13 @@ type ReceiverConfig struct {
 //
 //	/LIMessageProcessing/http/UICCCMessageProcessing/UICCCMessageProcessingInboundWS
 type Receiver struct {
-	cfg    ReceiverConfig
-	server *http.Server
+	cfg          ReceiverConfig
+	secureServer *http.Server
+	unsafeServer *http.Server
 }
 
-const inboundPath = "/LIMessageProcessing/http/UICCCMessageProcessing/UICCCMessageProcessingInboundWS"
+// const inboundPath = "/LIMessageProcessing/http/UICCCMessageProcessing/UICCCMessageProcessingInboundWS"
+const inboundPath = "/inbound"
 const inboundMessagePattern = "POST " + inboundPath
 
 // NewReceiver creates a Receiver.  Call ListenAndServe to start accepting connections.
@@ -90,25 +94,49 @@ func NewReceiver(cfg ReceiverConfig) (*Receiver, error) {
 	mux.Handle(inboundMessagePattern, corsHandler(http.HandlerFunc(r.handleInboundMessage), []string{"*"}))
 	mux.HandleFunc("GET /", WSDLHandler(cfg.ListenAddr))
 
-	r.server = &http.Server{
+	r.secureServer = &http.Server{
 		Addr:         cfg.ListenAddr,
 		Handler:      mux,
 		TLSConfig:    tlsCfg,
 		ReadTimeout:  30 * time.Second,
 		WriteTimeout: 30 * time.Second,
 	}
+
+	r.unsafeServer = &http.Server{
+		Addr:         ":8080",
+		Handler:      mux,
+		ReadTimeout:  30 * time.Second,
+		WriteTimeout: 30 * time.Second,
+	}
+
 	return r, nil
 }
 
 // ListenAndServe starts the HTTPS server.  It blocks until the server shuts down.
-func (r *Receiver) ListenAndServe() error {
+func (r *Receiver) StartSecureServer() error {
 	log.Printf("ci receiver: listening on %s", r.cfg.ListenAddr)
-	return r.server.ListenAndServeTLS(r.cfg.TLSCertFile, r.cfg.TLSKeyFile)
+	return r.secureServer.ListenAndServeTLS(r.cfg.TLSCertFile, r.cfg.TLSKeyFile)
+}
+
+// ListenAndServe starts the HTTPS server.  It blocks until the server shuts down.
+func (r *Receiver) StartUnsafeServer() error {
+	log.Printf("ci receiver: listening on %s", ":8080")
+	return r.unsafeServer.ListenAndServe()
 }
 
 // Close shuts down the HTTPS server.
 func (r *Receiver) Close() error {
-	return r.server.Close()
+	var errs []error
+
+	if r.secureServer != nil {
+		errs = append(errs, r.secureServer.Close())
+	}
+
+	if r.unsafeServer != nil {
+		errs = append(errs, r.unsafeServer.Close())
+	}
+
+	return errors.Join(errs...)
 }
 
 // handleSOAP processes one inbound SOAP request.
@@ -128,6 +156,7 @@ func (r *Receiver) handleInboundMessage(w http.ResponseWriter, req *http.Request
 
 	env, err := parseEnvelope(body)
 	if err != nil {
+		fmt.Print(string(body))
 		log.Printf("ci receiver: parse SOAP envelope: %v", err)
 		writeAck(w, r.cfg, "", "", "", message.ResponseStatusNotAccepted)
 		return
@@ -135,10 +164,12 @@ func (r *Receiver) handleInboundMessage(w http.ResponseWriter, req *http.Request
 
 	msgID := env.Header.MessageIdentifier
 	senderIP := env.Header.MessageLiHost
-	payload := env.Body.UICMessage.Message
+	payload := strings.Trim(env.Body.UICMessage.Message.Data, " ")
+
+	hdr, err := telematics.ParseHeader(payload)
 
 	if r.cfg.Validator != nil {
-		if err := r.cfg.Validator.Validate(payload); err != nil {
+		if err := r.cfg.Validator.Validate(hdr.MessageReference, payload); err != nil {
 			log.Printf("ci receiver: schema validation failed for message %s: %v", msgID, err)
 			writeAck(w, r.cfg, msgID, senderIP, payload, message.ResponseStatusNotAccepted)
 			return

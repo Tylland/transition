@@ -38,11 +38,6 @@ type Header struct {
 	MessageLiHost string `xml:"messageLiHost"`
 }
 
-type MessageIdentifier struct {
-	NsUICMH string `xml:"xmlns,attr"`
-	Value   string `xml:",chardata"`
-}
-
 // Body wraps the UICMessage payload.
 type Body struct {
 	UICMessage UICMessage `xml:"UICMessage"`
@@ -52,13 +47,19 @@ type Body struct {
 type UICMessage struct {
 	// Message is the TAF/TAP TSI XML payload.
 	// If compressed, encrypted, or signed it is base64-encoded.
-	Message string `xml:"message"`
+	Message UICMessageData `xml:"message"`
 	// Signature is the optional digital signature (SHA256withECDSA).
 	Signature string `xml:"signature,omitempty"`
 	// SenderAlias is the alias of the sender's TLS certificate in the receiver's truststore.
 	SenderAlias string `xml:"senderAlias,omitempty"`
 	// Encoding is the character encoding of the message (e.g. "UTF-8").
 	Encoding string `xml:"encoding"`
+}
+
+type UICMessageData struct {
+	// Message is the TAF/TAP TSI XML payload.
+	// If compressed, encrypted, or signed it is base64-encoded.
+	Data string `xml:",innerxml"`
 }
 
 // AckEnvelope is the SOAP response envelope containing the acknowledgement.
@@ -131,7 +132,7 @@ func NewEnvelope(msgID, senderIP, payload string) Envelope {
 		},
 		Body: Body{
 			UICMessage: UICMessage{
-				Message:  payload,
+				Message:  UICMessageData{Data: payload},
 				Encoding: "UTF-8",
 			},
 		},

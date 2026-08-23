@@ -23,6 +23,7 @@ import (
 	"log"
 	"os"
 	"path/filepath"
+	"sync"
 	"time"
 
 	"github.com/tylland/transition/commoninterface/service"
@@ -73,7 +74,31 @@ func main() {
 		log.Fatalf("create receiver: %v", err)
 	}
 
-	if err := recv.ListenAndServe(); err != nil {
+	defer recv.Close()
+
+	wg := sync.WaitGroup{}
+
+	wg.Add(2)
+
+	go StartSecureServer(recv, &wg)
+	go StartUnsafeServer(recv, &wg)
+
+	wg.Wait()
+}
+
+func StartSecureServer(recv *service.Receiver, wg *sync.WaitGroup) {
+	defer wg.Done()
+
+	if err := recv.StartSecureServer(); err != nil {
 		log.Fatalf("receiver: %v", err)
 	}
+}
+
+func StartUnsafeServer(recv *service.Receiver, wg *sync.WaitGroup) {
+	defer wg.Done()
+
+	if err := recv.StartUnsafeServer(); err != nil {
+		log.Fatalf("receiver: %v", err)
+	}
+
 }
