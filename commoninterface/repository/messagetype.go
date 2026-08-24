@@ -2,14 +2,20 @@ package repository
 
 import (
 	"bufio"
+	"encoding/json"
 	"fmt"
 	"os"
 	"strings"
 )
 
+type SchemaFile struct {
+	SchemaFile   string               `json:"schemaFile"`
+	MessageTypes []*MessageTypeRecord `json:"messageTypes"`
+}
+
 type MessageTypeRecord struct {
-	Code string
-	Name string
+	Code string `json:"code"`
+	Name string `json:"name"`
 }
 
 func Read(name string) ([]*MessageTypeRecord, error) {
@@ -37,4 +43,22 @@ func Read(name string) ([]*MessageTypeRecord, error) {
 	}
 
 	return records, nil
+}
+
+func ReadSchemaFile(name string) (*SchemaFile, error) {
+	data, err := os.ReadFile(name)
+
+	if err != nil {
+		return nil, fmt.Errorf("read schema file %q: %w", name, err)
+	}
+
+	file := &SchemaFile{}
+
+	err = json.Unmarshal(data, file)
+
+	if err != nil {
+		return nil, fmt.Errorf("deserialize schema file %q: %w", name, err)
+	}
+
+	return file, nil
 }

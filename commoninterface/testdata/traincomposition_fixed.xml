@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TrainCompositionMessage xmlns="http://www.era.europa.eu/schemes/TAFTSI/4.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <MessageHeader>
+    <MessageReference>
+      <MessageType>3003</MessageType>
+      <MessageTypeVersion>4.0.0</MessageTypeVersion>
+      <MessageIdentifier>796cc4ee-cd51-49c2-a8cf-3bd73b29ddfa</MessageIdentifier>
+      <MessageDateTime>2026-02-08T14:25:30.910+05:30</MessageDateTime>
+    </MessageReference>
+    <Sender CI_InstanceNumber="">3025</Sender>
+    <Recipient CI_InstanceNumber="">0074</Recipient>
+  </MessageHeader>
+  <MessageStatus>1</MessageStatus>
+  <OperationalTrainNumberIdentifier>
+    <OperationalTrainNumber>48119</OperationalTrainNumber>
+  </OperationalTrainNumberIdentifier>
+  <PathIdentity>
+    <PathIdent>48119</PathIdent>
+    <PathDeparturePoint>
+      <CountryCodeISO />
+      <LocationPrimaryCode />
+      <PrimaryLocationName />
+      <LocationSubsidiaryCode LocationSubsidiaryTypeCode="" />
+    </PathDeparturePoint>
+    <PathDepartureTime>2011-04-11T20:05:00+02:00</PathDepartureTime>
+    <PathDestinationPoint>
+      <CountryCodeISO />
+      <LocationPrimaryCode />
+      <PrimaryLocationName />
+      <LocationSubsidiaryCode LocationSubsidiaryTypeCode="" />
+    </PathDestinationPoint>
+  </PathIdentity>
+  <TrainCompositionJourneySection>
+    <JourneySection>
+      <IntermediateDestination>
+        <CountryCodeISO />
+        <LocationPrimaryCode />
+        <LocationSubsidiaryCode LocationSubsidiaryTypeCode="" />
+      </IntermediateDestination>
+      <IntermediateArrivalTime>2011-04-12T04:30:00+02:00</IntermediateArrivalTime>
+      <ResponsibilityActualSection>
+        <ResponsibleRU>0083</ResponsibleRU>
+      </ResponsibilityActualSection>
+      <ResponsibilityNextSection>
+        <ResponsibleRU>IT</ResponsibleRU>
+      </ResponsibilityNextSection>
+    </JourneySection>
+  </TrainCompositionJourneySection>
+</TrainCompositionMessage>

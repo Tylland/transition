@@ -48,9 +48,9 @@ type Sender struct {
 type CompanyCode int
 
 func ParseHeader(content string) (*MessageHeader, error) {
-	var header *MessageHeader
+	msg := &InboundMessage{}
 
-	err := xml.Unmarshal([]byte(content), header)
+	err := xml.Unmarshal([]byte(content), msg)
 
-	return header, err
+	return &msg.Header, err
 }

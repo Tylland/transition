@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TrainCompositionMessage xmlns="http://www.era.europa.eu/schemes/TAFTSI/4.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <MessageHeader>
+    <MessageReference>
+      <MessageType>3003</MessageType>
+      <MessageTypeVersion>4.0.0</MessageTypeVersion>
+      <MessageIdentifier>796cc4ee-cd51-49c2-a8cf-3bd73b29ddfa</MessageIdentifier>
+      <MessageDateTime>2026-02-08T14:25:30.910+05:30</MessageDateTime>
+    </MessageReference>
+    <Sender CI_InstanceNumber="">3025</Sender>
+    <Recipient CI_InstanceNumber="">0074</Recipient>
+  </MessageHeader>
+  <MessageStatus>1</MessageStatus>
+  <OperationalTrainNumberIdentifier>
+    <OperationalTrainNumber>48119</OperationalTrainNumber>
+  </OperationalTrainNumberIdentifier>
+  <TrainCompositionJourneySection>
+    <JourneySection>
+      <IntermediateDestination>
+        <CountryCodeISO />
+        <LocationPrimaryCode />
+        <LocationSubsidiaryCode LocationSubsidiaryTypeCode="" />
+      </IntermediateDestination>
+      <IntermediateArrivalTime>2011-04-12T04:30:00+02:00</IntermediateArrivalTime>
+      <IntermediateDepartureTime />
+      <ResponsibilityActualSection>
+        <ResponsibleRU>0083</ResponsibleRU>
+        <ResponsibleIM />
+      </ResponsibilityActualSection>
+      <ResponsibilityNextSection>
+        <ResponsibleRU>IT</ResponsibleRU>
+        <ResponsibleIM />
+      </ResponsibilityNextSection>
+    </JourneySection>
+    <LocoIdent>
+      <TractionType />
+      <TractionIdent />
+      <TractionMode />
+    </LocoIdent>
+    <TrainRunningData>
+      <TrainRunningTechData>
+        <TrainWeight>461900</TrainWeight>
+        <TrainLength>452</TrainLength>
+        <LocoIdent>
+          <TractionType />
+          <TractionIdent />
+          <TractionMode />
+        </LocoIdent>
+        <MaxAxleWeight>9.366666666666665</MaxAxleWeight>
+      </TrainRunningTechData>
+    </TrainRunningData>
+    <TrainWagonOrder>
+      <WagonNumberFreight>238742727825</WagonNumberFreight>
+      <WagonTrainPosition>1</WagonTrainPosition>
+    </TrainWagonOrder>
+    <WagonData>
+      <WagonNumberFreight>238742727825</WagonNumberFreight>
+      <WagonTechData>
+        <WagonLength>2650</WagonLength>
+        <WagonNumberOfAxles>3</WagonNumberOfAxles>
+        <BrakeType>3</BrakeType>
+        <BrakeWeight>28</BrakeWeight>
+        <WagonMaxSpeed>100</WagonMaxSpeed>
+        <MaxAxleWeight>9.366666666666665</MaxAxleWeight>
+        <WagonWeightEmpty>26700</WagonWeightEmpty>
+      </WagonTechData>
+    </WagonData>
+  </TrainCompositionJourneySection>
+</TrainCompositionMessage>

@@ -1,12 +1,13 @@
 package repository
 
 import (
+	"context"
 	"fmt"
 	"os"
 	"path/filepath"
 
-	"github.com/lestrrat-go/libxml2"
-	"github.com/lestrrat-go/libxml2/xsd"
+	"github.com/lestrrat-go/helium"
+	"github.com/lestrrat-go/helium/xsd"
 	"github.com/tylland/transition/commoninterface/message/telematics"
 )
 
@@ -20,33 +21,35 @@ func (e ErrSchemaNotRegistred) Error() string {
 
 // SchemaRepository holds TAF/TAP TSI XSD schemas indexed by MessageType and MessageTypeVersion (found in MessageHeader.MessageReference).
 type SchemaRepository struct {
-	schemas map[string]map[string][]byte // messageType → raw XSD bytes
+	schemas map[string]map[string]*SchemaEntry // type → version → raw XSD bytes
+}
+
+type SchemaEntry struct {
+	Validator *xsd.Validator
+	Schema    *xsd.Schema
 }
 
 // NewSchemaRepository loads all .xsd files from a type/version/schema.xsd structure at initialisation time.
 func NewSchemaRepository(dir string) (*SchemaRepository, error) {
-	typeEntries, err := os.ReadDir(dir)
+	categoryEntries, err := os.ReadDir(dir)
 
 	if err != nil {
 		return nil, fmt.Errorf("schema repository: read directory %q: %w", dir, err)
 	}
 
-	repo := &SchemaRepository{schemas: make(map[string]map[string][]byte)}
+	repo := &SchemaRepository{schemas: make(map[string]map[string]*SchemaEntry)}
 
-	for _, typeEntry := range typeEntries {
-		if !typeEntry.IsDir() {
-			return nil, fmt.Errorf("schema repository: %s is not a directory", typeEntry.Name())
+	for _, categoryEntry := range categoryEntries {
+		if !categoryEntry.IsDir() {
+			return nil, fmt.Errorf("schema repository: %s is not a directory", categoryEntry.Name())
 		}
 
-		msgType := typeEntry.Name()
+		category := categoryEntry.Name()
+		categoryDir := filepath.Join(dir, category)
 
-		versions := make(map[string][]byte)
-
-		typeDir := filepath.Join(dir, msgType)
-
-		versionEntries, err := os.ReadDir(typeDir)
+		versionEntries, err := os.ReadDir(categoryDir)
 		if err != nil {
-			return nil, fmt.Errorf("schema repository: read directory %q: %w", typeDir, err)
+			return nil, fmt.Errorf("schema repository: read directory %q: %w", categoryDir, err)
 		}
 
 		for _, versionEntry := range versionEntries {
@@ -56,59 +59,68 @@ func NewSchemaRepository(dir string) (*SchemaRepository, error) {
 
 			msgTypeVer := versionEntry.Name()
 
-			versionDir := filepath.Join(typeDir, msgTypeVer)
+			versionDir := filepath.Join(categoryDir, msgTypeVer)
+
+			schemaInfo, err := ReadSchemaFile(filepath.Join(versionDir, "schema.json"))
 
 			if err != nil {
-				return nil, fmt.Errorf("schema repository: read directory %q: %w", versionDir, err)
+				return nil, fmt.Errorf("schema repository: read schema file %q: %w", filepath.Join(versionDir, "schema.json"), err)
 			}
 
-			schemas, err := filepath.Glob(versionDir + "/*.xsd")
+			ctx := context.Background()
+
+			root, err := os.OpenRoot(versionDir)
 
 			if err != nil {
-				return nil, fmt.Errorf("schema repository: finding schemas %q: %w", versionDir, err)
+				return nil, fmt.Errorf("open directory root %q: %w\n", versionDir, err)
 			}
 
-			if len(schemas) == 0 {
-				return nil, fmt.Errorf("schema repository: no schema found for %q version %q in %q", msgType, msgTypeVer, versionDir)
+			defer root.Close()
+
+			src, err := root.ReadFile(schemaInfo.SchemaFile)
+			if err != nil {
+				return nil, err
 			}
 
-			if len(schemas) > 1 {
-				return nil, fmt.Errorf("schema repository: %s schemas found for %q version %q in %q",
-					len(schemas), msgType, msgTypeVer, versionDir)
+			doc, err := helium.NewParser().Parse(ctx, src)
+			if err != nil {
+				return nil, err
 			}
 
-			data, err := os.ReadFile(schemas[0])
+			schema, err := xsd.NewCompiler().
+				FS(root.FS()). // resolves xs:include / xs:import
+				Compile(ctx, doc)
 
 			if err != nil {
-				return nil, fmt.Errorf("schema repository: read schema for %q version %q in %q: %w",
-					msgType, msgTypeVer, schemas[0], err)
+				return nil, fmt.Errorf("failed to compile schema: %w\n", err)
 			}
 
-			versions[msgTypeVer] = data
+			validator := xsd.NewValidator(schema)
+
+			for _, info := range schemaInfo.MessageTypes {
+				if _, ok := repo.schemas[info.Code]; !ok {
+					repo.schemas[info.Code] = make(map[string]*SchemaEntry)
+				}
+
+				repo.schemas[info.Code][msgTypeVer] = &SchemaEntry{Validator: &validator, Schema: schema}
+			}
 		}
-
-		repo.schemas[msgType] = versions
-
 	}
 
 	return repo, nil
 }
 
 // HasSchema reports whether a schema is registered for messageType.
-func (r *SchemaRepository) HasSchema(msgRef telematics.MessageReference) bool {
-	if versions, ok := r.schemas[msgRef.MessageType]; ok {
-		if _, ok := versions[msgRef.MessageTypeVersion]; ok {
-			return true
-		}
-	}
+func (r *SchemaRepository) HasSchema(msgRef *telematics.MessageReference) bool {
+	_, exists := r.SchemaEntry(msgRef)
 
-	return false
+	return exists
 }
 
-func (r *SchemaRepository) Schema(msgRef *telematics.MessageReference) ([]byte, bool) {
+func (r *SchemaRepository) SchemaEntry(msgRef *telematics.MessageReference) (*SchemaEntry, bool) {
 	if versions, ok := r.schemas[msgRef.MessageType]; ok {
-		if data, ok := versions[msgRef.MessageTypeVersion]; ok {
-			return data, true
+		if entry, ok := versions[msgRef.MessageTypeVersion]; ok {
+			return entry, true
 		}
 	}
 
@@ -128,28 +140,27 @@ func (r *SchemaRepository) Validate(msgRef *telematics.MessageReference, payload
 			return fmt.Errorf("validate: failed to parse schema")
 		}
 
+		if hdr == nil || hdr.MessageReference == nil {
+			return fmt.Errorf("validate: message reference not found in payload header")
+		}
+
 		msgRef = hdr.MessageReference
 	}
 
-	data, hasSchema := r.Schema(msgRef)
+	schemaEntry, hasSchema := r.SchemaEntry(msgRef)
 
 	if !hasSchema {
 		return ErrSchemaNotRegistred{msgRef: msgRef}
 	}
 
-	schema, err := xsd.Parse(data)
-
-	if err != nil {
-		return fmt.Errorf("validate: failed to parse schema")
-	}
-
-	doc, err := libxml2.Parse([]byte(payload))
+	parser := helium.NewParser()
+	doc, err := parser.Parse(context.Background(), []byte(payload))
 
 	if err != nil {
 		return fmt.Errorf("validate: failed to parse document (payload)")
 	}
 
-	if err := schema.Validate(doc); err != nil {
+	if err := schemaEntry.Validator.Validate(context.Background(), doc); err != nil {
 		return fmt.Errorf("xml does not conform to schema type %q version %q: %w", msgRef.MessageType, msgRef.MessageTypeVersion, err)
 	}
 

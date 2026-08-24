@@ -26,6 +26,7 @@ import (
 	"sync"
 	"time"
 
+	"github.com/tylland/transition/commoninterface/repository"
 	"github.com/tylland/transition/commoninterface/service"
 )
 
@@ -48,6 +49,12 @@ func main() {
 		log.Fatalf("create output directory %s: %v", *outDir, err)
 	}
 
+	schemaRepo, err := repository.NewSchemaRepository("c:\\temp\\schemas")
+
+	if err != nil {
+		log.Fatalf("create output directory %s: %v", *outDir, err)
+	}
+
 	handler := func(msgID, senderIP, payload string) error {
 		filename := filepath.Join(*outDir, fmt.Sprintf("%s_%s.xml",
 			time.Now().UTC().Format("20060102T150405Z"),
@@ -67,6 +74,7 @@ func main() {
 		LIName:           *liName,
 		LIInstanceNumber: *liInst,
 		Handler:          handler,
+		Validator:        schemaRepo,
 	}
 
 	recv, err := service.NewReceiver(cfg)

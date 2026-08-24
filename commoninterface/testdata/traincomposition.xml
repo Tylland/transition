@@ -12,10 +12,10 @@
                 <TrainCompositionMessage>
                     <MessageHeader>
                         <MessageReference>
-                            <MessageType>2201</MessageType>
-                            <MessageTypeVersion>5.1.8</MessageTypeVersion>
+                            <MessageType>3003</MessageType>
+                            <MessageTypeVersion>4.0.0</MessageTypeVersion>
                             <MessageIdentifier>796cc4ee-cd51-49c2-a8cf-3bd73b29ddfa</MessageIdentifier>
-                            <MessageDateTime>2011-12-08T14:25:30.910+05:30</MessageDateTime>
+                            <MessageDateTime>2026-02-08T14:25:30.910+05:30</MessageDateTime>
                         </MessageReference>
                         <Sender CI_InstanceNumber="">3025</Sender>
                         <Recipient CI_InstanceNumber="">0074</Recipient>
