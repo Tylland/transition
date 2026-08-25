@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"strings"
 
 	"github.com/lestrrat-go/helium"
 	"github.com/lestrrat-go/helium/xsd"
@@ -160,8 +161,24 @@ func (r *SchemaRepository) Validate(msgRef *telematics.MessageReference, payload
 		return fmt.Errorf("validate: failed to parse document (payload)")
 	}
 
-	if err := schemaEntry.Validator.Validate(context.Background(), doc); err != nil {
-		return fmt.Errorf("xml does not conform to schema type %q version %q: %w", msgRef.MessageType, msgRef.MessageTypeVersion, err)
+	// Attach an ErrorCollector so we can gather structured diagnostics
+	ctx := context.Background()
+	ec := helium.NewErrorCollector(ctx, helium.ErrorLevelNone)
+	v := (*schemaEntry.Validator).ErrorHandler(ec).Label("schema-validate")
+
+	if err := v.Validate(ctx, doc); err != nil {
+		var b strings.Builder
+		for _, e := range ec.Errors() {
+			if ve, ok := e.(*xsd.ValidationError); ok {
+				fmt.Fprintf(&b, "%s:%d %s (element=%s attr=%s)\n", ve.Filename, ve.Line, ve.Message, ve.Element, ve.AttributeName)
+			} else {
+				fmt.Fprintf(&b, "%T: %v\n", e, e)
+			}
+		}
+		ec.Close()
+		return fmt.Errorf("xml does not conform to schema type %q version %q: %w\nDiagnostics:\n%s", msgRef.MessageType, msgRef.MessageTypeVersion, err, b.String())
+	} else {
+		fmt.Printf("message of type %q version %q validated", msgRef.MessageType, msgRef.MessageTypeVersion)
 	}
 
 	return nil

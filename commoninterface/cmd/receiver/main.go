@@ -62,7 +62,7 @@ func main() {
 		if err := os.WriteFile(filename, []byte(payload), 0o600); err != nil {
 			return fmt.Errorf("write payload to %s: %w", filename, err)
 		}
-		log.Printf("received message id=%s from=%s saved=%s", msgID, senderIP, filename)
+		log.Printf("received message id=%q from=%q saved=%q", msgID, senderIP, filename)
 		return nil
 	}
 

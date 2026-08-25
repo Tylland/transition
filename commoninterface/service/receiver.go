@@ -11,12 +11,18 @@ import (
 	"net/http"
 	"os"
 	"strings"
+	"text/template"
 	"time"
+
+	_ "embed"
 
 	"github.com/tylland/transition/commoninterface/message"
 	"github.com/tylland/transition/commoninterface/message/telematics"
 	"github.com/tylland/transition/commoninterface/repository"
 )
+
+//go:embed inbound.wsdl.tmpl
+var wsdlTmpl string
 
 // MessageHandler is called by the Receiver for each successfully parsed inbound message.
 // msgID is the uicmh:messageIdentifier from the SOAP header.
@@ -92,7 +98,7 @@ func NewReceiver(cfg ReceiverConfig) (*Receiver, error) {
 	mux := http.NewServeMux()
 
 	mux.Handle(inboundMessagePattern, corsHandler(http.HandlerFunc(r.handleInboundMessage), []string{"*"}))
-	mux.HandleFunc("GET /", WSDLHandler(cfg.ListenAddr))
+	mux.HandleFunc("GET /", WSDLHandler(cfg.ListenAddr+inboundPath))
 
 	r.secureServer = &http.Server{
 		Addr:         cfg.ListenAddr,
@@ -162,9 +168,9 @@ func (r *Receiver) handleInboundMessage(w http.ResponseWriter, req *http.Request
 		return
 	}
 
-	msgID := env.Header.MessageIdentifier
-	senderIP := env.Header.MessageLiHost
-	payload := strings.Trim(env.Body.UICMessage.Message.Data, " ")
+	msgID := strings.TrimSpace(env.Header.MessageIdentifier)
+	senderIP := strings.TrimSpace(env.Header.MessageLiHost)
+	payload := strings.TrimSpace(env.Body.UICMessage.Message.Data)
 
 	hdr, err := telematics.ParseHeader(payload)
 
@@ -232,61 +238,26 @@ func WSDLHandler(baseURL string) http.HandlerFunc {
 			return
 		}
 		w.Header().Set("Content-Type", "text/xml; charset=utf-8")
-		_, _ = w.Write([]byte(buildWSDL(baseURL)))
+
+		_ = writeWSDL(w, baseURL)
 	}
 }
 
 // buildWSDL returns a minimal WSDL 1.1 document for the inbound service.
-func buildWSDL(baseURL string) string {
-	return `<?xml version="1.0" encoding="UTF-8"?>
-<definitions xmlns="http://schemas.xmlsoap.org/wsdl/"
-             xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
-             xmlns:tns="http://uic.cc.org/UICMessage"
-             xmlns:uicm="http://uic.cc.org/UICMessage"
-             targetNamespace="http://uic.cc.org/UICMessage"
-             name="UICCCMessageProcessingInboundWS">
-  <types>
-    <schema xmlns="http://www.w3.org/2001/XMLSchema"
-            targetNamespace="http://uic.cc.org/UICMessage">
-      <element name="UICMessage">
-        <complexType>
-          <sequence>
-            <element name="message"      type="string"/>
-            <element name="signature"    type="string" minOccurs="0"/>
-            <element name="senderAlias"  type="string" minOccurs="0"/>
-            <element name="encoding"     type="string"/>
-          </sequence>
-        </complexType>
-      </element>
-    </schema>
-  </types>
-  <message name="sendUICMessageRequest">
-    <part name="parameters" element="uicm:UICMessage"/>
-  </message>
-  <message name="sendUICMessageResponse">
-    <part name="parameters" element="uicm:UICMessage"/>
-  </message>
-  <portType name="UICCCMessageProcessingInboundWSPortType">
-    <operation name="sendUICMessage">
-      <input  message="tns:sendUICMessageRequest"/>
-      <output message="tns:sendUICMessageResponse"/>
-    </operation>
-  </portType>
-  <binding name="UICCCMessageProcessingInboundWSBinding"
-           type="tns:UICCCMessageProcessingInboundWSPortType">
-    <soap:binding style="document"
-                  transport="http://schemas.xmlsoap.org/soap/http"/>
-    <operation name="sendUICMessage">
-      <soap:operation soapAction=""/>
-      <input><soap:body use="literal"/></input>
-      <output><soap:body use="literal"/></output>
-    </operation>
-  </binding>
-  <service name="UICCCMessageProcessingInboundWS">
-    <port name="UICCCMessageProcessingInboundWSPort"
-          binding="tns:UICCCMessageProcessingInboundWSBinding">
-      <soap:address location="` + baseURL + inboundPath + `"/>
-    </port>
-  </service>
-</definitions>`
+func writeWSDL(wr io.Writer, baseURL string) error {
+	type wsdlData struct {
+		Location string
+	}
+
+	data := wsdlData{Location: baseURL}
+
+	tmpl, err := template.New("").Parse(wsdlTmpl)
+
+	if err != nil {
+		return err
+	}
+
+	tmpl.Execute(wr, data)
+
+	return nil
 }
