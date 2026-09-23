@@ -128,6 +128,8 @@ func (s *Sender) Send(receiverCode, msgID, payload string) (SendResult, error) {
 		}
 	}
 
+	// TODO: Set MessageIdentifier and MessageDateTime in xs:dateTime format. YYYY-MM-DDThh:mm:ss[.sss][Z]  ISO 8601
+
 	env := message.NewEnvelope(msgID, s.cfg.LocalIP, payload)
 
 	xmlBytes, err := xml.Marshal(env)

@@ -1,0 +1,11 @@
+{
+    "schemaFile": "SFERA_v200.xsd",
+    "messageTypes":[
+        {"code": "SF00", "name": "SFERA_B2G_EventMessage"},
+        {"code": "SF01", "name": "SFERA_B2G_RequestMessage"},
+        {"code": "SF02", "name": "SFERA_B2G_ReplyMessage"},
+        {"code": "SF10", "name": "SFERA_G2B_EventMessage"},
+        {"code": "SF11", "name": "SFERA_G2B_RequestMessage"},
+        {"code": "SF12", "name": "SFERA_G2B_ReplyMessage"}
+    ]
+}

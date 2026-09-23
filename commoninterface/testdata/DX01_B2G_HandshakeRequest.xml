@@ -1,0 +1,35 @@
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    xmlns:uicm="http://uic.cc.org/UICMessage">
+    <soap:Header>
+        <uicmh:signed xmlns:uicmh="http://uic.cc.org/UICMessage/Header">false</uicmh:signed>
+        <uicmh:encrypted xmlns:uicmh="http://uic.cc.org/UICMessage/Header">false</uicmh:encrypted>
+        <uicmh:compressed xmlns:uicmh="http://uic.cc.org/UICMessage/Header">false</uicmh:compressed>
+        <uicmh:messageIdentifier xmlns:uicmh="http://uic.cc.org/UICMessage/Header">796cc4ee-cd51-49c2-a8cf-3bd73b29ddfa
+        </uicmh:messageIdentifier>
+        <uicmh:messageLiHost xmlns:uicmh="http://uic.cc.org/UICMessage/Header">122.109.101.100</uicmh:messageLiHost>
+    </soap:Header>
+    <soap:Body>
+        <uicm:UICMessage>
+            <message>
+                <SFERA_B2G_RequestMessage xmlns="http://www.era.europa.eu/schemes/TAFTSI/4.0"
+                    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+                    <MessageHeader>
+                        <MessageReference>
+                            <MessageType>SF01</MessageType>
+                            <MessageTypeVersion>3.0.0</MessageTypeVersion>
+                            <MessageIdentifier>796cc4ee-cd51-49c2-a8cf-3bd73b29ddfa</MessageIdentifier>
+                            <MessageDateTime>2026-02-08T14:25:30.910+05:30</MessageDateTime>
+                        </MessageReference>
+                        <Sender>3025</Sender>
+                        <Recipient>0074</Recipient>
+                    </MessageHeader>
+                    <HandshakeRequest>
+                      <DAS_OperatingModesSupported 	DAS_drivingMode="" DAS_architecture="" DAS_connectivity="" />
+                    </HandshakeRequest>
+                </SFERA_B2G_RequestMessage>
+            </message>
+            <encoding>UTF-8</encoding>
+        </uicm:UICMessage>
+    </soap:Body>
+</soap:Envelope>

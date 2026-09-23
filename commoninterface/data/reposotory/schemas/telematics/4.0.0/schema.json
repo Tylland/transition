@@ -1,0 +1,7 @@
+{
+    "schemaFile": "taf_cat_complete.xsd",
+    "messageTypes":[
+        {"code": "1000", "name": "ConsignmentOrderMessage"},
+        {"code": "3003", "name": "TrainCompositionMessage"}
+    ]
+}

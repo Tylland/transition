@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SFERA_B2G_EventMessage xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../Appendix_D-SFERA_XML_Schema_Definition/SFERA.xsd" xmlns:teltsi="http://www.era.europa.eu/schemes/TAFTSI/3.5">
+	<MessageHeader SFERA_version="3.00" message_ID="5052df4a-0f6a-4e57-aca7-7c5ef06de2b7" timestamp="2022-04-01T20:07:30Z" sourceDevice="TMS" destinationDevice="RU DAS-TS">
+		<teltsi:MessageReference>
+			<teltsi:MessageType>SF00</teltsi:MessageType>
+			<teltsi:MessageTypeVersion>3.00</teltsi:MessageTypeVersion>
+			<teltsi:MessageIdentifier>594da3ec-e3b8-11eb-bdba-0050560c8ce3</teltsi:MessageIdentifier>
+			<teltsi:MessageDateTime>2022-04-01T22:57:27.680+02:00</teltsi:MessageDateTime>
+		</teltsi:MessageReference>
+		<teltsi:Sender>0087</teltsi:Sender>
+		<teltsi:Recipient teltsi:CI_InstanceNumber="3">1187</teltsi:Recipient>
+	</MessageHeader>
+	<B2G_EventPayload>
+		<Reported_DAS_DrivingMode DAS_drivingMode="GoA1" />
+	</B2G_EventPayload>
+</SFERA_B2G_EventMessage>

@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<SFERA_G2B_EventMessage xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../Appendix_D-SFERA_XML_Schema_Definition/SFERA.xsd" xmlns:teltsi="http://www.era.europa.eu/schemes/TAFTSI/3.5" >
+	<MessageHeader SFERA_version="3.00" message_ID="578667d4-64b0-45e6-85cb-11eb860697b0" timestamp="2022-01-22T02:15:10Z" sourceDevice="HBZN" destinationDevice="DAS">
+		<teltsi:Sender>0080</teltsi:Sender>
+		<teltsi:Recipient>0815</teltsi:Recipient>
+	</MessageHeader>
+	<G2B_EventPayload>
+		<C_DAS_C_Advice identifier="advice-2/6" adviceType="CoastingAdvice" optimalSpeed="160" deltaSpeed="70" reasonCode="energyOptimisation" startValidity="2022-01-22T02:15:22Z" endValidity="2022-01-22T02:17:07Z" referenceIDAbs="cf063663-3a5c-49bc-8eb8-17c3f1002562" startStationShort="Schwarzenbek" startStationLong="Schwarzenbek" startKm="248.6" startLine="6100" endKm="253.4" endLine="6100" endKmAbs="253.4" endLineAbs="6100" endValidityAbs="2022-01-22T02:17:07Z">
+			<ReasonText language="DE" text="Energieoptimierung" />
+			<TrainIdentification>
+				<OTN_ID>
+					<teltsi:Company>0815</teltsi:Company>
+					<teltsi:OperationalTrainNumber>4711</teltsi:OperationalTrainNumber>
+					<teltsi:StartDate>2022-01-21</teltsi:StartDate>
+				</OTN_ID>
+			</TrainIdentification>
+			<LocationText language="DE" text="248,6(6100)" />
+		</C_DAS_C_Advice>
+	</G2B_EventPayload>
+</SFERA_G2B_EventMessage>
+

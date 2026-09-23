@@ -49,7 +49,7 @@ func main() {
 		log.Fatalf("create output directory %s: %v", *outDir, err)
 	}
 
-	schemaRepo, err := repository.NewSchemaRepository("c:\\temp\\schemas")
+	schemaRepo, err := repository.NewSchemaRepository("C:\\src\\transition\\commoninterface\\data\\reposotory\\schemas")
 
 	if err != nil {
 		log.Fatalf("create output directory %s: %v", *outDir, err)

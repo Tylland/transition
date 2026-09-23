@@ -5,7 +5,7 @@ import (
 	"math"
 
 	dm "github.com/tylland/transition/internal/model/domainmodel"
-	"github.com/tylland/transition/internal/schema/sfera"
+	sfera "github.com/tylland/transition/internal/schema/sfera/v3"
 )
 
 func ptr[T any](t T) *T {
@@ -23,7 +23,7 @@ func Generate(network *dm.Network, writer Writer) {
 // specific direction and writes them using the given writer.
 func GenerateForDirection(network *dm.Network, direction dm.LinkDirection, writer Writer) {
 	for _, link := range network.Links() {
-		imID := sfera.Numeric44(74)
+		imID := sfera.NewID("0074")
 		name := "namn"
 
 		segment := &sfera.SegmentProfile{
@@ -32,8 +32,8 @@ func GenerateForDirection(network *dm.Network, direction dm.LinkDirection, write
 				SPZone: &sfera.SPZoneComplexType{IMID: &imID}},
 
 			SPName:         &name,
-			SPVersionMajor: 1,
-			SPVersionMinor: 0,
+			SPVersionMajor: "1",
+			SPVersionMinor: ptr("0"),
 			SPLength:       link.Length,
 			SPStatus:       sfera.SPStatusValid,
 		}
@@ -68,17 +68,17 @@ func GenerateForDirection(network *dm.Network, direction dm.LinkDirection, write
 			}
 		}
 
-		// Balise tavlor
-		for _, baliseBoard := range link.Boards.Items() {
-			if baliseBoard.Id.Type == "Bal" && baliseBoard.LinkPosition.IsValid(direction) {
-				balise := &sfera.Balise{SPGenericPointComplexType: &sfera.SPGenericPointComplexType{
-					Identifier: ptr(baliseBoard.Id.String()),
-					Location:   baliseBoard.LinkPosition.GetDistance(direction),
-				}}
+		// // Balise tavlor
+		// for _, baliseBoard := range link.Boards.Items() {
+		// 	if baliseBoard.Id.Type == "Bal" && baliseBoard.LinkPosition.IsValid(direction) {
+		// 		balise := &sfera.Balise{SPGenericPointComplexType: &sfera.SPGenericPointComplexType{
+		// 			Identifier: ptr(baliseBoard.Id.String()),
+		// 			Location:   baliseBoard.LinkPosition.GetDistance(direction),
+		// 		}}
 
-				points.Balise = append(points.Balise, balise)
-			}
-		}
+		// 		points.Balise = append(points.Balise, balise)
+		// 	}
+		// }
 
 		// Unprotected level crossings
 		for _, vagskydd := range link.Levelcrossings.Items() {
@@ -95,12 +95,12 @@ func GenerateForDirection(network *dm.Network, direction dm.LinkDirection, write
 		for _, platform := range link.Platforms.Items() {
 			startLoc := platform.Extent.GetStartDistance(direction)
 			endLoc := platform.Extent.GetEndDistance(direction)
-			areas.Platform = append(areas.Platform, &sfera.SPGenericAreaComplexType{
+			areas.Platform = append(areas.Platform, &sfera.Platform{SPGenericAreaComplexType: &sfera.SPGenericAreaComplexType{
 				Identifier:        ptr(platform.Name),
 				StartLocation:     &startLoc,
 				EndLocation:       &endLoc,
 				StartEndQualifier: sfera.StartEndQualifierStartsEnds,
-			})
+			}})
 		}
 		segment.SPAreas = areas
 
@@ -127,7 +127,7 @@ func GenerateForDirection(network *dm.Network, direction dm.LinkDirection, write
 		}
 
 		ga := CreateGradientAverage(link, direction)
-		characteristics.GradientAverage = &ga
+		characteristics.Gradient = &ga
 		segment.SPCharacteristics = characteristics
 
 		// Context information
@@ -138,7 +138,7 @@ func GenerateForDirection(network *dm.Network, direction dm.LinkDirection, write
 				contextInfo.KilometreReferencePoint = append(contextInfo.KilometreReferencePoint,
 					&sfera.KilometreReferencePoint{
 						SPGenericPointComplexType: createSPGenericPoint(kmBoard.Id.Information, kmBoard.LinkPosition.GetDistance(direction)),
-						KmRef:                     float64(*kmBoard.Kilometer)},
+						KMReference:               &sfera.KMReference{KmRef: float64(*kmBoard.Kilometer)}},
 				)
 			}
 		}
@@ -233,19 +233,19 @@ func CreateStaticSpeedProfile(speedProfile *dm.SpeedProfile, direction dm.LinkDi
 }
 
 // CreateGradientAverage creates a SFERA GradientAverage from a Lank's gradients.
-func CreateGradientAverage(link *dm.Link, direction dm.LinkDirection) sfera.GradientAverage {
-	ga := sfera.GradientAverage{}
+func CreateGradientAverage(link *dm.Link, direction dm.LinkDirection) sfera.Gradient {
+	ga := sfera.Gradient{}
 
 	slopes := dm.ExtentEntitiesInDirection(link.Slopes.Items(), direction)
 
 	for i, slope := range slopes {
 		if i == 0 {
-			ga.GradientAverageStart = &sfera.GradientComplexType{
+			ga.GradientStart = &sfera.GradientComplexType{
 				GradientValue:     math.Abs(slope.Gradient),
 				GradientDirection: getGradientDirection(slope, direction),
 			}
 		} else {
-			ga.GradientAverageChange = append(ga.GradientAverageChange, &sfera.GradientAverageChange{
+			ga.GradientChange = append(ga.GradientChange, &sfera.GradientChange{
 				GradientComplexType: &sfera.GradientComplexType{
 					GradientValue:     math.Abs(slope.Gradient),
 					GradientDirection: getGradientDirection(slope, direction),

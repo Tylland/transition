@@ -2,5 +2,5 @@
 
 ### Example
 ```
-xgen -i .\SFERA_v200.xsd -o .\xgentest.go -l Go
+xgen -i .\SFERA_v300.xsd -o .\SFERA_v300.go -l Go
 ```

@@ -3,11 +3,10 @@ package infrastructure
 import (
 	"encoding/xml"
 	"fmt"
-	"strconv"
 	"strings"
 
 	"github.com/nats-io/nats.go"
-	"github.com/tylland/transition/internal/schema/sfera"
+	sfera "github.com/tylland/transition/internal/schema/sfera/v3"
 )
 
 // NatsWriter publishes SFERA segment profiles as XML to NATS.
@@ -28,7 +27,7 @@ func subjectFromProfile(segment *sfera.SegmentProfile) (string, error) {
 		return "", fmt.Errorf("unexpected SPID format %q: expected 6 colon-separated parts", segment.SPID)
 	}
 
-	var imID *sfera.Numeric44
+	var imID *sfera.TeltsiString44
 
 	if segment.SPZone.IMID != nil {
 		imID = segment.SPZone.IMID
@@ -57,8 +56,8 @@ func (w *NatsWriter) Write(segment *sfera.SegmentProfile) (string, error) {
 		Subject: subject,
 		Data:    data,
 		Header: nats.Header{
-			"VersionMajor": []string{strconv.FormatUint(uint64(segment.SPVersionMajor), 10)},
-			"VersionMinor": []string{strconv.FormatUint(uint64(segment.SPVersionMinor), 10)},
+			"VersionMajor": []string{segment.SPVersionMajor},
+			"VersionMinor": []string{*segment.SPVersionMinor},
 		},
 	}
 

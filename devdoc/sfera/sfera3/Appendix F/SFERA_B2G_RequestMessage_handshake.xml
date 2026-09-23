@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<SFERA_B2G_RequestMessage xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../Appendix_D-SFERA_XML_Schema_Definition/SFERA.xsd" xmlns:teltsi="http://www.era.europa.eu/schemes/TAFTSI/3.5">
+	<MessageHeader SFERA_version="3.00" message_ID="a24e63c3-ab2e-4102-9a10-ba058dec5efe" timestamp="2019-09-26T20:07:36Z" sourceDevice="DAS" destinationDevice="TMS">
+		<teltsi:Sender>1084</teltsi:Sender>
+		<teltsi:Recipient>0084</teltsi:Recipient>
+	</MessageHeader>
+	<HandshakeRequest relatedTrainRequest="OwnTrainAndOrRelatedTrains" statusReportsEnabled="true">
+		<DAS_OperatingModesSupported DAS_drivingMode="GoA1" DAS_architecture="BoardAdviceCalculation" DAS_connectivity="Connected"/>
+		<DAS_OperatingModesSupported DAS_drivingMode="GoA1" DAS_architecture="BoardAdviceCalculation" DAS_connectivity="Standalone"/>
+	</HandshakeRequest>
+</SFERA_B2G_RequestMessage>

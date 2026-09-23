@@ -1,0 +1,57 @@
+<?xml version="1.0"?>
+<SFERA_G2B_EventMessage xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../Appendix_D-SFERA_XML_Schema_Definition/SFERA.xsd" xmlns:teltsi="http://www.era.europa.eu/schemes/TAFTSI/3.5">
+	<MessageHeader SFERA_version="3.00" message_ID="96d8fa00-7f5e-4c26-9de4-b1ea16ced65a" timestamp="2022-04-01T20:07:36Z" sourceDevice="TMS" destinationDevice="DAS">
+		<teltsi:Sender>0084</teltsi:Sender>
+		<teltsi:Recipient>1084</teltsi:Recipient>
+	</MessageHeader>
+	<G2B_EventPayload>
+		<RelatedTrainInformation>
+			<OwnTrain>
+				<TrainIdentification>
+					<OTN_ID>
+						<teltsi:Company>0084</teltsi:Company>
+						<teltsi:OperationalTrainNumber>9358</teltsi:OperationalTrainNumber>					
+						<teltsi:StartDate>2022-04-01</teltsi:StartDate>
+					</OTN_ID>
+				</TrainIdentification>
+				<TrainLocationInformation>
+					<SegmentClaim SP_ID="1" SP_VersionMajor="1" SP_VersionMinor="0" startLocation="100" endLocation="175" startEndQualifier="StartsEnds">
+						<SP_Zone><IM_ID>0084</IM_ID></SP_Zone>
+						<SegmentOccupationStatus>
+							<ClaimType>Occupied</ClaimType>
+						</SegmentOccupationStatus>
+					</SegmentClaim>
+					<Delay Delay="PT45S" DelayCategory="Measured"/>							
+				</TrainLocationInformation>					
+			</OwnTrain>
+			<TrainsBeforeOwn>
+				<Train order="1">
+					<RT_TrainInformation>
+							<teltsi:OperationalTrainNumber>2575</teltsi:OperationalTrainNumber>
+							<teltsi:StartDate>2022-04-01</teltsi:StartDate>
+					</RT_TrainInformation>
+					<TrainLocationInformation>
+						<SegmentClaim SP_VersionMajor="1" SP_VersionMinor="0" SP_ID="2" startLocation="10" endLocation="175" startEndQualifier="StartsEnds">
+							<SP_Zone><IM_ID>0084</IM_ID></SP_Zone>
+							<SegmentOccupationStatus>
+								<ClaimType>Occupied</ClaimType>
+							</SegmentOccupationStatus>
+						</SegmentClaim>
+						<NextTimingPointTrainInformation TP_ID="3" TP_abbreviation="Rtd" TP_StopSkipPass="Stopping_Point" forecastedArrival="2021-11-04T05:20:00Z" forecastedDeparture="2021-11-04T05:21:00Z">
+							<SP_Zone><IM_ID>0084</IM_ID></SP_Zone>
+						</NextTimingPointTrainInformation>
+						<NextTimingPointTrainInformation TP_ID="4" TP_abbreviation="Ass" TP_StopSkipPass="Stopping_Point" forecastedArrival="2021-11-04T05:35:00Z">
+							<SP_Zone><IM_ID>0084</IM_ID></SP_Zone>
+						</NextTimingPointTrainInformation>
+						<PreviousTimingPointTrainInformation TP_ID="5" TP_abbreviation="Ut" TP_StopSkipPass="Stopping_Point" arrivalTime="2021-11-04T05:15:00Z">
+							<SP_Zone><IM_ID>0084</IM_ID></SP_Zone>
+						</PreviousTimingPointTrainInformation>
+						<LastPassedKmRef kmRef="56.56"/>
+						<LastPassedSignal signal_ID_Physical="191" AtSignal="true"/>
+						<Delay Delay="PT35S" DelayCategory="Expected"/>				
+					</TrainLocationInformation>
+				</Train>
+			</TrainsBeforeOwn>
+		</RelatedTrainInformation>
+	</G2B_EventPayload>
+</SFERA_G2B_EventMessage>

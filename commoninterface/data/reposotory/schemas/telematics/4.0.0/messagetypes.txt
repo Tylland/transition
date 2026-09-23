@@ -1,0 +1,72 @@
+1000        ConsignmentOrderMessage
+
+2001        PathCanceledMessage
+2002        PathConfirmedMessage
+2003        PathDetailsMessage
+2004        PathDetailsRefusedMessage
+2005        PathNotAvailableMessage
+2006        PathRequestMessage
+2007        ReceiptConfirmationMessage
+
+-- sector messages (Planning) --
+2500      PathCoordinationMessage
+2501      PathSectionNotificationMessage
+-- sector message end --
+
+3003        TrainCompositionMessage
+3006        TrainReadyMessage
+4001        TrainDelayCauseMessage
+4003        TrainForecastAtReportingLocationMessage
+4004        TrainRunningForecastMessage
+4005        TrainRunningInformationMessage
+4006        TrainRunningInterruptionMessage
+
+-- sector message (Operations) --
+4500        PassengerTrainCompositionMessage
+4501      RollingStockRestrictionMessage
+4504      ChangeOfTrackMessage
+4505      TrainJourneyModificationMessage
+4506      TrainForecastedDelayCauseMessage
+4510      RunningStatusReportMessage
+-- sector message  end --
+
+
+5001        AlertMessage
+5006        WagonETI_ETA_Message
+
+-- sector message (Wagon interchange) --
+5009        WagonInterchangeNoticeMessage 
+5012        WagonReceivedAtInterchangeMessage
+5013        WagonRefusedAtInterchangeMessage
+-- sector message  end --
+
+5020        WagonStatusMessage
+
+6002        LocationFileDatasetMessage
+6003        RollingStockDatasetMessage
+6005        ILUDataQueryMessage
+6006        ILUDataMessage
+
+--sector (RU-RU) ---
+5500        WagonPerformanceMessage
+-- sector end---
+
+
+6004        RollingStockDatasetQueryMessage
+
+-- Sector Messages TCR begin --
+6500        TCRMessage
+6501        TCRResponseMessage
+6502        TCRCanceledMessage
+-- Sector Messages TCR end --
+
+-- sector (TrainID) begin -- 
+8500        UpateLinkMessage
+8501        ObjectInfoMessage
+-- sector end --
+
+9000        ErrorMessage
+
+-- Reserved:  (IM-RU for SFERA) ---
+-- SF00 to SF99 for SFERA messages (see IRS90940) --
+-- Reserved end --

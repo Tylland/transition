@@ -1,0 +1,53 @@
+<?xml version="1.0"?>
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	xmlns:uicm="http://uic.cc.org/UICMessage">
+	<soap:Header>
+		<uicmh:signed xmlns:uicmh="http://uic.cc.org/UICMessage/Header">false</uicmh:signed>
+		<uicmh:encrypted xmlns:uicmh="http://uic.cc.org/UICMessage/Header">false</uicmh:encrypted>
+		<uicmh:compressed xmlns:uicmh="http://uic.cc.org/UICMessage/Header">false</uicmh:compressed>
+		<uicmh:messageIdentifier xmlns:uicmh="http://uic.cc.org/UICMessage/Header">796cc4ee-cd51-49c2-a8cf-3bd73b29ddfa
+		</uicmh:messageIdentifier>
+		<uicmh:messageLiHost xmlns:uicmh="http://uic.cc.org/UICMessage/Header">122.109.101.100</uicmh:messageLiHost>
+	</soap:Header>
+	<soap:Body>
+		<uicm:UICMessage>
+			<message>
+				<SFERA_B2G_RequestMessage xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+					xsi:noNamespaceSchemaLocation="../Appendix_D-SFERA_XML_Schema_Definition/SFERA.xsd"
+					xmlns:teltsi="http://www.era.europa.eu/schemes/TAFTSI/3.5">
+					<MessageHeader SFERA_version="3.00" message_ID="0c5e2c7d-74d6-4e1e-919c-8b90895ae6b4"
+						timestamp="2022-04-01T20:50:17Z" sourceDevice="DAS" destinationDevice="TMS">
+						
+						<teltsi:MessageReference>
+							<teltsi:MessageType>SF01</teltsi:MessageType>
+							<teltsi:MessageTypeVersion>3.00</teltsi:MessageTypeVersion>
+							<teltsi:MessageTypeIdentifier></teltsi:MessageTypeIdentifier>
+							<teltsi:MessageDateTime></teltsi:MessageDateTime>						
+						</teltsi:MessageReference>
+						<teltsi:Sender>1084</teltsi:Sender>
+						<teltsi:Recipient>0084</teltsi:Recipient>
+					</MessageHeader>
+					<B2G_Request>	
+						<SP_Request SP_ID="1">
+							<SP_Zone>
+								<IM_ID>0084</IM_ID>
+							</SP_Zone>
+						</SP_Request>
+						<SP_Request SP_ID="2">
+							<SP_Zone>
+								<IM_ID>0084</IM_ID>
+							</SP_Zone>
+						</SP_Request>
+						<SP_Request SP_ID="3">
+							<SP_Zone>
+								<IM_ID>0084</IM_ID>
+							</SP_Zone>
+						</SP_Request>
+					</B2G_Request>
+				</SFERA_B2G_RequestMessage>
+			</message>
+			<encoding>UTF-8</encoding>
+		</uicm:UICMessage>
+	</soap:Body>
+</soap:Envelope>

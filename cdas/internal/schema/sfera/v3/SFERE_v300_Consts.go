@@ -1,6 +1,34 @@
-package sfera
+package v3
+
+import _ "encoding/xml"
+
+func NewID(id string) TeltsiString44 {
+	return TeltsiString44(id)
+}
+
+type Powerless struct {
+	Value string `xml:",innerxml"`
+}
+
+type SelfPropelled struct {
+	Value string `xml:"Self-Propelled"`
+}
+type Battery struct {
+	Value string `xml:"Battery"`
+}
+type Diesel struct {
+	Value string `xml:"Diesel"`
+}
+type Hydrogen struct {
+	Value string `xml:"Hydrogen"`
+}
 
 // StartEndQualifier for area positions.
+
+const (
+	SPStatusValid   SPStatus = "Valid"
+	SPStatusInvalid SPStatus = "Invalid"
+)
 
 const (
 	StartEndQualifierStarts     StartEndQualifier = "Starts"
@@ -38,57 +66,57 @@ const (
 	AdhesionCategoryTypeExtremelyLowAdhesion AdhesionCategoryType = "Extremely Low Adhesion"
 )
 
-const (
-	DelayCode11 DelayCode = "11"
-	DelayCode10 DelayCode = "10"
-	DelayCode12 DelayCode = "12"
-	DelayCode13 DelayCode = "13"
-	DelayCode14 DelayCode = "14"
-	DelayCode18 DelayCode = "18"
-	DelayCode19 DelayCode = "19"
-	DelayCode20 DelayCode = "20"
-	DelayCode21 DelayCode = "21"
-	DelayCode22 DelayCode = "22"
-	DelayCode23 DelayCode = "23"
-	DelayCode24 DelayCode = "24"
-	DelayCode25 DelayCode = "25"
-	DelayCode28 DelayCode = "28"
-	DelayCode29 DelayCode = "29"
-	DelayCode31 DelayCode = "31"
-	DelayCode30 DelayCode = "30"
-	DelayCode32 DelayCode = "32"
-	DelayCode39 DelayCode = "39"
-	DelayCode40 DelayCode = "40"
-	DelayCode41 DelayCode = "41"
-	DelayCode50 DelayCode = "50"
-	DelayCode51 DelayCode = "51"
-	DelayCode52 DelayCode = "52"
-	DelayCode53 DelayCode = "53"
-	DelayCode54 DelayCode = "54"
-	DelayCode58 DelayCode = "58"
-	DelayCode59 DelayCode = "59"
-	DelayCode60 DelayCode = "60"
-	DelayCode61 DelayCode = "61"
-	DelayCode62 DelayCode = "62"
-	DelayCode63 DelayCode = "63"
-	DelayCode64 DelayCode = "64"
-	DelayCode68 DelayCode = "68"
-	DelayCode70 DelayCode = "70"
-	DelayCode69 DelayCode = "69"
-	DelayCode71 DelayCode = "71"
-	DelayCode80 DelayCode = "80"
-	DelayCode81 DelayCode = "81"
-	DelayCode82 DelayCode = "82"
-	DelayCode83 DelayCode = "83"
-	DelayCode84 DelayCode = "84"
-	DelayCode89 DelayCode = "89"
-	DelayCode90 DelayCode = "90"
-	DelayCode91 DelayCode = "91"
-	DelayCode92 DelayCode = "92"
-	DelayCode93 DelayCode = "93"
-	DelayCode94 DelayCode = "94"
-	DelayCode95 DelayCode = "95"
-)
+// const (
+// 	DelayCode11 DelayCode = "11"
+// 	DelayCode10 DelayCode = "10"
+// 	DelayCode12 DelayCode = "12"
+// 	DelayCode13 DelayCode = "13"
+// 	DelayCode14 DelayCode = "14"
+// 	DelayCode18 DelayCode = "18"
+// 	DelayCode19 DelayCode = "19"
+// 	DelayCode20 DelayCode = "20"
+// 	DelayCode21 DelayCode = "21"
+// 	DelayCode22 DelayCode = "22"
+// 	DelayCode23 DelayCode = "23"
+// 	DelayCode24 DelayCode = "24"
+// 	DelayCode25 DelayCode = "25"
+// 	DelayCode28 DelayCode = "28"
+// 	DelayCode29 DelayCode = "29"
+// 	DelayCode31 DelayCode = "31"
+// 	DelayCode30 DelayCode = "30"
+// 	DelayCode32 DelayCode = "32"
+// 	DelayCode39 DelayCode = "39"
+// 	DelayCode40 DelayCode = "40"
+// 	DelayCode41 DelayCode = "41"
+// 	DelayCode50 DelayCode = "50"
+// 	DelayCode51 DelayCode = "51"
+// 	DelayCode52 DelayCode = "52"
+// 	DelayCode53 DelayCode = "53"
+// 	DelayCode54 DelayCode = "54"
+// 	DelayCode58 DelayCode = "58"
+// 	DelayCode59 DelayCode = "59"
+// 	DelayCode60 DelayCode = "60"
+// 	DelayCode61 DelayCode = "61"
+// 	DelayCode62 DelayCode = "62"
+// 	DelayCode63 DelayCode = "63"
+// 	DelayCode64 DelayCode = "64"
+// 	DelayCode68 DelayCode = "68"
+// 	DelayCode70 DelayCode = "70"
+// 	DelayCode69 DelayCode = "69"
+// 	DelayCode71 DelayCode = "71"
+// 	DelayCode80 DelayCode = "80"
+// 	DelayCode81 DelayCode = "81"
+// 	DelayCode82 DelayCode = "82"
+// 	DelayCode83 DelayCode = "83"
+// 	DelayCode84 DelayCode = "84"
+// 	DelayCode89 DelayCode = "89"
+// 	DelayCode90 DelayCode = "90"
+// 	DelayCode91 DelayCode = "91"
+// 	DelayCode92 DelayCode = "92"
+// 	DelayCode93 DelayCode = "93"
+// 	DelayCode94 DelayCode = "94"
+// 	DelayCode95 DelayCode = "95"
+// )
 
 // Enumerated values for NC_CDTrainType.
 const (

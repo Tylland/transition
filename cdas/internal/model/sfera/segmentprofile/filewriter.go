@@ -7,7 +7,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/tylland/transition/internal/schema/sfera"
+	sfera "github.com/tylland/transition/internal/schema/sfera/v3"
 )
 
 // FileWriter writes SegmentProfile objects as XML files to a folder.
