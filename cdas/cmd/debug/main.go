@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"os"
 
-	dm "github.com/tylland/transition/internal/model/domainmodel"
+	dm "github.com/tylland/transition/internal/core/domain/network"
 
 	conv "github.com/tylland/transition/internal/model/facilitydata"
 	fd "github.com/tylland/transition/internal/schema/facilitydata"

@@ -1,7 +1,7 @@
 package facilitydata
 
 import (
-	dm "github.com/tylland/transition/internal/model/domainmodel"
+	dm "github.com/tylland/transition/internal/core/domain/network"
 	fd "github.com/tylland/transition/internal/schema/facilitydata"
 )
 

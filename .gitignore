@@ -15,6 +15,6 @@ Thumbs.db
 
 # Go modules
 
-
 bin/
 temp/
+testdata/output

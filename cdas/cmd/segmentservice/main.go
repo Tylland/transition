@@ -9,26 +9,37 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/tylland/transition/internal/model/sfera/segmentprofile"
-	"github.com/tylland/transition/internal/model/signalroute"
-	"github.com/tylland/transition/internal/model/trackroute"
+	"github.com/tylland/transition/internal/adapter/provider"
+	"github.com/tylland/transition/internal/adapter/writer"
+	"github.com/tylland/transition/internal/core/port"
+	"github.com/tylland/transition/internal/core/service"
 )
 
 func main() {
-	inputDir := filepath.Join("testdata", "input")
-	outputDir := filepath.Join("testdata", "sfera")
+	inputDir := filepath.Join("testdata", "input", "facilitydata")
+	outputDir := filepath.Join("testdata", "output", "sfera")
 
 	if err := os.MkdirAll(outputDir, 0755); err != nil {
 		log.Fatalf("error creating output dir: %v", err)
 	}
 
-	spWriter := segmentprofile.NewFileWriter(outputDir)
-	srWriter := signalroute.NewFileWriter(filepath.Join("testdata", "signalroutes.xml"))
-	trWriter := trackroute.NewFileWriter(filepath.Join("testdata", "trackroutes.xml"))
+	var (
+		facilityService port.FacilityService
+		srWriter        port.SignalRouteWriter
+		trWriter        port.TrackRouteWriter
+		spWriter        port.SegmentProfileWriter
+	)
+
+	srWriter = writer.NewSignalRoutesXMLFileWriter(filepath.Join("testdata", "signalroutes.xml"))
+	trWriter = writer.NewTrackRoutesXMLFileWriter(filepath.Join("testdata", "trackroutes.xml"))
+	spWriter = writer.NewSegmentProfileXMLFileWriter(outputDir)
+
+	facilityService = service.NewFacilityService(srWriter, trWriter, spWriter)
+
+	networkProvider := provider.NewFacilityDataFileNetworkProvider(inputDir, 5*time.Second, facilityService)
 
 	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
 	defer stop()
 
-	log.Printf("watching %s for FacilityData XML files", inputDir)
-	watchInputFolder(ctx, inputDir, spWriter, srWriter, trWriter, 5*time.Second)
+	networkProvider.Start(ctx)
 }
