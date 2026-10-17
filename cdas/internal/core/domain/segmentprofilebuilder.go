@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"math"
 
-	dm "github.com/tylland/transition/internal/core/domain/network"
-	sfera "github.com/tylland/transition/internal/schema/sfera/v3"
+	dm "github.com/tylland/transition/cdas/internal/core/domain/network"
+	sfera "github.com/tylland/transition/cdas/internal/schema/sfera/v3"
 )
 
 func ptr[T any](t T) *T {
@@ -143,7 +143,11 @@ func GenerateForDirection(network *dm.Network, direction dm.LinkDirection) []*sf
 				contextInfo.KilometreReferencePoint = append(contextInfo.KilometreReferencePoint,
 					&sfera.KilometreReferencePoint{
 						SPGenericPointComplexType: createSPGenericPoint(kmBoard.Id.Information, kmBoard.LinkPosition.GetDistance(direction)),
-						KMReference:               &sfera.KMReference{KmRef: float64(*kmBoard.Kilometer)}},
+						KMReference: &sfera.KMReference{
+							KmRef: float64(*kmBoard.Kilometer),
+							PhysicalCharacteristicsComplexType: &sfera.PhysicalCharacteristicsComplexType{},
+						},
+					},
 				)
 			}
 		}

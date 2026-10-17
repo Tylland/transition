@@ -1,7 +1,7 @@
 package domain
 
 import (
-	dm "github.com/tylland/transition/internal/core/domain/network"
+	dm "github.com/tylland/transition/cdas/internal/core/domain/network"
 )
 
 // Generate creates track routes by classifying each signal route as

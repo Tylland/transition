@@ -1,6 +1,4 @@
-package domain
-
-import "encoding/xml"
+﻿package domain
 
 // TrackRouteType classifies the type of track route.
 type TrackRouteType string
@@ -16,11 +14,10 @@ const (
 
 // TrackRoutes is the root XML element for track routes.
 type TrackRoutes struct {
-	XMLName xml.Name     `xml:"TrackRoutes"`
 	Routes  []TrackRoute `xml:"TrackRoute"`
 }
 
-// TrackRoute maps a track section (linjespår/stationsspår) to a sequence of signal routes,
+// TrackRoute maps a track section (linjespÃ¥r/stationsspÃ¥r) to a sequence of signal routes,
 // enabling lookup from timetable track data to segment profiles.
 type TrackRoute struct {
 	Type            TrackRouteType   `xml:"Type,attr"`
@@ -38,3 +35,4 @@ type SignalRouteRef struct {
 	StartSignal string `xml:"StartSignal,attr"`
 	EndSignal   string `xml:"EndSignal,attr"`
 }
+

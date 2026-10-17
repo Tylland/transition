@@ -6,7 +6,7 @@ import (
 	"strings"
 
 	"github.com/nats-io/nats.go"
-	sfera "github.com/tylland/transition/internal/schema/sfera/v3"
+	sfera "github.com/tylland/transition/cdas/internal/schema/sfera/v3"
 )
 
 // Writer publishes SFERA segment profiles as XML to NATS.

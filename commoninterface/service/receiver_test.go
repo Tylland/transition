@@ -48,10 +48,12 @@ func (c *ReceiverTestContext) InboundMessage(companyCode, msgID, body string) *s
 	return res.Success()
 }
 
-func (c *ReceiverTestContext) ValidInboundMessage() *specs.StepResult {
+func (c *ReceiverTestContext) ValidInboundMessage(schemaName, code string) *specs.StepResult {
 	res := specs.NewStepResult("valid inbound message")
 
-	c.inboundMessage = &CIMessage{companyCode: defaultCompanyCode, msgID: defaultMsgID, body: validPayload}
+	payload := fmt.Sprintf(messageTemplate, c.schemaName, code, c.schemaName)
+
+	c.inboundMessage = &CIMessage{companyCode: defaultCompanyCode, msgID: defaultMsgID, body: payload}
 
 	return res.Success()
 }
@@ -152,8 +154,10 @@ func TestValidInboundMessageIsAcceptedAndForwarded(t *testing.T) {
 	c := NewReceiverTestContext(t)
 
 	receiverStory.Scenario(t).
-		Given(c.RepositoryWithSchemaFor("TrainRunningInformationMessage")).
-		Given(c.ValidInboundMessage()).
+		Given(c.Schema("TrainRunningInformationMessage")).
+		And(c.MessageType("0011", "TrainRunningInformationMessage")).
+		Given(c.RepositoryExists()).
+		Given(c.ValidInboundMessage("TrainRunningInformationMessage", "0011")).
 		When(c.Receiving()).
 		Then(c.MessageIsAccepted()).
 		And(c.MessageIsForwarded()).
@@ -164,7 +168,9 @@ func TestInboundMessageFailingValidationIsNACKed(t *testing.T) {
 	c := NewReceiverTestContext(t)
 
 	receiverStory.Scenario(t).
-		Given(c.RepositoryWithSchemaFor("TrainRunningInformationMessage")).
+		Given(c.Schema("TrainRunningInformationMessage")).
+		And(c.MessageType("0011", "TrainRunningInformationMessage")).
+		Given(c.RepositoryExists()).
 		Given(c.InboundMessage("99", "mrg-001", wrongRootPayload)).
 		When(c.Receiving()).
 		Then(c.MessageIsNotAccepted()).
@@ -176,8 +182,10 @@ func TestInboundMessageWithNoRegisteredSchemaIsNACKed(t *testing.T) {
 	c := NewReceiverTestContext(t)
 
 	receiverStory.Scenario(t).
-		Given(c.RepositoryLacksSchemaFor("PathRequestMessage")).
-		Given(c.ValidInboundMessage()).
+		Given(c.Schema("TrainCompositionMessage")).
+		And(c.MessageType("3003", "TrainCompositionMessage")).
+		Given(c.RepositoryLacksSchemaFor("TrainCompositionMessage")).
+		Given(c.ValidInboundMessage("TrainCompositionMessage", "3003")).
 		When(c.Receiving()).
 		Then(c.MessageIsNotAccepted()).
 		And(c.MessageIsNotForwarded()).

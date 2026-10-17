@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"os"
 
-	fd "github.com/tylland/transition/internal/schema/facilitydata"
+	fd "github.com/tylland/transition/cdas/internal/schema/facilitydata"
 )
 
 // ReadFacilityData deserializes a FacilityData XML file from the given path.

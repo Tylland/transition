@@ -5,8 +5,7 @@
         <uicmh:signed xmlns:uicmh="http://uic.cc.org/UICMessage/Header">false</uicmh:signed>
         <uicmh:encrypted xmlns:uicmh="http://uic.cc.org/UICMessage/Header">false</uicmh:encrypted>
         <uicmh:compressed xmlns:uicmh="http://uic.cc.org/UICMessage/Header">false</uicmh:compressed>
-        <uicmh:messageIdentifier xmlns:uicmh="http://uic.cc.org/UICMessage/Header">796cc4ee-cd51-49c2-a8cf-3bd73b29ddfa
-        </uicmh:messageIdentifier>
+        <uicmh:messageIdentifier xmlns:uicmh="http://uic.cc.org/UICMessage/Header">796cc4ee-cd51-49c2-a8cf-3bd73b29ddfa</uicmh:messageIdentifier>
         <uicmh:messageLiHost xmlns:uicmh="http://uic.cc.org/UICMessage/Header">122.109.101.100</uicmh:messageLiHost>
     </soap:Header>
     <soap:Body>

@@ -1,9 +1,9 @@
 package service
 
 import (
-	"github.com/tylland/transition/internal/core/domain"
-	dm "github.com/tylland/transition/internal/core/domain/network"
-	"github.com/tylland/transition/internal/core/port"
+	"github.com/tylland/transition/cdas/internal/core/domain"
+	dm "github.com/tylland/transition/cdas/internal/core/domain/network"
+	"github.com/tylland/transition/cdas/internal/core/port"
 )
 
 type FacilityService struct {

@@ -1,8 +1,8 @@
 package facilitydata
 
 import (
-	dm "github.com/tylland/transition/internal/core/domain/network"
-	fd "github.com/tylland/transition/internal/schema/facilitydata"
+	dm "github.com/tylland/transition/cdas/internal/core/domain/network"
+	fd "github.com/tylland/transition/cdas/internal/schema/facilitydata"
 )
 
 // FacilityDataExtensions provides conversion utilities from FacilityData schema types

@@ -1,18 +1,15 @@
-package domain
+﻿package domain
 
 // Package routes provides Go types for the Routes XML schema,
 // containing SignalRoutes and TrackRoutes used by Journey Service
 // to map between timetable data and SFERA Segment Profiles.
 
-import "encoding/xml"
-
 // SignalRoutes is the root XML element for signal routes.
 type SignalRoutes struct {
-	XMLName xml.Name      `xml:"SignalRoutes"`
 	Routes  []SignalRoute `xml:"SignalRoute"`
 }
 
-// SignalRoute represents a route between two stop signals (signalsträcka).
+// SignalRoute represents a route between two stop signals (signalstrÃ¤cka).
 // It contains the list of segment profile references that make up the route.
 type SignalRoute struct {
 	StartSignal        string                    `xml:"StartSignal,attr"`
@@ -29,3 +26,4 @@ type SegmentProfileReference struct {
 	EndPos    float64 `xml:"EndPos,attr"`
 	Direction string  `xml:"Direction,attr"`
 }
+

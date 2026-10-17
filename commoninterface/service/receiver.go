@@ -21,7 +21,7 @@ import (
 	"github.com/tylland/transition/commoninterface/repository"
 )
 
-//go:embed inbound.wsdl.tmpl
+//go:embed template/inbound.wsdl.tmpl
 var wsdlTmpl string
 
 // MessageHandler is called by the Receiver for each successfully parsed inbound message.

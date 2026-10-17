@@ -1,8 +1,8 @@
 package domain
 
 import (
-	dm "github.com/tylland/transition/internal/core/domain/network"
-	"github.com/tylland/transition/internal/core/domain/network/networkvisitor"
+	dm "github.com/tylland/transition/cdas/internal/core/domain/network"
+	"github.com/tylland/transition/cdas/internal/core/domain/network/networkvisitor"
 )
 
 // Generate traverses the network from every stop signal in both directions

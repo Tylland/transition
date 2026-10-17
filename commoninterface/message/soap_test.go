@@ -4,6 +4,7 @@ import (
 	"encoding/xml"
 	"fmt"
 	"os"
+	"strings"
 	"testing"
 
 	"github.com/tylland/transition/specs"
@@ -81,7 +82,7 @@ func TestReadTrainComposition(t *testing.T) {
 
 	messageIdentifier := "796cc4ee-cd51-49c2-a8cf-3bd73b29ddfa"
 
-	if renv.Header.MessageIdentifier != messageIdentifier {
+	if strings.TrimSpace(renv.Header.MessageIdentifier) != messageIdentifier {
 		fmt.Print(string(data))
 		t.Fatalf("MessageIdentifier expected %q got %q", messageIdentifier, renv.Header.MessageIdentifier)
 	}

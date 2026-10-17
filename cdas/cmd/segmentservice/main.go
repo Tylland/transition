@@ -9,10 +9,10 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/tylland/transition/internal/adapter/provider"
-	"github.com/tylland/transition/internal/adapter/writer"
-	"github.com/tylland/transition/internal/core/port"
-	"github.com/tylland/transition/internal/core/service"
+	"github.com/tylland/transition/cdas/internal/adapter/provider"
+	"github.com/tylland/transition/cdas/internal/adapter/writer"
+	"github.com/tylland/transition/cdas/internal/core/port"
+	"github.com/tylland/transition/cdas/internal/core/service"
 )
 
 func main() {
@@ -30,8 +30,8 @@ func main() {
 		spWriter        port.SegmentProfileWriter
 	)
 
-	srWriter = writer.NewSignalRoutesXMLFileWriter(filepath.Join("testdata", "signalroutes.xml"))
-	trWriter = writer.NewTrackRoutesXMLFileWriter(filepath.Join("testdata", "trackroutes.xml"))
+	srWriter = writer.NewSignalRoutesXMLFileWriter(filepath.Join("testdata", "output", "signalroutes.xml"))
+	trWriter = writer.NewTrackRoutesXMLFileWriter(filepath.Join("testdata", "output", "trackroutes.xml"))
 	spWriter = writer.NewSegmentProfileXMLFileWriter(outputDir)
 
 	facilityService = service.NewFacilityService(srWriter, trWriter, spWriter)

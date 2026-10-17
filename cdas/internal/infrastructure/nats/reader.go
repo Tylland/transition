@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	"github.com/nats-io/nats.go"
-	sfera "github.com/tylland/transition/internal/schema/sfera/v3"
+	sfera "github.com/tylland/transition/cdas/internal/schema/sfera/v3"
 )
 
 // Reader subscribes to a NATS subject and delivers decoded segment profiles.

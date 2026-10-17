@@ -84,10 +84,20 @@ func (c *SenderTestContext) OutboundMessage(companyCode, msgID, body string) *sp
 	return res.Success()
 }
 
-func (c *SenderTestContext) ValidOutboundMessage() *specs.StepResult {
-	res := specs.NewStepResult("valid outbound message")
+// func (c *SenderTestContext) ValidOutboundMessage() *specs.StepResult {
+// 	res := specs.NewStepResult("valid outbound message")
 
-	c.outboundMessage = &CIMessage{companyCode: defaultCompanyCode, msgID: defaultMsgID, body: validPayload}
+// 	c.outboundMessage = &CIMessage{companyCode: defaultCompanyCode, msgID: defaultMsgID, body: validPayload}
+
+// 	return res.Success()
+// }
+
+func (c *SenderTestContext) ValidOutboundMessage(code, schemaName string) *specs.StepResult {
+	res := specs.NewStepResult("valid inbound message")
+
+	payload := fmt.Sprintf(messageTemplate, c.schemaName, code, c.schemaName)
+
+	c.outboundMessage = &CIMessage{companyCode: defaultCompanyCode, msgID: defaultMsgID, body: payload}
 
 	return res.Success()
 }
@@ -117,7 +127,13 @@ func (c *SenderTestContext) RequestWasMade() *specs.StepResult {
 	sr := specs.NewStepResult("the message is posted to the partner endpoint")
 
 	if !c.called {
-		return sr.WithErrorMessage("no HTTP request was made to the partner")
+		errMsg := "no HTTP request was made to the partner"
+
+		if c.err != nil {
+			errMsg += ": " + c.err.Error()
+		}
+
+		return sr.WithErrorMessage(errMsg)
 	}
 
 	return sr.Success()
@@ -155,22 +171,26 @@ func (c *SenderTestContext) SchemaNotRegistredError() *specs.StepResult {
 
 // ── Outbound validation (Sender) tests ───────────────────────────────────────
 
-func TestValidOutboundMessageIsSent(t *testing.T) {
+func TestSendingValidOutboundMessageIsSent(t *testing.T) {
 	c := NewSenderTestContext(t)
 
 	senderStory.Scenario(t).
-		Given(c.RepositoryWithSchemaFor("TrainRunningInformationMessage")).
-		And(c.ValidOutboundMessage()).
+		Given(c.Schema("TrainRunningInformationMessage")).
+		And(c.MessageType("0011", "TrainRunningInformationMessage")).
+		Given(c.RepositoryExists()).
+		And(c.ValidOutboundMessage("0011", "TrainRunningInformationMessage")).
 		When(c.Sending()).
 		Then(c.RequestWasMade()).
 		Execute()
 }
 
-func TestOutboundMessageFailingValidationIsRejected(t *testing.T) {
+func TestSendingOutboundMessageWithFailingValidationIsRejected(t *testing.T) {
 	c := NewSenderTestContext(t)
 
 	senderStory.Scenario(t).
-		Given(c.RepositoryWithSchemaFor("TrainRunningInformationMessage")).
+		Given(c.Schema("TrainRunningInformationMessage")).
+		And(c.MessageType("0011", "TrainRunningInformationMessage")).
+		Given(c.RepositoryExists()).
 		And(c.OutboundMessage("0000099", "test-msg-id", wrongRootPayload)).
 		When(c.Sending()).
 		Then(c.NoRequestWasMade()).
@@ -181,8 +201,10 @@ func TestSendingMessageWithNoRegisteredSchemaReturnsError(t *testing.T) {
 	c := NewSenderTestContext(t)
 
 	senderStory.Scenario(t).
-		Given(c.RepositoryLacksSchemaFor("PathRequestMessage")).
-		And(c.ValidOutboundMessage()).
+		Given(c.Schema("TrainRunningInformationMessage")).
+		And(c.MessageType("0011", "TrainRunningInformationMessage")).
+		Given(c.RepositoryLacksSchemaFor("TrainRunningInformationMessage")).
+		And(c.ValidOutboundMessage("0011", "TrainRunningInformationMessage")).
 		When(c.Sending()).
 		Then(c.NoRequestWasMade()).
 		And(c.SchemaNotRegistredError()).

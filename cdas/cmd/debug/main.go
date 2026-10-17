@@ -5,10 +5,10 @@ import (
 	"fmt"
 	"os"
 
-	dm "github.com/tylland/transition/internal/core/domain/network"
+	dm "github.com/tylland/transition/cdas/internal/core/domain/network"
 
-	conv "github.com/tylland/transition/internal/model/facilitydata"
-	fd "github.com/tylland/transition/internal/schema/facilitydata"
+	conv "github.com/tylland/transition/cdas/internal/model/facilitydata"
+	fd "github.com/tylland/transition/cdas/internal/schema/facilitydata"
 )
 
 func main() {

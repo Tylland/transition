@@ -7,11 +7,11 @@ package main
 // 	"path/filepath"
 // 	"time"
 
-// 	"github.com/tylland/transition/internal/model/facilitydata"
-// 	"github.com/tylland/transition/internal/model/sfera/segmentprofile"
-// 	"github.com/tylland/transition/internal/model/signalroute"
-// 	"github.com/tylland/transition/internal/model/trackroute"
-// 	schroutes "github.com/tylland/transition/internal/core/domain"
+// 	"github.com/tylland/transition/cdas/internal/model/facilitydata"
+// 	"github.com/tylland/transition/cdas/internal/model/sfera/segmentprofile"
+// 	"github.com/tylland/transition/cdas/internal/model/signalroute"
+// 	"github.com/tylland/transition/cdas/internal/model/trackroute"
+// 	schroutes "github.com/tylland/transition/cdas/internal/core/domain"
 // )
 
 // // watchInputFolder scans inputDir for FacilityData XML files on each tick and

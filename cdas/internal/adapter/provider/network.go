@@ -7,8 +7,8 @@ import (
 	"path/filepath"
 	"time"
 
-	"github.com/tylland/transition/internal/core/port"
-	"github.com/tylland/transition/internal/model/facilitydata"
+	"github.com/tylland/transition/cdas/internal/core/port"
+	"github.com/tylland/transition/cdas/internal/model/facilitydata"
 )
 
 type FacilityDataFileNetworkProvider struct {

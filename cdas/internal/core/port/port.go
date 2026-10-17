@@ -1,9 +1,9 @@
 package port
 
 import (
-	"github.com/tylland/transition/internal/core/domain"
-	"github.com/tylland/transition/internal/core/domain/network"
-	sfera "github.com/tylland/transition/internal/schema/sfera/v3"
+	"github.com/tylland/transition/cdas/internal/core/domain"
+	"github.com/tylland/transition/cdas/internal/core/domain/network"
+	sfera "github.com/tylland/transition/cdas/internal/schema/sfera/v3"
 )
 
 type SignalRouteWriter interface {

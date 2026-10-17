@@ -5,7 +5,7 @@ package trackroute
 // 	"fmt"
 // 	"os"
 
-// 	"github.com/tylland/transition/internal/schema/routes"
+// 	"github.com/tylland/transition/cdas/internal/schema/routes"
 // )
 
 // type FileWriter struct {

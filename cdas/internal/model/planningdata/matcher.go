@@ -6,7 +6,7 @@ package planningdata
 // 	"fmt"
 // 	"strings"
 
-// 	pd "github.com/tylland/transition/internal/schema/planningdata"
+// 	pd "github.com/tylland/transition/cdas/internal/schema/planningdata"
 // )
 
 // // JourneySegment represents one matched step in a train's journey,

@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/tylland/transition/internal/schema/signalstrackor"
+	"github.com/tylland/transition/cdas/internal/schema/signalstrackor"
 )
 
 // FileWriter writes Signalstrackor objects as XML files.

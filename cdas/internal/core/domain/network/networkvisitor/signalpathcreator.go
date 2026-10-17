@@ -3,7 +3,7 @@ package networkvisitor
 import (
 	"slices"
 
-	dm "github.com/tylland/transition/internal/core/domain/network"
+	dm "github.com/tylland/transition/cdas/internal/core/domain/network"
 )
 
 // SignalPathCreator traverses the network to find signal sections.

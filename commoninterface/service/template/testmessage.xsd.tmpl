@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+  <xs:element name="{{ .MessageName }}" type="{{ .MessageName }}Type"/>
+
+  <xs:complexType name="{{ .MessageName }}Type">
+    <xs:sequence>
+      <xs:element name="MessageHeader" type="MessageHeaderType"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="MessageHeaderType">
+    <xs:sequence>
+      <xs:element name="MessageReference" type="MessageReferenceType"/>
+      <xs:element name="Sender" type="xs:string"/>
+      <xs:element name="Recipient" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="MessageReferenceType">
+    <xs:sequence>
+      <xs:element name="MessageType" type="MessageTypeType"/>
+      <xs:element name="MessageTypeVersion" type="MessageTypeVersionType"/>
+      <xs:element name="MessageIdentifier" type="MessageIdentifierType"/>
+      <xs:element name="MessageDateTime" type="xs:dateTime"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:simpleType name="MessageTypeType">
+    <xs:restriction base="xs:string">
+      <xs:pattern value="[0-9]{4}"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="MessageTypeVersionType">
+    <xs:restriction base="xs:string">
+      <xs:pattern value="[0-9]+(\.[0-9]+)?"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="MessageIdentifierType">
+    <xs:restriction base="xs:string">
+      <xs:pattern value="[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+</xs:schema>

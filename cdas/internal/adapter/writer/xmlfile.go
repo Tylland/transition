@@ -7,8 +7,8 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/tylland/transition/internal/core/domain"
-	sfera "github.com/tylland/transition/internal/schema/sfera/v3"
+	"github.com/tylland/transition/cdas/internal/core/domain"
+	sfera "github.com/tylland/transition/cdas/internal/schema/sfera/v3"
 )
 
 type xmlFileWriter struct {

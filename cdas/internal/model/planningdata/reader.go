@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"os"
 
-	pd "github.com/tylland/transition/internal/schema/planningdata"
+	pd "github.com/tylland/transition/cdas/internal/schema/planningdata"
 )
 
 // ReadPlanningData deserializes a DagligFärdplan JSON file from the given path.
