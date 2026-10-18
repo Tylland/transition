@@ -6,7 +6,7 @@
 
 // SignalRoutes is the root XML element for signal routes.
 type SignalRoutes struct {
-	Routes  []SignalRoute `xml:"SignalRoute"`
+	Routes []SignalRoute `xml:"SignalRoute"`
 }
 
 // SignalRoute represents a route between two stop signals (signalstrÃ¤cka).
@@ -26,4 +26,3 @@ type SegmentProfileReference struct {
 	EndPos    float64 `xml:"EndPos,attr"`
 	Direction string  `xml:"Direction,attr"`
 }
-

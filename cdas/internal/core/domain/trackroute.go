@@ -14,7 +14,7 @@ const (
 
 // TrackRoutes is the root XML element for track routes.
 type TrackRoutes struct {
-	Routes  []TrackRoute `xml:"TrackRoute"`
+	Routes []TrackRoute `xml:"TrackRoute"`
 }
 
 // TrackRoute maps a track section (linjespÃ¥r/stationsspÃ¥r) to a sequence of signal routes,
@@ -35,4 +35,3 @@ type SignalRouteRef struct {
 	StartSignal string `xml:"StartSignal,attr"`
 	EndSignal   string `xml:"EndSignal,attr"`
 }
-

@@ -5,9 +5,9 @@ package signalstrackor
 type Signalstrackor struct {
 	Signalstracka []SignalstrackaTyp `xml:"Signalstracka"`
 }
+
 // SignalstrackaTyp represents a signal section.
 type SignalstrackaTyp struct {
 	Start string `xml:"Start,attr,omitempty"`
 	Slut  string `xml:"Slut,attr,omitempty"`
 }
-

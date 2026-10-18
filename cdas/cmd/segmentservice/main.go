@@ -9,7 +9,9 @@ import (
 	"syscall"
 	"time"
 
+	"github.com/nats-io/nats.go"
 	"github.com/tylland/transition/cdas/internal/adapter/provider"
+	publisher "github.com/tylland/transition/cdas/internal/adapter/publisher/nats"
 	"github.com/tylland/transition/cdas/internal/adapter/writer"
 	"github.com/tylland/transition/cdas/internal/core/port"
 	"github.com/tylland/transition/cdas/internal/core/service"
@@ -30,9 +32,15 @@ func main() {
 		spWriter        port.SegmentProfileWriter
 	)
 
+	nc, err := nats.Connect("nuclear:4222")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer nc.Close()
+
 	srWriter = writer.NewSignalRoutesXMLFileWriter(filepath.Join("testdata", "output", "signalroutes.xml"))
 	trWriter = writer.NewTrackRoutesXMLFileWriter(filepath.Join("testdata", "output", "trackroutes.xml"))
-	spWriter = writer.NewSegmentProfileXMLFileWriter(outputDir)
+	spWriter = publisher.NewSegmentProfileNATSWriter(nc)
 
 	facilityService = service.NewFacilityService(srWriter, trWriter, spWriter)
 
