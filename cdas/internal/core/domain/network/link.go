@@ -4,7 +4,7 @@ import "fmt"
 
 // Link represents a link in the network.
 type Link struct {
-	Id     LinkId
+	Id     LinkID
 	From   *Node
 	To     *Node
 	Length float64
@@ -21,7 +21,7 @@ type Link struct {
 }
 
 // NewLink creates a new Link.
-func NewLink(id LinkId, from, to *Node, length float64) *Link {
+func NewLink(id LinkID, from, to *Node, length float64) *Link {
 	return &Link{
 		Id:     id,
 		From:   from,

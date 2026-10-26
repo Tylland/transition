@@ -1,14 +1,18 @@
 package domain
 
 import (
+	"fmt"
+	"strings"
+
 	dm "github.com/tylland/transition/cdas/internal/core/domain/network"
-	"github.com/tylland/transition/cdas/internal/core/domain/network/networkvisitor"
+	"github.com/tylland/transition/cdas/internal/core/domain/network/visitor"
+	sfera "github.com/tylland/transition/cdas/internal/schema/sfera/v3"
 )
 
 // Generate traverses the network from every stop signal in both directions
 // and returns both the schema signal routes and the domain Signalstracka objects.
-func BuildSignalRoutes(network *dm.Network) ([]SignalRoute, []*dm.SignalPath) {
-	var result []SignalRoute
+func BuildSignalRoutes(network *dm.Network, segmentLookup map[string]*sfera.SegmentProfile) ([]*SignalRoute, []*dm.SignalPath) {
+	var result []*SignalRoute
 	var paths []*dm.SignalPath
 
 	for _, link := range network.Links() {
@@ -22,7 +26,7 @@ func BuildSignalRoutes(network *dm.Network) ([]SignalRoute, []*dm.SignalPath) {
 					continue
 				}
 
-				visitor := networkvisitor.NewSignalPathCreator(signal, direction)
+				visitor := visitor.NewSignalPathFinder(signal, direction)
 				dm.Traverse(visitor)
 
 				if visitor.SignalPath == nil {
@@ -31,7 +35,8 @@ func BuildSignalRoutes(network *dm.Network) ([]SignalRoute, []*dm.SignalPath) {
 
 				signalPath := visitor.SignalPath
 
-				signalRoute := SignalRoute{
+				signalRoute := &SignalRoute{
+					Id:          createID(signalPath),
 					StartSignal: signalPath.Start.Id.String(),
 					EndSignal:   signalPath.End.Id.String(),
 					StartPlace:  signalPath.Start.Id.PlaceSignature,
@@ -39,13 +44,20 @@ func BuildSignalRoutes(network *dm.Network) ([]SignalRoute, []*dm.SignalPath) {
 				}
 
 				for _, path := range signalPath.LinkPaths {
-					signalRoute.SegmentProfileRefs = append(signalRoute.SegmentProfileRefs,
-						SegmentProfileReference{
-							SPID:      createProfileId(path.Link.Id, path.Direction),
-							StartPos:  path.Start,
-							EndPos:    path.End,
-							Direction: string(path.Direction),
-						})
+					spid := createProfileId(path.Link.Id, path.Direction)
+
+					if sp, ok := segmentLookup[spid]; ok {
+
+						signalRoute.SegmentProfileRefs = append(signalRoute.SegmentProfileRefs,
+							&SegmentProfileReference{
+								SPID:           sp.SPID,
+								SPVersionMajor: sp.SPVersionMajor,
+								SPVersionMinor: *sp.SPVersionMinor,
+								StartPos:       path.Start,
+								EndPos:         path.End,
+								Direction:      string(path.Direction),
+							})
+					}
 				}
 
 				result = append(result, signalRoute)
@@ -55,4 +67,23 @@ func BuildSignalRoutes(network *dm.Network) ([]SignalRoute, []*dm.SignalPath) {
 	}
 
 	return result, paths
+}
+
+func signalName(name string) string {
+	parts := strings.Split(name, "(")
+
+	if len(parts) > 0 {
+		name = parts[0]
+	}
+
+	return strings.ToLower(strings.TrimSpace(name))
+}
+
+func createID(signalPath *dm.SignalPath) string {
+
+	return fmt.Sprintf("%d.%d.%s.%s",
+		signalPath.Start.Link.From.Id.LocationNumber,
+		signalPath.End.Link.To.Id.LocationNumber,
+		signalName(signalPath.Start.Id.Name),
+		signalName(signalPath.End.Id.Name))
 }

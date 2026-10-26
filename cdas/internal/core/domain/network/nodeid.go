@@ -6,40 +6,40 @@ import (
 	"strings"
 )
 
-// NodeId uniquely identifies a node.
-type NodeId struct {
+// NodeID uniquely identifies a node.
+type NodeID struct {
 	LocationNumber int
 	Number         int
 }
 
-func NewNodeId(locationNumber, number int) NodeId {
-	return NodeId{LocationNumber: locationNumber, Number: number}
+func NewNodeId(locationNumber, number int) NodeID {
+	return NodeID{LocationNumber: locationNumber, Number: number}
 }
 
-func (n NodeId) String() string {
+func (n NodeID) String() string {
 	return fmt.Sprintf("%d:%d", n.LocationNumber, n.Number)
 }
 
 // ParseNodeId parses a NodId from a string in the format "trafikplatsId:nummer".
-func ParseNodeId(id string) (NodeId, error) {
+func ParseNodeId(id string) (NodeID, error) {
 	if id == "" {
-		return NodeId{}, fmt.Errorf("nod id inte angivet")
+		return NodeID{}, fmt.Errorf("nod id inte angivet")
 	}
 
 	parts := strings.Split(id, ":")
 	if len(parts) != 2 {
-		return NodeId{}, fmt.Errorf("node id in invalid format: %s", id)
+		return NodeID{}, fmt.Errorf("node id in invalid format: %s", id)
 	}
 
 	locationNumber, err := strconv.Atoi(parts[0])
 	if err != nil {
-		return NodeId{}, fmt.Errorf("location number in invalid format: %w", err)
+		return NodeID{}, fmt.Errorf("location number in invalid format: %w", err)
 	}
 
 	number, err := strconv.Atoi(parts[1])
 	if err != nil {
-		return NodeId{}, fmt.Errorf("number in invalid format: %w", err)
+		return NodeID{}, fmt.Errorf("number in invalid format: %w", err)
 	}
 
-	return NodeId{LocationNumber: locationNumber, Number: number}, nil
+	return NodeID{LocationNumber: locationNumber, Number: number}, nil
 }

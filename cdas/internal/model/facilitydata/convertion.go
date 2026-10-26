@@ -1,6 +1,7 @@
 package facilitydata
 
 import (
+	"github.com/tylland/transition/cdas"
 	dm "github.com/tylland/transition/cdas/internal/core/domain/network"
 	fd "github.com/tylland/transition/cdas/internal/schema/facilitydata"
 )
@@ -9,24 +10,24 @@ import (
 // to domain model types.
 
 // CreateNodeId converts a FacilityData NodeId to a domain model NodId.
-func CreateNodeId(nodeId fd.NodeId) dm.NodeId {
+func CreateNodeId(nodeId fd.NodeId) dm.NodeID {
 	return dm.NewNodeId(nodeId.LocationNumber, nodeId.NodeNumber)
 }
 
 // CreateNodeIdForNade creates a domain NodId from a FacilityData Node.
-func CreateNodeIdForNade(node fd.Node) dm.NodeId {
+func CreateNodeIdForNade(node fd.Node) dm.NodeID {
 	return CreateNodeId(node.Identification.NodeId)
 }
 
 // CreateLinkId converts a FacilityData LinkId to a domain model LinkId.
-func CreateLinkId(linkId fd.LinkId) dm.LinkId {
+func CreateLinkId(linkId fd.LinkId) dm.LinkID {
 	franNodId := CreateNodeId(linkId.NodeFrom)
 	tillNodId := CreateNodeId(linkId.NodeTo)
 	return dm.NewLinkId(franNodId, tillNodId, linkId.Linknumber)
 }
 
 // CreateCreateLinkId creates a domain LinkId from a FacilityData Link.
-func CreateLinkIdForLink(link fd.Link) dm.LinkId {
+func CreateLinkIdForLink(link fd.Link) dm.LinkID {
 	return CreateLinkId(link.Identification.LinkId)
 }
 
@@ -51,7 +52,7 @@ func CreateSignalId(businessId fd.BusinessId) *dm.SignalId {
 
 // CreateLinkPosition creates a Linkposition from a FacilityData LinkPosition on a given Link.
 func CreateLinkPosition(link *dm.Link, position fd.LinkPosition, direction dm.ValidityDirection) *dm.LinkPosition {
-	return dm.NewLinkPosition(link, position.StartDistanceFromNode/link.Length, direction)
+	return cdas.Must(dm.NewLinkPosition(link, position.StartDistanceFromNode/link.Length, direction))
 }
 
 // CreateLinkExtent creates a Linkutbredning from a FacilityData LinkPosition on a given Link.

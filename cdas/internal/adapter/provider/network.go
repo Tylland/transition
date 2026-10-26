@@ -82,6 +82,11 @@ func (p *FacilityDataFileNetworkProvider) processFile(path string) {
 	network := facilitydata.NewNetworkBuilder(fd.BaseRoot).Build()
 
 	if p.service != nil {
-		p.service.ProcessNetwork(network)
+		err := p.service.ProcessNetwork(network)
+
+		if err != nil {
+			log.Printf("error processing network %s: %w", path, err)
+			return
+		}
 	}
 }

@@ -36,25 +36,7 @@ func (s *NetworkBuilder) Build() *dm.Network {
 		network.GetOrCreateLink(linkId, link.Length)
 	}
 
-	// Create node paths (nodvägar) by connecting all links that share a node.
-	// For each node, every pair of connected links gets a bidirectional path.
-	for _, node := range network.Nodes() {
-		// Collect all links connected to this node
-		var connectedLinks []*dm.Link
-		for _, link := range network.Links() {
-			if link.From == node || link.To == node {
-				connectedLinks = append(connectedLinks, link)
-			}
-		}
-		// Create bidirectional paths between all pairs
-		for i := 0; i < len(connectedLinks); i++ {
-			for j := 0; j < len(connectedLinks); j++ {
-				if i != j {
-					node.AddRoute(connectedLinks[i], connectedLinks[j])
-				}
-			}
-		}
-	}
+	network.BuildNodeRoutes()
 
 	// Import locations (platsmittar)
 	for _, location := range s.Infrastructure.Locations {
@@ -68,6 +50,7 @@ func (s *NetworkBuilder) Build() *dm.Network {
 
 		for _, position := range location.LinkPositions {
 			FDWithLink(network, position, func(lank *dm.Link) {
+
 				lank.PlaceCenters.Add(dm.NewPlaceCenter(place, CreateLinkPosition(lank, position, dm.ValidityDirectionBoth)))
 			})
 		}

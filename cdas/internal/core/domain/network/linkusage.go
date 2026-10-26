@@ -61,6 +61,18 @@ func (lp *LinkPath) GetPath(position *LinkPosition) *LinkPath {
 	return NewLinkPath(lp.Link, lp.Start, position.Position, lp.Direction)
 }
 
+func (lp *LinkPath) Reverse() *LinkPath {
+	return NewLinkPath(lp.Link, lp.Start, lp.End, lp.Direction.Reverse())
+}
+
+func (lp *LinkPath) InDirection(reversed bool) *LinkPath {
+	if !reversed {
+		return lp
+	}
+
+	return NewLinkPath(lp.Link, lp.Start, lp.End, lp.Direction.Reverse())
+}
+
 func (lp *LinkPath) String() string {
 	return fmt.Sprintf("%v->%v %v", lp.Start, lp.End, lp.Direction)
 }

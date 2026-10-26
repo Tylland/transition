@@ -1,32 +1,36 @@
 package domain
 
 import (
+	"fmt"
+	"strings"
+
 	dm "github.com/tylland/transition/cdas/internal/core/domain/network"
+	"github.com/tylland/transition/cdas/internal/core/domain/network/visitor"
 )
 
 // Generate creates track routes by classifying each signal route as
 // Arrival, Departure, or Line based on signal types, then grouping by type and
 // place/track.
-func BuildTrackRoutes(network *dm.Network, signalRoutes []SignalRoute, signalstrackor []*dm.SignalPath) []TrackRoute {
+func BuildTrackRoutes(network *dm.Network, signalRoutes []*SignalRoute, signalPaths []*dm.SignalPath) []*TrackRoute {
 	grouped := make(map[trackRouteKey][]SignalRouteRef)
 
 	for i, sr := range signalRoutes {
-		st := signalstrackor[i]
+		sp := signalPaths[i]
 
-		routeType := classifySignalRoute(st)
+		routeType := classifySignalRoute(sp)
 
-		// Determine track based on signal type:
-		// Line signals (INF, UBL, MBL) → Linjespar
-		// Station signals (M) → Sparnummer
-		startTrack := findStartTrack(st)
-		endTrack := findEndTrack(st)
+		startTrack := findStartTrack(sp)
+		endTrack := findEndTrack(sp)
+
+		directionPlace := findDirectionPlace(sp, routeType)
 
 		key := trackRouteKey{
-			Type:       routeType,
-			StartPlace: sr.StartPlace,
-			EndPlace:   sr.EndPlace,
-			StartTrack: startTrack,
-			EndTrack:   endTrack,
+			Type:           routeType,
+			StartPlace:     sr.StartPlace,
+			EndPlace:       sr.EndPlace,
+			DirectionPlace: directionPlace,
+			StartTrack:     startTrack,
+			EndTrack:       endTrack,
 		}
 
 		ref := SignalRouteRef{
@@ -37,12 +41,14 @@ func BuildTrackRoutes(network *dm.Network, signalRoutes []SignalRoute, signalstr
 		grouped[key] = append(grouped[key], ref)
 	}
 
-	var result []TrackRoute
+	var result []*TrackRoute
 	for key, refs := range grouped {
-		tr := TrackRoute{
+		tr := &TrackRoute{
+			Id:              key.String(),
 			Type:            key.Type,
 			StartPlace:      key.StartPlace,
 			EndPlace:        key.EndPlace,
+			DirectionPlace:  key.DirectionPlace,
 			StartTrack:      key.StartTrack,
 			EndTrack:        key.EndTrack,
 			StartSignal:     refs[0].StartSignal,
@@ -144,6 +150,29 @@ func findStartTrack(st *dm.SignalPath) string {
 	return ""
 }
 
+// findDirectionPlace finds the place before an arrival or after a departure.
+func findDirectionPlace(signalPath *dm.SignalPath, trt TrackRouteType) string {
+	if trt == TrackRouteLine {
+		return signalPath.Start.Id.PlaceSignature
+	}
+
+	signal := signalPath.End
+	var reverse bool
+
+	if trt == TrackRouteArrival {
+		signal = signalPath.Start
+		reverse = true
+	}
+
+	visitor := visitor.NewPlaceFinder(signal, reverse)
+	dm.Traverse(visitor)
+	if visitor.PlaceSignature() != "" {
+		return visitor.PlaceSignature()
+	}
+
+	return signal.Id.PlaceSignature
+}
+
 // findEndTrack finds the track at the end of a signal route.
 // Uses linjespår for line signals (INF, UBL, MBL), spårnummer for station signals (M).
 // If not found at the signal position, searches backward through the route's links.
@@ -199,9 +228,14 @@ func classifySignalRoute(st *dm.SignalPath) TrackRouteType {
 
 // trackRouteKey is the grouping key for track
 type trackRouteKey struct {
-	Type       TrackRouteType
-	StartPlace string
-	EndPlace   string
-	StartTrack string
-	EndTrack   string
+	Type           TrackRouteType
+	StartPlace     string
+	EndPlace       string
+	DirectionPlace string
+	StartTrack     string
+	EndTrack       string
+}
+
+func (k *trackRouteKey) String() string {
+	return strings.ToLower(fmt.Sprintf("%s.%s.%s.%s.%s.%s", k.StartPlace, k.EndPlace, k.DirectionPlace, k.StartTrack, k.EndTrack, k.Type))
 }

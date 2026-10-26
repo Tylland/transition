@@ -1,5 +1,7 @@
 package network
 
+import "fmt"
+
 // LinkPosition represents a position on a link.
 type LinkPosition struct {
 	Link      *Link
@@ -8,12 +10,16 @@ type LinkPosition struct {
 }
 
 // NewLinkPosition creates a new Linkposition.
-func NewLinkPosition(link *Link, position float64, direction ValidityDirection) *LinkPosition {
+func NewLinkPosition(link *Link, position float64, direction ValidityDirection) (*LinkPosition, error) {
+	if position < 0 || position > 1.0 {
+		return nil, fmt.Errorf("Invalid position, must be in range 0.0 and 1.0")
+	}
+
 	return &LinkPosition{
 		Link:      link,
 		Position:  position,
 		Direction: direction,
-	}
+	}, nil
 }
 
 // IsValid checks if the position is valid for the given link direction.

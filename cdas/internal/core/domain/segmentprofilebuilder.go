@@ -3,6 +3,7 @@ package domain
 import (
 	"fmt"
 	"math"
+	"strings"
 
 	dm "github.com/tylland/transition/cdas/internal/core/domain/network"
 	sfera "github.com/tylland/transition/cdas/internal/schema/sfera/v3"
@@ -144,7 +145,7 @@ func GenerateForDirection(network *dm.Network, direction dm.LinkDirection) []*sf
 					&sfera.KilometreReferencePoint{
 						SPGenericPointComplexType: createSPGenericPoint(kmBoard.Id.Information, kmBoard.LinkPosition.GetDistance(direction)),
 						KMReference: &sfera.KMReference{
-							KmRef: float64(*kmBoard.Kilometer),
+							KmRef:                              float64(*kmBoard.Kilometer),
 							PhysicalCharacteristicsComplexType: &sfera.PhysicalCharacteristicsComplexType{},
 						},
 					},
@@ -270,8 +271,8 @@ func CreateGradientAverage(link *dm.Link, direction dm.LinkDirection) sfera.Grad
 }
 
 // createProfileId creates a SFERA segment profile ID from a LankId and direction.
-func createProfileId(linkId dm.LinkId, direction dm.LinkDirection) string {
-	return fmt.Sprintf("%v:%s", linkId, direction)
+func createProfileId(linkId dm.LinkID, direction dm.LinkDirection) string {
+	return fmt.Sprintf("%s.%s", linkId.Key(), strings.ToLower(direction.String()))
 }
 
 // getGradientDirection returns the SFERA gradient direction for a Slope.

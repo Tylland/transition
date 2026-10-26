@@ -4,6 +4,7 @@ import (
 	"github.com/tylland/transition/cdas/internal/core/domain"
 	dm "github.com/tylland/transition/cdas/internal/core/domain/network"
 	"github.com/tylland/transition/cdas/internal/core/port"
+	sfera "github.com/tylland/transition/cdas/internal/schema/sfera/v3"
 )
 
 type FacilityService struct {
@@ -17,10 +18,24 @@ func NewFacilityService(srWriter port.SignalRouteWriter, trWriter port.TrackRout
 }
 
 func (s *FacilityService) ProcessNetwork(net *dm.Network) error {
+	segmentLookup := make(map[string]*sfera.SegmentProfile)
 
-	signalRoutes, signalPaths := domain.BuildSignalRoutes(net)
+	segmentProfiles := domain.BuildSegmentProfiles(net)
 
-	err := s.srWriter.Write(&domain.SignalRoutes{Routes: signalRoutes})
+	var err error
+	for _, sp := range segmentProfiles {
+		_, err = s.spWriter.Write(sp)
+
+		if err != nil {
+			return err
+		}
+
+		segmentLookup[sp.SPID] = sp
+	}
+
+	signalRoutes, signalPaths := domain.BuildSignalRoutes(net, segmentLookup)
+
+	err = s.srWriter.Write(&domain.SignalRoutes{Routes: signalRoutes})
 
 	if err != nil {
 		return err
@@ -32,16 +47,6 @@ func (s *FacilityService) ProcessNetwork(net *dm.Network) error {
 
 	if err != nil {
 		return err
-	}
-
-	segmentProfiles := domain.BuildSegmentProfiles(net)
-
-	for _, sp := range segmentProfiles {
-		_, err = s.spWriter.Write(sp)
-
-		if err != nil {
-			return err
-		}
 	}
 
 	return nil

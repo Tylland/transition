@@ -24,15 +24,15 @@ type NetworkVisitor interface {
 
 // Network represents the network (nät).
 type Network struct {
-	nodes  map[NodeId]*Node
-	links  map[LinkId]*Link
+	nodes  map[NodeID]*Node
+	links  map[LinkID]*Link
 	places map[int]*Place
 }
 
 func NewNetwork() *Network {
 	return &Network{
-		nodes:  make(map[NodeId]*Node),
-		links:  make(map[LinkId]*Link),
+		nodes:  make(map[NodeID]*Node),
+		links:  make(map[LinkID]*Link),
 		places: make(map[int]*Place),
 	}
 }
@@ -54,7 +54,7 @@ func (n *Network) Nodes() []*Node {
 
 // GetOrCreateNode gets an existing node or creates a new one.
 // An optional name can be provided; defaults to "-".
-func (n *Network) GetOrCreateNode(nodeId NodeId, names ...string) *Node {
+func (n *Network) GetOrCreateNode(nodeId NodeID, names ...string) *Node {
 	name := "-"
 	if len(names) > 0 {
 		name = names[0]
@@ -66,7 +66,7 @@ func (n *Network) GetOrCreateNode(nodeId NodeId, names ...string) *Node {
 }
 
 // SaveNode stores a node if it doesn't already exist.
-func (n *Network) SaveNode(nodeId NodeId, name string) {
+func (n *Network) SaveNode(nodeId NodeID, name string) {
 	if _, ok := n.nodes[nodeId]; !ok {
 		n.nodes[nodeId] = NewNode(nodeId, name)
 	}
@@ -98,7 +98,7 @@ func (n *Network) Links() []*Link {
 }
 
 // GetOrCreateLink gets an existing link or creates a new one.
-func (n *Network) GetOrCreateLink(linkId LinkId, length float64) *Link {
+func (n *Network) GetOrCreateLink(linkId LinkID, length float64) *Link {
 	if _, ok := n.links[linkId]; !ok {
 		from := n.GetOrCreateNode(linkId.From)
 		to := n.GetOrCreateNode(linkId.To)
@@ -113,8 +113,30 @@ func (n *Network) AddLink(link *Link) {
 	n.links[link.Id] = link
 }
 
+func (n *Network) BuildNodeRoutes() {
+	// Create node paths (nodvägar) by connecting all links that share a node.
+	// For each node, every pair of connected links gets a bidirectional path.
+	for _, node := range n.Nodes() {
+		// Collect all links connected to this node
+		var connectedLinks []*Link
+		for _, link := range n.Links() {
+			if link.From == node || link.To == node {
+				connectedLinks = append(connectedLinks, link)
+			}
+		}
+		// Create bidirectional paths between all pairs
+		for i := 0; i < len(connectedLinks); i++ {
+			for j := 0; j < len(connectedLinks); j++ {
+				if i != j {
+					node.AddRoute(connectedLinks[i], connectedLinks[j])
+				}
+			}
+		}
+	}
+}
+
 // GetLink retrieves a link by its ID. Panics if not found.
-func (n *Network) GetLink(linkId LinkId) *Link {
+func (n *Network) GetLink(linkId LinkID) *Link {
 	link, ok := n.links[linkId]
 	if !ok {
 		panic(fmt.Sprintf("Link not found: %v", linkId))
@@ -133,7 +155,7 @@ func (n *Network) WithLinkStr(id string, action func(*Link)) error {
 }
 
 // WithLink executes an action on a link identified by its LinkId.
-func (n *Network) WithLink(id LinkId, action func(*Link)) {
+func (n *Network) WithLink(id LinkID, action func(*Link)) {
 	action(n.GetLink(id))
 }
 
@@ -152,6 +174,18 @@ func (n *Network) Places() []*Place {
 // AddPlace adds a place to the network.
 func (n *Network) AddPlace(place *Place) {
 	n.places[place.PLC] = place
+}
+
+func (n *Network) FindSignal(signalID *SignalId) *Signal {
+	for _, link := range n.links {
+		for _, sig := range link.Signals.items {
+			if sig.Id.Equals(signalID) {
+				return sig
+			}
+		}
+	}
+
+	return nil
 }
 
 // Traverse traverses the network using the given visitor starting from its start position.

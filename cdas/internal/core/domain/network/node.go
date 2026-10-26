@@ -2,13 +2,13 @@ package network
 
 // Node represents a node in the network.
 type Node struct {
-	Id     NodeId
+	Id     NodeID
 	Name   string
 	routes []*NodeRoute
 }
 
 // NewNode creates a new Nod.
-func NewNode(id NodeId, name string) *Node {
+func NewNode(id NodeID, name string) *Node {
 	return &Node{
 		Id:     id,
 		Name:   name,

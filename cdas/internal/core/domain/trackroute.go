@@ -14,15 +14,17 @@ const (
 
 // TrackRoutes is the root XML element for track routes.
 type TrackRoutes struct {
-	Routes []TrackRoute `xml:"TrackRoute"`
+	Routes []*TrackRoute `xml:"TrackRoute"`
 }
 
 // TrackRoute maps a track section (linjespÃ¥r/stationsspÃ¥r) to a sequence of signal routes,
 // enabling lookup from timetable track data to segment profiles.
 type TrackRoute struct {
+	Id              string           `xml:"Id,attr"`
 	Type            TrackRouteType   `xml:"Type,attr"`
 	StartPlace      string           `xml:"StartPlace,attr"`
 	EndPlace        string           `xml:"EndPlace,attr"`
+	DirectionPlace  string           `xml:"DirectionPlace,attr"`
 	StartTrack      string           `xml:"StartTrack,attr,omitempty"`
 	EndTrack        string           `xml:"EndTrack,attr,omitempty"`
 	StartSignal     string           `xml:"StartSignal,attr"`

@@ -35,3 +35,27 @@ func (g ValidityDirection) ToSign() string {
 		return "|"
 	}
 }
+
+func (g ValidityDirection) ToLinkDirection() (LinkDirection, bool) {
+	switch g {
+	case ValidityDirectionWith:
+		return LinkDirectionWith, true
+	case ValidityDirectionAgainst:
+		return LinkDirectionAgainst, true
+	default:
+		return LinkDirectionUnknown, false
+	}
+}
+
+func (g ValidityDirection) ToLinkDirections() []LinkDirection {
+	switch g {
+	case ValidityDirectionWith:
+		return []LinkDirection{LinkDirectionWith}
+	case ValidityDirectionAgainst:
+		return []LinkDirection{LinkDirectionAgainst}
+	case ValidityDirectionBoth:
+		return []LinkDirection{LinkDirectionWith, LinkDirectionAgainst}
+	default:
+		return []LinkDirection{}
+	}
+}

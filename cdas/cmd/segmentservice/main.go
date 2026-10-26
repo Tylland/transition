@@ -10,9 +10,10 @@ import (
 	"time"
 
 	"github.com/nats-io/nats.go"
+	"github.com/nats-io/nats.go/jetstream"
+	"github.com/tylland/transition/cdas"
 	"github.com/tylland/transition/cdas/internal/adapter/provider"
-	publisher "github.com/tylland/transition/cdas/internal/adapter/publisher/nats"
-	"github.com/tylland/transition/cdas/internal/adapter/writer"
+	publisher "github.com/tylland/transition/cdas/internal/adapter/publisher/jetstream"
 	"github.com/tylland/transition/cdas/internal/core/port"
 	"github.com/tylland/transition/cdas/internal/core/service"
 )
@@ -38,9 +39,16 @@ func main() {
 	}
 	defer nc.Close()
 
-	srWriter = writer.NewSignalRoutesXMLFileWriter(filepath.Join("testdata", "output", "signalroutes.xml"))
-	trWriter = writer.NewTrackRoutesXMLFileWriter(filepath.Join("testdata", "output", "trackroutes.xml"))
-	spWriter = publisher.NewSegmentProfileNATSWriter(nc)
+	js, _ := jetstream.New(nc)
+
+	//srWriter = writer.NewSignalRoutesXMLFileWriter(filepath.Join("testdata", "output", "signalroutes.xml"))
+	srWriter = cdas.Must(publisher.NewSignalRouteKVWriter(js))
+
+	//	trWriter = writer.NewTrackRoutesXMLFileWriter(filepath.Join("testdata", "output", "sfera", "trackroutes.xml"))
+
+	trWriter = cdas.Must(publisher.NewTrackRouteKVWriter(js))
+
+	spWriter = cdas.Must(publisher.NewSegmentProfileKVWriter(js))
 
 	facilityService = service.NewFacilityService(srWriter, trWriter, spWriter)
 
@@ -50,4 +58,12 @@ func main() {
 	defer stop()
 
 	networkProvider.Start(ctx)
+}
+
+func must[T any](obj T, err error) T {
+	if err != nil {
+		panic(err)
+	}
+
+	return obj
 }
