@@ -226,16 +226,27 @@ func classifySignalRoute(st *dm.SignalPath) TrackRouteType {
 	return TrackRouteArrival
 }
 
+var specialKeyReplacer *strings.Replacer = strings.NewReplacer(
+	"å", "aa",
+	"ä", "ae",
+	"ö", "oe",
+	"Å", "Aa",
+	"Ä", "Ae",
+	"Ö", "Oe",
+	" ", "-",
+)
+
 // trackRouteKey is the grouping key for track
 type trackRouteKey struct {
-	Type           TrackRouteType
 	StartPlace     string
 	EndPlace       string
 	DirectionPlace string
 	StartTrack     string
 	EndTrack       string
+	Type           TrackRouteType
 }
 
 func (k *trackRouteKey) String() string {
-	return strings.ToLower(fmt.Sprintf("%s.%s.%s.%s.%s.%s", k.StartPlace, k.EndPlace, k.DirectionPlace, k.StartTrack, k.EndTrack, k.Type))
+	return specialKeyReplacer.Replace(strings.ToLower(fmt.Sprintf("%s.%s.%s.%s.%s.%s",
+		k.StartPlace, k.EndPlace, k.DirectionPlace, k.StartTrack, k.EndTrack, k.Type)))
 }

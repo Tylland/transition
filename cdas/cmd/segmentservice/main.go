@@ -12,6 +12,7 @@ import (
 	"github.com/nats-io/nats.go"
 	"github.com/nats-io/nats.go/jetstream"
 	"github.com/tylland/transition/cdas"
+	consumer "github.com/tylland/transition/cdas/internal/adapter/consumer/jetstream"
 	"github.com/tylland/transition/cdas/internal/adapter/provider"
 	publisher "github.com/tylland/transition/cdas/internal/adapter/publisher/jetstream"
 	"github.com/tylland/transition/cdas/internal/core/port"
@@ -57,13 +58,8 @@ func main() {
 	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
 	defer stop()
 
+	logger := cdas.Must(consumer.NewLogger(js))
+	go logger.Start(ctx)
+
 	networkProvider.Start(ctx)
-}
-
-func must[T any](obj T, err error) T {
-	if err != nil {
-		panic(err)
-	}
-
-	return obj
 }
