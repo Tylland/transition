@@ -632,7 +632,7 @@ type HandshakeAcknowledgement struct {
 type HandshakeReject struct {
 	ATOTSID               *string            `xml:"ATOTS_ID,attr"`
 	SPZone                *SPZoneComplexType `xml:"SP_Zone"`
-	HandshakeRejectReason []interface{}      `xml:"HandshakeRejectReason"`
+	HandshakeRejectReason []string           `xml:"HandshakeRejectReason"`
 }
 
 // HandshakeRejectReason is Reason for handshake rejection
@@ -3483,11 +3483,11 @@ type TeltsiWagonWeightEmpty int
 
 // TeltsiCompositIdentifierOperationalType is Is only used in the operational phase and refers to the date where the single train will start the train journey
 type TeltsiCompositIdentifierOperationalType struct {
-	TeltsiObjectType    interface{}     `xml:"teltsi_ObjectType"`
+	TeltsiObjectType    string          `xml:"teltsi_ObjectType"`
 	TeltsiCompany       *TeltsiString44 `xml:"teltsi_Company"`
-	TeltsiCore          interface{}     `xml:"teltsi_Core"`
-	TeltsiVariant       interface{}     `xml:"teltsi_Variant"`
-	TeltsiTimetableYear interface{}     `xml:"teltsi_TimetableYear"`
+	TeltsiCore          string          `xml:"teltsi_Core"`
+	TeltsiVariant       string          `xml:"teltsi_Variant"`
+	TeltsiTimetableYear string          `xml:"teltsi_TimetableYear"`
 	TeltsiStartDate     string          `xml:"teltsi_StartDate"`
 }
 

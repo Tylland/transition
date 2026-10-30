@@ -1,6 +1,8 @@
 package port
 
 import (
+	"context"
+
 	"github.com/tylland/transition/cdas/internal/core/domain"
 	"github.com/tylland/transition/cdas/internal/core/domain/network"
 	sfera "github.com/tylland/transition/cdas/internal/schema/sfera/v3"
@@ -20,10 +22,23 @@ type SegmentProfileWriter interface {
 
 // type NetworkFunc func(*network.Network) error
 
-// type NetworkProvider interface {
-// 	Start(ctx context.Context, callback NetworkFunc)
-// }
-
 type FacilityService interface {
 	ProcessNetwork(net *network.Network) error
+}
+
+type SFERAMessagePublisher interface {
+	Publish(msg any) error
+}
+
+type SegmentProfileReader interface {
+	Read(ctx context.Context, key string) (*sfera.SegmentProfile, error)
+}
+
+type KeyProvider[T any] interface {
+	Create(id string) string
+}
+
+type SPKeyProvider interface {
+	Info(id string) string
+	Data(id string) string
 }

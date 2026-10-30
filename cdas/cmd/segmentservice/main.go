@@ -49,7 +49,8 @@ func main() {
 
 	trWriter = cdas.Must(publisher.NewTrackRouteKVWriter(js))
 
-	spWriter = cdas.Must(publisher.NewSegmentProfileKVWriter(js))
+	spKey := &provider.SPKeyProvider{}
+	spWriter = cdas.Must(publisher.NewSegmentProfileKVWriter(js, spKey))
 
 	facilityService = service.NewFacilityService(srWriter, trWriter, spWriter)
 
