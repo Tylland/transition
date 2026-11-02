@@ -3365,7 +3365,14 @@ type TeltsiNetworkProjectedLocation struct {
 }
 
 // TeltsiObjectType is Provides a possibility for differentiation between the objects: Train (TR), Route (RO), Path (PA), Case Reference (CR) and Path Request (PR), Capacity Needs Announcements (CN), Capacity Model (CM), Catalogue Path (CP) and TCR(TC)
-type TeltsiObjectType interface{}
+type ObjectType string
+
+const (
+	ObjectTypeTrain         = "TR"
+	ObjectTypePath          = "PA"
+	ObjectTypePathRequest   = "PR"
+	ObjectTypeCaseReference = "CR"
+)
 
 // TeltsiOperationalTrainNumber is Identifies the train for traffic management purposes by the Dispatcher, GSMR services, etc.
 type TeltsiOperationalTrainNumber string
