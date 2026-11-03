@@ -75,7 +75,7 @@ func TestNextPlaceFromDeparture(t *testing.T) {
 		Given(b.Link("2:1:2:2:1")). //place B
 		Given(b.Signal("A.102.UBL", "1:1:1:2:1", 1, dm.ValidityDirectionWith)).
 		Given(b.Signal("B.101.INF", "2:1:2:2:1", 0, dm.ValidityDirectionWith)).
-		When(FindingNextPlaceFrom("A.102.UTB")).
+		When(FindingNextPlaceFrom("A.102.UBL")).
 		Then(FoundPlaceIs("B")).
 		Execute()
 }

@@ -1,11 +1,16 @@
 package service
 
 import (
+	"context"
+	"fmt"
 	"slices"
 	"testing"
 	"time"
 
 	"github.com/tylland/transition/cdas"
+	"github.com/tylland/transition/cdas/internal/adapter/provider"
+	"github.com/tylland/transition/cdas/internal/core/domain"
+	"github.com/tylland/transition/cdas/internal/core/port"
 	sfera "github.com/tylland/transition/cdas/internal/schema/sfera/v3"
 	"github.com/tylland/transition/specs"
 )
@@ -15,6 +20,11 @@ var onboardStory = specs.NewStory(specs.UserStory{
 	IWantTo: "communicate with server side",
 	SoThat:  "accurate advices can be given",
 })
+
+var (
+	jpKey    port.JPKeyProvider        = &provider.JPKeyProvider{}
+	jpReader *TestJourneyProfileReader = NewTestJourneyProfileReader()
+)
 
 var (
 	messageHeader *sfera.MessageHeader
@@ -31,10 +41,26 @@ func NewTestPublisher(callback func(msg any)) *TestPublisher {
 	return &TestPublisher{callback: callback}
 }
 
-func (p *TestPublisher) Publish(msg any) error {
+func (p *TestPublisher) Publish(ctx context.Context, msg any) error {
 	p.callback(msg)
 
 	return nil
+}
+
+type TestJourneyProfileReader struct {
+	JourneyProfiles map[string]*sfera.JourneyProfile
+}
+
+func NewTestJourneyProfileReader() *TestJourneyProfileReader {
+	return &TestJourneyProfileReader{JourneyProfiles: make(map[string]*sfera.JourneyProfile)}
+}
+
+func (r *TestJourneyProfileReader) Read(ctx context.Context, key string) (*sfera.JourneyProfile, error) {
+	if jp, ok := r.JourneyProfiles[key]; ok {
+		return jp, nil
+	}
+
+	return nil, fmt.Errorf("JourneyProfile with key %q not found", key)
 }
 
 func TrackSide() *specs.StepResult {
@@ -43,7 +69,7 @@ func TrackSide() *specs.StepResult {
 	settings := &Settings{}
 	publisher := NewTestPublisher(func(msg any) { message = msg })
 
-	svc = NewSFERAService(settings, publisher, nil)
+	svc = NewSFERAService(settings, publisher, nil, nil, jpKey, jpReader)
 
 	return sr.Success()
 }
@@ -53,7 +79,7 @@ func Onboard(version, companyCode, sourceDevice string) *specs.StepResult {
 
 	messageHeader = &sfera.MessageHeader{
 		SFERAVersion: version,
-		Sender:       &sfera.Sender{TeltsiCompanyCode: new(sfera.TeltsiCompanyCode(companyCode))},
+		Sender:       &sfera.Sender{TeltsiCompanyCode: cdas.CompanyCode(companyCode)},
 		SourceDevice: sourceDevice,
 	}
 
@@ -61,11 +87,14 @@ func Onboard(version, companyCode, sourceDevice string) *specs.StepResult {
 }
 
 func Train(company, core, variant string) *specs.StepResult {
-	sr := specs.NewStepResult("train %q %q", company, core)
+	core = cdas.Core(core)
+	companyCode := cdas.CompanyCode(company)
+
+	sr := specs.NewStepResult("train %v %q", companyCode, core)
 
 	trainID = &sfera.TrainIdentificationComplexType{TAFTAPID: &sfera.TeltsiCompositIdentifierOperationalType{
 		TeltsiObjectType:    sfera.ObjectTypeTrain,
-		TeltsiCompany:       (*sfera.TeltsiString44)(&company),
+		TeltsiCompany:       companyCode,
 		TeltsiCore:          core,
 		TeltsiVariant:       variant,
 		TeltsiTimetableYear: time.Now().Format(cdas.YearFormat),
@@ -83,7 +112,20 @@ func SessionStarted(drivingMode, architecture, connectivity string) *specs.StepR
 	return sr.Success()
 }
 
-func Handshaking(drivingMode, architecture, connectivity string) *specs.StepResult {
+func JourneyProfileExists() *specs.StepResult {
+	sr := specs.NewStepResult("journey profile exists")
+
+	key := jpKey.Create(trainID)
+
+	jpReader.JourneyProfiles[key] = &sfera.JourneyProfile{TrainIdentification: trainID}
+
+	return sr.Success()
+}
+
+type Driver struct {
+}
+
+func Handshaking(ctx context.Context, drivingMode, architecture, connectivity string) *specs.StepResult {
 	sr := specs.NewStepResult("making handshake request with driver mode %q, architecture %q and connectivity %q", drivingMode, architecture, connectivity)
 
 	hr := &sfera.HandshakeRequest{TrainIdentification: trainID}
@@ -99,7 +141,7 @@ func Handshaking(drivingMode, architecture, connectivity string) *specs.StepResu
 		HandshakeRequest: hr,
 	}
 
-	err := svc.HandleB2GRequestMessage(req)
+	err := svc.HandleB2GRequestMessage(ctx, req)
 
 	if err != nil {
 		return sr.WithError(err)
@@ -124,6 +166,27 @@ func TerminatingSession(reason string) *specs.StepResult {
 	}
 
 	err := svc.HandleB2GEventMessage(evt)
+
+	if err != nil {
+		return sr.WithError(err)
+	}
+
+	return sr.Success()
+}
+
+func RequestingJourneyProfile() *specs.StepResult {
+	sr := specs.NewStepResult("requesting journey profile for train")
+
+	req := &sfera.SFERAB2GRequestMessage{
+		MessageHeader: messageHeader,
+		B2GRequest: &sfera.B2GRequest{
+			JPRequest: []*sfera.JPRequest{{
+				TrainIdentification: trainID,
+			}},
+		},
+	}
+
+	err := svc.HandleB2GMessage(context.Background(), req)
 
 	if err != nil {
 		return sr.WithError(err)
@@ -161,12 +224,37 @@ func ActiveSessionsIs(n int) *specs.StepResult {
 	return sr.Success()
 }
 
+func JourneyProfileReplied() *specs.StepResult {
+	sr := specs.NewStepResult("journey profile replied")
+
+	if req, ok := message.(*sfera.SFERAG2BReplyMessage); ok {
+		if req.G2BReplyPayload != nil {
+			if req.G2BReplyPayload.JourneyProfile != nil {
+				for _, jp := range req.G2BReplyPayload.JourneyProfile {
+					if jp.TrainIdentification == trainID {
+						return sr.Success()
+					}
+				}
+			} else {
+				return sr.WithErrorMessage("Expected JourneyProfile")
+			}
+
+		} else {
+			return sr.WithErrorMessage("Expected G2BReplyPayload")
+		}
+	} else {
+		return sr.WithErrorMessage("Expected SFERAG2BReplyMessage")
+	}
+
+	return sr.WithErrorf("Expected journey profile %q not replied", domain.NewActiveTrainSessionKey(trainID))
+}
+
 func TestDX1HandshakeInvalidVersionRejected(t *testing.T) {
 	onboardStory.Scenario(t).
 		Given(TrackSide()).
 		Given(Onboard("1.0.0", "0099", "OB1")).
 		Given(Train("0001", "123", "01")).
-		When(Handshaking("GoA1", "BoardAdviceCalculation", "Connected")).
+		When(Handshaking(t.Context(), "GoA1", "BoardAdviceCalculation", "Connected")).
 		Then(RejectedWithReason(RejectReasonSFERAVersionIncompatible)).
 		Execute()
 }
@@ -176,7 +264,7 @@ func TestDX1HandshakeInvalidConnectivityRejected(t *testing.T) {
 		Given(TrackSide()).
 		Given(Onboard("3.0.0", "0099", "OB1")).
 		Given(Train("0001", "123", "01")).
-		When(Handshaking("GoA1", "BoardAdviceCalculation", "Standalone")).
+		When(Handshaking(t.Context(), "GoA1", "BoardAdviceCalculation", "Standalone")).
 		Then(RejectedWithReason(RejectReasonConnectivityNotSupported)).
 		Execute()
 }
@@ -185,7 +273,7 @@ func TestDX1HandshakeValidAcknowledged(t *testing.T) {
 		Given(TrackSide()).
 		Given(Onboard("3.0.0", "0099", "OB1")).
 		Given(Train("0001", "123", "01")).
-		When(Handshaking("GoA1", "BoardAdviceCalculation", "Connected")).
+		When(Handshaking(t.Context(), "GoA1", "BoardAdviceCalculation", "Connected")).
 		Then(ActiveSessionsIs(1)).
 		Execute()
 }
@@ -193,10 +281,23 @@ func TestDX1HandshakeValidAcknowledged(t *testing.T) {
 func TestDX2TerminatingSession(t *testing.T) {
 	onboardStory.Scenario(t).
 		Given(TrackSide()).
-		Given(Onboard("3.0.0", "0099", "OB1")).
-		Given(Train("0001", "123", "01")).
+		Given(Onboard("3.0.0", "99", "OB1")).
+		Given(Train("1", "123", "01")).
 		Given(SessionStarted("GoA1", "BoardAdviceCalculation", "Connected")).
 		When(TerminatingSession("Finished")).
 		Then(ActiveSessionsIs(0)).
+		Execute()
+}
+
+func TestJP2RequestJourneyProfile(t *testing.T) {
+	onboardStory.Scenario(t).
+		Given(TrackSide()).
+		Given(Onboard("3.0.0", "0099", "OB1")).
+		Given(Train("0001", "123", "01")).
+		Given(SessionStarted("GoA1", "BoardAdviceCalculation", "Connected")).
+		And(JourneyProfileExists()).
+		When(RequestingJourneyProfile()).
+		Then(ActiveSessionsIs(1)).
+		And(JourneyProfileReplied()).
 		Execute()
 }

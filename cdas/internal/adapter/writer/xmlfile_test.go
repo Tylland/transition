@@ -54,7 +54,13 @@ func TestKMReferenceMarshalDoesNotPanic(t *testing.T) {
 		}
 	}()
 
-	_, err := xml.MarshalIndent(&sfera.KMReference{KmRef: 12.5}, "", "  ")
+	_, err := xml.MarshalIndent(&sfera.KMReference{
+		KmRef:                              12.5,
+		PhysicalCharacteristicsComplexType: &sfera.PhysicalCharacteristicsComplexType{},
+	}, "", "  ")
+
+	// _, err := xml.MarshalIndent(&sfera.KMReference{KmRef: 12.5}, "", "  ")
+
 	if err != nil {
 		t.Fatalf("marshal should succeed: %v", err)
 	}

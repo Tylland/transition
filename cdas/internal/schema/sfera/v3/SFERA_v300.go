@@ -636,7 +636,7 @@ type HandshakeReject struct {
 }
 
 // HandshakeRejectReason is Reason for handshake rejection
-type HandshakeRejectReason interface{}
+type HandshakeRejectReason string
 
 // HandshakeRequest is Handshake request from board to ground
 type HandshakeRequest struct {
@@ -649,7 +649,7 @@ type HandshakeRequest struct {
 }
 
 // IMID is ID of the Infrastructure Manager. It is a UIC RICS Code.
-type IMID *TeltsiString44
+type IMID *TeltsiCompanyCode
 
 // JourneyProfile is Journey Profile for a specific route
 type JourneyProfile struct {
@@ -1236,7 +1236,7 @@ type SignalApplication struct {
 }
 
 // SignalFunction is Function of the signal. The list of values is taken from EULynx SignalFunctionTypes (https://eulynx.eu/dataprep-2023-03/index.htm?goto=2:5:1:1:6:9801), with the addition of laneChange.
-type SignalFunction interface{}
+type SignalFunction string
 
 // SignalInformation is Information contained by the signal that impacts the driving profile
 type SignalInformation struct {
@@ -1462,7 +1462,7 @@ type StoppingPointLocation struct {
 type StopType struct {
 	PlannedStop             *bool                          `xml:"plannedStop,attr"`
 	MandatoryStop           *bool                          `xml:"mandatoryStop,attr"`
-	TeltsiTrainActivityType interface{}                    `xml:"teltsi_TrainActivityType"`
+	TeltsiTrainActivityType string                         `xml:"teltsi_TrainActivityType"`
 	StopTypeDetails         []*MultilingualTextComplexType `xml:"StopTypeDetails"`
 }
 
@@ -1549,7 +1549,7 @@ type TCRequest struct {
 }
 
 // TCRUID is Train Characteristics - Identifier of the RU operating the train (use UIC RICS Code: https://uic.org/rics)
-type TCRUID *TeltsiString44
+type TCRUID *TeltsiCompanyCode
 
 // TemporaryConstraintReason is Context information explaining background of temporary constraint
 type TemporaryConstraintReason struct {
@@ -2000,8 +2000,8 @@ type SPGenericPointComplexType struct {
 
 // SPZoneComplexType is Complex Type for SP Zone. The IM_ID (Infrastructure Manager ID) shall be provided. If the SP is in a zone covered by a NID_C identifier from ERTMS, it should be provided, especially if conversion to SUBSET-126 is required.
 type SPZoneComplexType struct {
-	IMID *TeltsiString44 `xml:"IM_ID"`
-	NIDC *int16          `xml:"NID_C"`
+	IMID *TeltsiCompanyCode `xml:"IM_ID"`
+	NIDC *int16             `xml:"NID_C"`
 }
 
 // SpecificSSPComplexType is Complex Type for Specific Static Speed Profile
@@ -2060,9 +2060,9 @@ type TCFeaturesComplexType struct {
 
 // TCIdentifierComplexType is Type for the identification of Train Characteristics. Contains the ID of TC, and the mandatory identification of the entity responsible (RU or VKM) for the data
 type TCIdentifierComplexType struct {
-	TCID                     string          `xml:"TC_ID,attr"`
-	TCRUID                   *TeltsiString44 `xml:"TC_RU_ID"`
-	TeltsiKeeperShortNameVKM *string         `xml:"teltsi_KeeperShortNameVKM"`
+	TCID                     string             `xml:"TC_ID,attr"`
+	TCRUID                   *TeltsiCompanyCode `xml:"TC_RU_ID"`
+	TeltsiKeeperShortNameVKM *string            `xml:"teltsi_KeeperShortNameVKM"`
 }
 
 // TemporaryConstraintsComplexType is Complex type for Temporary Constraints
@@ -2361,7 +2361,7 @@ type DepartureTime string
 type Description string
 
 // DestinationCompany is ID of the company to which the message is addressed. Must be a UIC RICS Code: : https://uic.org/rics
-type DestinationCompany *TeltsiString44
+type DestinationCompany *TeltsiCompanyCode
 
 // DestinationDevice is ID of the device to which the message is addressed. For any given company, this ID must be unique. Maximum 128 characters. For G2B messages, if this attribute is empty, the message is directed to all devices in the train. For B2G messages, this attribute can be ignored.
 type DestinationDevice string
@@ -2823,7 +2823,7 @@ type SignalType string
 type SlipSlideReported bool
 
 // SourceCompany is ID of the company sending the message. Must be a UIC RICS Code: : https://uic.org/rics
-type SourceCompany *TeltsiString44
+type SourceCompany *TeltsiCompanyCode
 
 // SourceDevice is ID of the device sending the message. For any given company, this ID must be unique. Maximum 128 characters.
 type SourceDevice string
@@ -3228,7 +3228,7 @@ type TeltsiAgainstBooked string
 type TeltsiAgainstReferenced string
 
 // TeltsiAllocationCompany is Name of company who is responsible for allocation and maintenance of codes
-type TeltsiAllocationCompany *TeltsiString44
+type TeltsiAllocationCompany *TeltsiCompanyCode
 
 // TeltsiAltitude is Altitude (in m) at the beginning of the SP. Considering ETRS89 as reference. Starting at -1000m
 type TeltsiAltitude int
@@ -3237,7 +3237,7 @@ type TeltsiAltitude int
 type TeltsiBookedLocationDateTime string
 
 // TeltsiCompany is Identifies a railway company (RU or IM)
-type TeltsiCompany *TeltsiString44
+type TeltsiCompany *TeltsiCompanyCode
 
 // TeltsiCore is It is the main part of identifier and is determent by the company that creates  it.
 type TeltsiCore interface{}
@@ -3347,7 +3347,7 @@ type TeltsiLocationSubsidiaryCode struct {
 // TeltsiLocationSubsidiaryIdentification is Code, Name and allocation company of Subsidiary Location
 type TeltsiLocationSubsidiaryIdentification struct {
 	TeltsiLocationSubsidiaryCode *TeltsiLocationSubsidiaryCode `xml:"teltsi_LocationSubsidiaryCode"`
-	TeltsiAllocationCompany      *TeltsiString44               `xml:"teltsi_AllocationCompany"`
+	TeltsiAllocationCompany      *TeltsiCompanyCode            `xml:"teltsi_AllocationCompany"`
 	TeltsiLocationSubsidiaryName *TeltsiFreeText               `xml:"teltsi_LocationSubsidiaryName"`
 }
 
@@ -3490,12 +3490,12 @@ type TeltsiWagonWeightEmpty int
 
 // TeltsiCompositIdentifierOperationalType is Is only used in the operational phase and refers to the date where the single train will start the train journey
 type TeltsiCompositIdentifierOperationalType struct {
-	TeltsiObjectType    string          `xml:"teltsi_ObjectType"`
-	TeltsiCompany       *TeltsiString44 `xml:"teltsi_Company"`
-	TeltsiCore          string          `xml:"teltsi_Core"`
-	TeltsiVariant       string          `xml:"teltsi_Variant"`
-	TeltsiTimetableYear string          `xml:"teltsi_TimetableYear"`
-	TeltsiStartDate     string          `xml:"teltsi_StartDate"`
+	TeltsiObjectType    string             `xml:"teltsi_ObjectType"`
+	TeltsiCompany       *TeltsiCompanyCode `xml:"teltsi_Company"`
+	TeltsiCore          string             `xml:"teltsi_Core"`
+	TeltsiVariant       string             `xml:"teltsi_Variant"`
+	TeltsiTimetableYear string             `xml:"teltsi_TimetableYear"`
+	TeltsiStartDate     string             `xml:"teltsi_StartDate"`
 }
 
 // TeltsiLocationIdent is Indication of the Railway or Customer Location

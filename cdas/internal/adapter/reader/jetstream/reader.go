@@ -64,3 +64,21 @@ func (r *SegmentProfileReader) Read(ctx context.Context, key string) (*sfera.Seg
 
 	return segment, nil
 }
+
+type JourneyProfileReader struct {
+	*KeyValueReader
+}
+
+func (r *JourneyProfileReader) Read(ctx context.Context, key string) (*sfera.JourneyProfile, error) {
+	ent, err := r.kv.Get(ctx, key)
+
+	journey := &sfera.JourneyProfile{}
+
+	err = xml.Unmarshal(ent.Value(), journey)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return journey, nil
+}

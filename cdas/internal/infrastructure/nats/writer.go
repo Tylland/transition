@@ -27,7 +27,7 @@ func subjectFromProfile(segment *sfera.SegmentProfile) (string, error) {
 		return "", fmt.Errorf("unexpected SPID format %q: expected 6 colon-separated parts", segment.SPID)
 	}
 
-	var imID *sfera.TeltsiString44
+	var imID *sfera.TeltsiCompanyCode
 
 	if segment.SPZone.IMID != nil {
 		imID = segment.SPZone.IMID

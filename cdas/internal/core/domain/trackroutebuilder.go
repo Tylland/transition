@@ -96,9 +96,9 @@ func findLineTrackAtPosition(link *dm.Link, position float64) string {
 // isLineSignal returns true if the signal type is a line signal (INF, UBL, MBL)
 // that sits on the line between stations and should use linjespår for track lookup.
 func isLineSignal(signalType string) bool {
-	return signalType == dm.SignalTypInfart ||
-		signalType == dm.SignalTypUtfart ||
-		signalType == dm.SignalTypMellanBlock
+	return signalType == dm.SignalTypeInfart ||
+		signalType == dm.SignalTypeUtfart ||
+		signalType == dm.SignalTypeMellanBlock
 }
 
 // findTrackForSignal returns the track number for a signal position.

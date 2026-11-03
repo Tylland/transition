@@ -71,7 +71,7 @@ func (p *SFERAMessagePublisher) subject(msg any) string {
 	}
 }
 
-func (p *SFERAMessagePublisher) Publish(ctx context.Context, msg sfera.SFERAB2GRequestMessage) error {
+func (p *SFERAMessagePublisher) Publish(ctx context.Context, msg any) error {
 	subject := p.subject(msg)
 
 	payload, err := xml.Marshal(msg)

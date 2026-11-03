@@ -85,7 +85,7 @@ func (p *FacilityDataFileNetworkProvider) processFile(path string) {
 		err := p.service.ProcessNetwork(network)
 
 		if err != nil {
-			log.Printf("error processing network %s: %w", path, err)
+			log.Printf("error processing network %s: %s", path, err.Error())
 			return
 		}
 	}

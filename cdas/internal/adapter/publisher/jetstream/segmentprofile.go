@@ -20,9 +20,7 @@ type SegmentProfileKVWriter struct {
 	kv  jetstream.KeyValue
 }
 
-func NewSegmentProfileKVWriter(js jetstream.JetStream, key port.SPKeyProvider) (*SegmentProfileKVWriter, error) {
-	const bucket = "SEGMENT_PROFILES"
-
+func NewSegmentProfileKVWriter(js jetstream.JetStream, key port.SPKeyProvider, bucket string) (*SegmentProfileKVWriter, error) {
 	ctx := context.Background()
 
 	kv, err := js.KeyValue(ctx, bucket)
@@ -36,20 +34,6 @@ func NewSegmentProfileKVWriter(js jetstream.JetStream, key port.SPKeyProvider) (
 	}
 
 	return &SegmentProfileKVWriter{key: key, kv: kv}, nil
-}
-
-// versionedKey builds the NATS key from the segment profile.
-// Format: sfera.segmentprofile.{imid}.{from_place}.{to_place}.{from_node}.{to_node}.{seq}.{dir}.{major}.{minor}
-func versionedKey(segment *sfera.SegmentProfile) (string, error) {
-	major := segment.SPVersionMajor
-	minor := "0"
-
-	if segment.SPVersionMinor != nil {
-		minor = *segment.SPVersionMinor
-	}
-
-	return fmt.Sprintf("sfera.segmentprofile.%s.%s.%s",
-		segment.SPID, major, minor), nil
 }
 
 // hashSHA256 takes a string and returns its SHA-256 hash in hex format

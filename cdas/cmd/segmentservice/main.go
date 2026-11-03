@@ -50,9 +50,18 @@ func main() {
 	trWriter = cdas.Must(publisher.NewTrackRouteKVWriter(js))
 
 	spKey := &provider.SPKeyProvider{}
-	spWriter = cdas.Must(publisher.NewSegmentProfileKVWriter(js, spKey))
+	spWriter = cdas.Must(publisher.NewSegmentProfileKVWriter(js, spKey, cdas.SegmentProfileBucket))
 
 	facilityService = service.NewFacilityService(srWriter, trWriter, spWriter)
+
+	// settings := service.Settings{}
+	// msgPublisher := cdas.Must(publisher.NewSFERAMessagePublisher(js))
+	// jpKey := &provider.JPKeyProvider{}
+
+	// spReader := &reader.SegmentProfileReader{KeyValueReader: cdas.Must(reader.NewKeyValueReader(js, SegmentProfileBucket))}
+	// jpReader := &reader.JourneyProfileReader{KeyValueReader: cdas.Must(reader.NewKeyValueReader(js, JourneyProfileBucket))}
+
+	// sferaService := service.NewSFERAService(settings, msgPublisher, spKey, spReader, jpKey, jpReader)
 
 	networkProvider := provider.NewFacilityDataFileNetworkProvider(inputDir, 5*time.Second, facilityService)
 

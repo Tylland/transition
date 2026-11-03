@@ -7,13 +7,13 @@ import (
 
 // Signal type constants.
 const (
-	SignalTypInfart      = "INF"
-	SignalTypUtfart      = "UBL"
-	SignalTypMellan      = "M"
-	SignalTypMellanBlock = "MBL"
+	SignalTypeInfart      = "INF"
+	SignalTypeUtfart      = "UBL"
+	SignalTypeMellan      = "M"
+	SignalTypeMellanBlock = "MBL"
 )
 
-var stopSignals = []string{SignalTypInfart, SignalTypUtfart, SignalTypMellan, SignalTypMellanBlock}
+var stopSignals = []string{SignalTypeInfart, SignalTypeUtfart, SignalTypeMellan, SignalTypeMellanBlock}
 
 // IsStopSignalTyp checks if the given signal type is a stop signal.
 func IsStopSignalTyp(typ string) bool {

@@ -5,6 +5,7 @@ import (
 	"math"
 	"strings"
 
+	"github.com/tylland/transition/cdas"
 	dm "github.com/tylland/transition/cdas/internal/core/domain/network"
 	sfera "github.com/tylland/transition/cdas/internal/schema/sfera/v3"
 )
@@ -27,15 +28,15 @@ func BuildSegmentProfiles(network *dm.Network) []*sfera.SegmentProfile {
 // specific direction and writes them using the given writer.
 func GenerateForDirection(network *dm.Network, direction dm.LinkDirection) []*sfera.SegmentProfile {
 	var profiles []*sfera.SegmentProfile
+	imID := cdas.CompanyCode("0074")
 
 	for _, link := range network.Links() {
-		imID := sfera.NewID("0074")
 		name := "namn"
 
 		segment := &sfera.SegmentProfile{
 			SegmentProfileIdentificationComplexType: &sfera.SegmentProfileIdentificationComplexType{
 				SPID:   createProfileId(link.Id, direction),
-				SPZone: &sfera.SPZoneComplexType{IMID: &imID}},
+				SPZone: &sfera.SPZoneComplexType{IMID: imID}},
 
 			SPName:         &name,
 			SPVersionMajor: "1",

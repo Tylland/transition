@@ -28,11 +28,11 @@ type Settings struct{}
 
 func (s *Settings) SchemaVersion() string { return "3.0.0" }
 func (s *Settings) Zone() *sfera.SPZoneComplexType {
-	return &sfera.SPZoneComplexType{IMID: new(sfera.TeltsiString44("0099"))}
+	return &sfera.SPZoneComplexType{IMID: cdas.CompanyCode("0099")}
 }
 
 func (s *Settings) CompanyCode() *sfera.TeltsiCompanyCode {
-	return new(sfera.TeltsiCompanyCode("0099"))
+	return cdas.CompanyCode("0099")
 }
 
 func (s *Settings) Sender() *sfera.Sender {
@@ -64,17 +64,25 @@ type SFERAService struct {
 	publisher    port.SFERAMessagePublisher
 	spKey        port.SPKeyProvider
 	spReader     port.SegmentProfileReader
+	jpKey        port.JPKeyProvider
+	jpReader     port.JourneyProfileReader
 	activeTrains map[string]*domain.ActiveTrainSession
 	mutex        *sync.RWMutex
 }
 
 func NewSFERAService(settings SFERASettings,
 	publisher port.SFERAMessagePublisher,
-	spReader port.SegmentProfileReader) *SFERAService {
+	spKey port.SPKeyProvider,
+	spReader port.SegmentProfileReader,
+	jpKey port.JPKeyProvider,
+	jpReader port.JourneyProfileReader) *SFERAService {
 
 	return &SFERAService{settings: settings,
 		publisher:    publisher,
+		spKey:        spKey,
 		spReader:     spReader,
+		jpKey:        jpKey,
+		jpReader:     jpReader,
 		activeTrains: make(map[string]*domain.ActiveTrainSession)}
 }
 
@@ -139,10 +147,10 @@ func (s *SFERAService) terminateSession(trainID *sfera.TrainIdentificationComple
 
 }
 
-func (s *SFERAService) HandleB2GMessage(msg any) error {
+func (s *SFERAService) HandleB2GMessage(ctx context.Context, msg any) error {
 	switch m := msg.(type) {
 	case *sfera.SFERAB2GRequestMessage:
-		return s.HandleB2GRequestMessage(m)
+		return s.HandleB2GRequestMessage(ctx, m)
 	case *sfera.SFERAB2GEventMessage:
 		return s.HandleB2GEventMessage(m)
 	case *sfera.SFERAB2GReplyMessage:
@@ -152,7 +160,7 @@ func (s *SFERAService) HandleB2GMessage(msg any) error {
 	}
 }
 
-func (s *SFERAService) HandleB2GRequestMessage(req *sfera.SFERAB2GRequestMessage) error {
+func (s *SFERAService) HandleB2GRequestMessage(ctx context.Context, req *sfera.SFERAB2GRequestMessage) error {
 	if req.HandshakeRequest != nil {
 		ack, reject, err := s.Handshake(req.HandshakeRequest, req.MessageHeader)
 
@@ -163,21 +171,21 @@ func (s *SFERAService) HandleB2GRequestMessage(req *sfera.SFERAB2GRequestMessage
 		header := s.replyHeader(req.MessageHeader)
 
 		if ack != nil {
-			return s.reply(ack, header)
+			return s.reply(ctx, ack, header)
 		}
 
 		if reject != nil {
-			return s.reply(reject, header)
+			return s.reply(ctx, reject, header)
 		}
 	}
 
 	if req.B2GRequest != nil {
-		payload, err := s.HandleB2GRequest(req.B2GRequest)
+		payload, err := s.HandleB2GRequest(ctx, req.B2GRequest)
 		if err != nil {
 			return err
 		}
 
-		s.reply(payload, req.MessageHeader)
+		s.reply(ctx, payload, req.MessageHeader)
 	}
 
 	return nil
@@ -198,7 +206,7 @@ func (s *SFERAService) HandleB2GReplyMessage(evt *sfera.SFERAB2GReplyMessage) er
 	return nil
 }
 
-func (s *SFERAService) reply(msg any, header *sfera.MessageHeader) error {
+func (s *SFERAService) reply(ctx context.Context, msg any, header *sfera.MessageHeader) error {
 	reply := &sfera.SFERAG2BReplyMessage{
 		MessageHeader: header,
 	}
@@ -214,7 +222,7 @@ func (s *SFERAService) reply(msg any, header *sfera.MessageHeader) error {
 		return fmt.Errorf("Invalid message type: %v", msg)
 	}
 
-	return s.publisher.Publish(reply)
+	return s.publisher.Publish(ctx, reply)
 }
 
 func (s *SFERAService) Handshake(req *sfera.HandshakeRequest, hdr *sfera.MessageHeader) (*sfera.HandshakeAcknowledgement, *sfera.HandshakeReject, error) {
@@ -272,26 +280,23 @@ func (s *SFERAService) Handshake(req *sfera.HandshakeRequest, hdr *sfera.Message
 	return nil, nil, fmt.Errorf("No supported mode without reason")
 }
 
-func (s *SFERAService) HandleB2GRequest(req *sfera.B2GRequest) (*sfera.G2BReplyPayload, error) {
-
-	// switch {
-	// case req.SPRequest != nil:
-	// 	return s.handleSPRequest(req.SPRequest)
-	// }
-
-	if req.SPRequest != nil {
-		return s.handleSPRequest(req.SPRequest)
+func (s *SFERAService) HandleB2GRequest(ctx context.Context, req *sfera.B2GRequest) (*sfera.G2BReplyPayload, error) {
+	switch {
+	case req.SPRequest != nil:
+		return s.handleSPRequest(ctx, req.SPRequest)
+	case req.JPRequest != nil:
+		return s.handleJPRequest(ctx, req.JPRequest)
 	}
 
 	return nil, NoRequestHandledErr
 }
 
-func (s *SFERAService) handleSPRequest(reqs []*sfera.SPRequest) (*sfera.G2BReplyPayload, error) {
+func (s *SFERAService) handleSPRequest(ctx context.Context, reqs []*sfera.SPRequest) (*sfera.G2BReplyPayload, error) {
 	var segments []*sfera.SegmentProfile
 
 	for _, req := range reqs {
 		key := s.spKey.Data(req.SPID)
-		segment, err := s.spReader.Read(context.Background(), key)
+		segment, err := s.spReader.Read(ctx, key)
 
 		if err != nil {
 			return nil, fmt.Errorf("read %q: %w", key, err)
@@ -301,4 +306,21 @@ func (s *SFERAService) handleSPRequest(reqs []*sfera.SPRequest) (*sfera.G2BReply
 	}
 
 	return &sfera.G2BReplyPayload{SegmentProfile: segments}, nil
+}
+
+func (s *SFERAService) handleJPRequest(ctx context.Context, reqs []*sfera.JPRequest) (*sfera.G2BReplyPayload, error) {
+	var journeys []*sfera.JourneyProfile
+
+	for _, req := range reqs {
+		key := s.jpKey.Create(req.TrainIdentification)
+		journey, err := s.jpReader.Read(ctx, key)
+
+		if err != nil {
+			return nil, fmt.Errorf("read %q: %w", key, err)
+		}
+
+		journeys = append(journeys, journey)
+	}
+
+	return &sfera.G2BReplyPayload{JourneyProfile: journeys}, nil
 }

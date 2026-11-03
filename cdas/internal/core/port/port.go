@@ -27,11 +27,15 @@ type FacilityService interface {
 }
 
 type SFERAMessagePublisher interface {
-	Publish(msg any) error
+	Publish(ctx context.Context, msg any) error
 }
 
 type SegmentProfileReader interface {
 	Read(ctx context.Context, key string) (*sfera.SegmentProfile, error)
+}
+
+type JourneyProfileReader interface {
+	Read(ctx context.Context, key string) (*sfera.JourneyProfile, error)
 }
 
 type KeyProvider[T any] interface {
@@ -41,4 +45,8 @@ type KeyProvider[T any] interface {
 type SPKeyProvider interface {
 	Info(id string) string
 	Data(id string) string
+}
+
+type JPKeyProvider interface {
+	Create(trainID *sfera.TrainIdentificationComplexType) string
 }
