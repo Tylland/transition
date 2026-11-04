@@ -291,6 +291,19 @@ func (s *SFERAService) HandleB2GRequest(ctx context.Context, req *sfera.B2GReque
 	return nil, NoRequestHandledErr
 }
 
+func createErrors(errorCodes ...sfera.ErrorCode) []*sfera.G2BError {
+	var errs []*sfera.G2BError
+
+	for _, errorCode := range errorCodes {
+		errs = append(errs, &sfera.G2BError{ErrorComplexType: &sfera.ErrorComplexType{
+			ErrorCode:      new(fmt.Sprint(errorCode.Code)),
+			AdditionalInfo: []*sfera.MultilingualTextComplexType{{Language: "en", Text: errorCode.Description}},
+		}})
+	}
+
+	return errs
+}
+
 func (s *SFERAService) handleSPRequest(ctx context.Context, reqs []*sfera.SPRequest) (*sfera.G2BReplyPayload, error) {
 	var segments []*sfera.SegmentProfile
 
@@ -302,7 +315,15 @@ func (s *SFERAService) handleSPRequest(ctx context.Context, reqs []*sfera.SPRequ
 			return nil, fmt.Errorf("read %q: %w", key, err)
 		}
 
-		segments = append(segments, segment)
+		if segment != nil {
+			segments = append(segments, segment)
+		} else {
+			return &sfera.G2BReplyPayload{G2BMessageResponse: &sfera.G2BMessageResponse{
+				Result:   "ERROR",
+				G2BError: createErrors(sfera.ErrorCodeRequestedDataNotAvailable),
+			}}, nil
+		}
+
 	}
 
 	return &sfera.G2BReplyPayload{SegmentProfile: segments}, nil
@@ -319,7 +340,14 @@ func (s *SFERAService) handleJPRequest(ctx context.Context, reqs []*sfera.JPRequ
 			return nil, fmt.Errorf("read %q: %w", key, err)
 		}
 
-		journeys = append(journeys, journey)
+		if journey != nil {
+			journeys = append(journeys, journey)
+		} else {
+			return &sfera.G2BReplyPayload{G2BMessageResponse: &sfera.G2BMessageResponse{
+				Result:   "ERROR",
+				G2BError: createErrors(sfera.ErrorCodeRequestedDataNotAvailable),
+			}}, nil
+		}
 	}
 
 	return &sfera.G2BReplyPayload{JourneyProfile: journeys}, nil

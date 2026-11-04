@@ -164,6 +164,15 @@ const (
 	TrainPartTypeTrainLastPantograph TrainPartType = "TrainLastPantograph"
 )
 
+type ErrorCode struct {
+	Code        int
+	Description string
+}
+
+var (
+	ErrorCodeRequestedDataNotAvailable = ErrorCode{Code: 51, Description: "Requested data not available"}
+)
+
 // const (
 // 	ClaimTypePlanned  ClaimType = "Planned"
 // 	ClaimTypeReserved ClaimType = "Reserved"

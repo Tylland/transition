@@ -2456,8 +2456,8 @@ type EnginePower float64
 // Engines is Number of engines
 type Engines int
 
-// ErrorCode is Error Code
-type ErrorCode string
+// // ErrorCode is Error Code
+// type ErrorCode string
 
 // EuropeanVehicleNumber is Number on 12 digits allocated to each rail vehicle to uniquely identify it from any other rail vehicle
 type EuropeanVehicleNumber string
