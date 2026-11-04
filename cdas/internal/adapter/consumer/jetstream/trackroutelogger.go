@@ -12,8 +12,7 @@ type Logger struct {
 	watcher jetstream.KeyWatcher
 }
 
-func NewLogger(js jetstream.JetStream) (*Logger, error) {
-	const bucket = "TRACK_ROUTES"
+func NewLogger(js jetstream.JetStream, bucket string) (*Logger, error) {
 
 	ctx := context.Background()
 

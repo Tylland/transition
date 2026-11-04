@@ -30,6 +30,10 @@ type SFERAMessagePublisher interface {
 	Publish(ctx context.Context, msg any) error
 }
 
+type SFERAService interface {
+	HandleB2GMessage(ctx context.Context, msg any) error
+}
+
 type SegmentProfileReader interface {
 	Read(ctx context.Context, key string) (*sfera.SegmentProfile, error)
 }

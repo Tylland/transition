@@ -10,10 +10,6 @@ import (
 	sfera "github.com/tylland/transition/cdas/internal/schema/sfera/v3"
 )
 
-func ptr[T any](t T) *T {
-	return &t
-}
-
 // Generate generates SFERA segment profiles for both directions
 func BuildSegmentProfiles(network *dm.Network) []*sfera.SegmentProfile {
 	var profiles []*sfera.SegmentProfile
@@ -40,7 +36,7 @@ func GenerateForDirection(network *dm.Network, direction dm.LinkDirection) []*sf
 
 			SPName:         &name,
 			SPVersionMajor: "1",
-			SPVersionMinor: ptr("0"),
+			SPVersionMinor: new("0"),
 			SPLength:       link.Length,
 			SPStatus:       sfera.SPStatusValid,
 		}
@@ -68,7 +64,7 @@ func GenerateForDirection(network *dm.Network, direction dm.LinkDirection) []*sf
 			if signal.LinkPosition.IsValid(direction) {
 				signalId := sfera.SignalID{
 					SignalIDPhysical: signal.Id.String(),
-					SignalIDObject:   ptr(signal.Id.String()),
+					SignalIDObject:   new(signal.Id.String()),
 					Location:         signal.LinkPosition.GetDistance(direction),
 				}
 				points.Signal = append(points.Signal, &sfera.SignalComplexType{SignalID: &signalId})
@@ -79,7 +75,7 @@ func GenerateForDirection(network *dm.Network, direction dm.LinkDirection) []*sf
 		// for _, baliseBoard := range link.Boards.Items() {
 		// 	if baliseBoard.Id.Type == "Bal" && baliseBoard.LinkPosition.IsValid(direction) {
 		// 		balise := &sfera.Balise{SPGenericPointComplexType: &sfera.SPGenericPointComplexType{
-		// 			Identifier: ptr(baliseBoard.Id.String()),
+		// 			Identifier: new(baliseBoard.Id.String()),
 		// 			Location:   baliseBoard.LinkPosition.GetDistance(direction),
 		// 		}}
 
@@ -103,7 +99,7 @@ func GenerateForDirection(network *dm.Network, direction dm.LinkDirection) []*sf
 			startLoc := platform.Extent.GetStartDistance(direction)
 			endLoc := platform.Extent.GetEndDistance(direction)
 			areas.Platform = append(areas.Platform, &sfera.Platform{SPGenericAreaComplexType: &sfera.SPGenericAreaComplexType{
-				Identifier:        ptr(platform.Name),
+				Identifier:        new(platform.Name),
 				StartLocation:     &startLoc,
 				EndLocation:       &endLoc,
 				StartEndQualifier: sfera.StartEndQualifierStartsEnds,
@@ -168,13 +164,13 @@ func GenerateForDirection(network *dm.Network, direction dm.LinkDirection) []*sf
 
 func createSPGenericPoint(id string, loc float64) *sfera.SPGenericPointComplexType {
 	return &sfera.SPGenericPointComplexType{
-		Identifier: ptr(id),
+		Identifier: new(id),
 		Location:   loc,
 	}
 }
 
 func createSPGenericArea(id string, start, end float64) *sfera.SPGenericAreaComplexType {
-	return &sfera.SPGenericAreaComplexType{Identifier: ptr(id), StartLocation: &start, EndLocation: &end}
+	return &sfera.SPGenericAreaComplexType{Identifier: new(id), StartLocation: &start, EndLocation: &end}
 }
 
 // isKilometerBoard checks if a Board is a Kilometertavla and returns it if so.
@@ -187,11 +183,11 @@ func CreateTimingPoint(placeCenter *dm.PlaceCenter, track *dm.StationTrack, dire
 	tp := &sfera.TimingPoint{
 		TPID:         fmt.Sprintf("%d:%s", placeCenter.Place.PLC, track.Number),
 		Location:     placeCenter.LinkPosition.GetDistance(direction),
-		StationTrack: ptr(track.Number),
+		StationTrack: new(track.Number),
 	}
 	tp.TPName = append(tp.TPName, &sfera.TPName{
 		Name:     fmt.Sprintf("%s, %s", track.Name, placeCenter.Place.Name),
-		Language: ptr("se"),
+		Language: new("se"),
 	})
 	return tp
 }
@@ -214,10 +210,10 @@ func CreateStaticSpeedProfile(speedProfile *dm.SpeedProfile, direction dm.LinkDi
 				ncDiff := sfera.NCTrainTypePassenger
 				start.SpecificSSP = append(start.SpecificSSP, &sfera.SpecificSSPComplexType{
 					OtherSpecificSSP: &sfera.OtherSpecificSSP{
-						TrainCategoryCode: ptr(string(segment.Category)),
-						SSPNCDIFF:         ptr(string(ncDiff)),
+						TrainCategoryCode: new(string(segment.Category)),
+						SSPNCDIFF:         new(string(ncDiff)),
 					},
-					SpecificSSPCategory: ptr(string(category)),
+					SpecificSSPCategory: new(string(category)),
 				})
 			}
 
@@ -233,7 +229,7 @@ func CreateStaticSpeedProfile(speedProfile *dm.SpeedProfile, direction dm.LinkDi
 			if !isDefaultProfile {
 				change.SpecificSSP = append(change.SpecificSSP, &sfera.SpecificSSPComplexType{
 					OtherSpecificSSP: &sfera.OtherSpecificSSP{
-						TrainCategoryCode: ptr(string(segment.Category)),
+						TrainCategoryCode: new(string(segment.Category)),
 					},
 				})
 			}

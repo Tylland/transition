@@ -14,20 +14,10 @@ func Must[T any](obj T, err error) T {
 	return obj
 }
 
-const (
-	TimestampFormat = "2006-01-02T15:04:05.000Z07:00"
-	YearFormat      = "2006"
-	DateFormat      = "2006-01-02"
-)
-
-const (
-	SegmentProfileBucket = "SEGMENT_PROFILES"
-	JourneyProfileBucket = "JOURNEY_PROFILES"
-)
-
 func CompanyCode(s string) *sfera.TeltsiCompanyCode {
-	cc := sfera.TeltsiCompanyCode(PadLeft(s, "0", 4))
-	return &cc
+	s = PadLeft(s, "0", 4)
+
+	return new(sfera.TeltsiCompanyCode(s))
 }
 
 func Core(s string) string {

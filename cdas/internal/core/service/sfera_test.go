@@ -23,7 +23,9 @@ var onboardStory = specs.NewStory(specs.UserStory{
 
 var (
 	jpKey    port.JPKeyProvider        = &provider.JPKeyProvider{}
+	spKey    port.SPKeyProvider        = &provider.SPKeyProvider{}
 	jpReader *TestJourneyProfileReader = NewTestJourneyProfileReader()
+	spReader *TestSegmentProfileReader = NewTestSegmentProfileReader()
 )
 
 var (
@@ -47,6 +49,22 @@ func (p *TestPublisher) Publish(ctx context.Context, msg any) error {
 	return nil
 }
 
+type TestReader[T any] struct {
+	Items map[string]*T
+}
+
+func NewTestReader[T any]() *TestReader[T] {
+	return &TestReader[T]{Items: make(map[string]*T)}
+}
+
+func (r *TestReader[T]) Read(ctx context.Context, key string) (*T, error) {
+	if item, ok := r.Items[key]; ok {
+		return item, nil
+	}
+
+	return nil, fmt.Errorf("item with key %q not found", key)
+}
+
 type TestJourneyProfileReader struct {
 	JourneyProfiles map[string]*sfera.JourneyProfile
 }
@@ -63,19 +81,27 @@ func (r *TestJourneyProfileReader) Read(ctx context.Context, key string) (*sfera
 	return nil, fmt.Errorf("JourneyProfile with key %q not found", key)
 }
 
+type TestSegmentProfileReader struct {
+	*TestReader[sfera.SegmentProfile]
+}
+
+func NewTestSegmentProfileReader() *TestSegmentProfileReader {
+	return &TestSegmentProfileReader{TestReader: NewTestReader[sfera.SegmentProfile]()}
+}
+
 func TrackSide() *specs.StepResult {
 	sr := specs.NewStepResult("track side service")
 
 	settings := &Settings{}
 	publisher := NewTestPublisher(func(msg any) { message = msg })
 
-	svc = NewSFERAService(settings, publisher, nil, nil, jpKey, jpReader)
+	svc = NewSFERAService(settings, publisher, spKey, spReader, jpKey, jpReader)
 
 	return sr.Success()
 }
 
 func Onboard(version, companyCode, sourceDevice string) *specs.StepResult {
-	sr := specs.NewStepResult("onboard device with verion %q and run by %q", version, companyCode)
+	sr := specs.NewStepResult("onboard device %s (%s) version %q", sourceDevice, companyCode, version)
 
 	messageHeader = &sfera.MessageHeader{
 		SFERAVersion: version,
@@ -90,7 +116,7 @@ func Train(company, core, variant string) *specs.StepResult {
 	core = cdas.Core(core)
 	companyCode := cdas.CompanyCode(company)
 
-	sr := specs.NewStepResult("train %v %q", companyCode, core)
+	sr := specs.NewStepResult("train %q %q", *companyCode, core)
 
 	trainID = &sfera.TrainIdentificationComplexType{TAFTAPID: &sfera.TeltsiCompositIdentifierOperationalType{
 		TeltsiObjectType:    sfera.ObjectTypeTrain,
@@ -105,7 +131,7 @@ func Train(company, core, variant string) *specs.StepResult {
 }
 
 func SessionStarted(drivingMode, architecture, connectivity string) *specs.StepResult {
-	sr := specs.NewStepResult("session started with driver mode %q, architecture %q and connectivity %q", drivingMode, architecture, connectivity)
+	sr := specs.NewStepResult("session started for %q %q in mode %q", connectivity, architecture, drivingMode)
 
 	svc.startSession(trainID, string(*messageHeader.Sender.TeltsiCompanyCode), messageHeader.SourceDevice, drivingMode)
 
@@ -122,7 +148,18 @@ func JourneyProfileExists() *specs.StepResult {
 	return sr.Success()
 }
 
-type Driver struct {
+func SegmentProfileExists(spid, major, minor string) *specs.StepResult {
+	sr := specs.NewStepResult("segment %q profile exists", spid)
+
+	key := spKey.Data(spid)
+
+	spReader.Items[key] = &sfera.SegmentProfile{SPVersionMajor: major, SPVersionMinor: new(minor),
+		SegmentProfileIdentificationComplexType: &sfera.SegmentProfileIdentificationComplexType{
+			SPID: spid,
+		},
+	}
+
+	return sr.Success()
 }
 
 func Handshaking(ctx context.Context, drivingMode, architecture, connectivity string) *specs.StepResult {
@@ -165,7 +202,7 @@ func TerminatingSession(reason string) *specs.StepResult {
 		B2GEventPayload: eventPayload,
 	}
 
-	err := svc.HandleB2GEventMessage(evt)
+	err := svc.HandleB2GMessage(context.Background(), evt)
 
 	if err != nil {
 		return sr.WithError(err)
@@ -175,7 +212,7 @@ func TerminatingSession(reason string) *specs.StepResult {
 }
 
 func RequestingJourneyProfile() *specs.StepResult {
-	sr := specs.NewStepResult("requesting journey profile for train")
+	sr := specs.NewStepResult("requesting journey profile")
 
 	req := &sfera.SFERAB2GRequestMessage{
 		MessageHeader: messageHeader,
@@ -183,6 +220,27 @@ func RequestingJourneyProfile() *specs.StepResult {
 			JPRequest: []*sfera.JPRequest{{
 				TrainIdentification: trainID,
 			}},
+		},
+	}
+
+	err := svc.HandleB2GMessage(context.Background(), req)
+
+	if err != nil {
+		return sr.WithError(err)
+	}
+
+	return sr.Success()
+}
+
+func RequestingSegmentProfile(spid string) *specs.StepResult {
+	sr := specs.NewStepResult("requesting segment profile %q", spid)
+
+	req := &sfera.SFERAB2GRequestMessage{
+		MessageHeader: messageHeader,
+		B2GRequest: &sfera.B2GRequest{
+			SPRequest: []*sfera.SPRequest{{SegmentProfileIdentificationComplexType: &sfera.SegmentProfileIdentificationComplexType{
+				SPID: spid,
+			}}},
 		},
 	}
 
@@ -232,6 +290,31 @@ func JourneyProfileReplied() *specs.StepResult {
 			if req.G2BReplyPayload.JourneyProfile != nil {
 				for _, jp := range req.G2BReplyPayload.JourneyProfile {
 					if jp.TrainIdentification == trainID {
+						return sr.Success()
+					}
+				}
+			} else {
+				return sr.WithErrorMessage("Expected JourneyProfile")
+			}
+
+		} else {
+			return sr.WithErrorMessage("Expected G2BReplyPayload")
+		}
+	} else {
+		return sr.WithErrorMessage("Expected SFERAG2BReplyMessage")
+	}
+
+	return sr.WithErrorf("Expected journey profile %q not replied", domain.NewActiveTrainSessionKey(trainID))
+}
+
+func SegmentProfileReplied(spid string) *specs.StepResult {
+	sr := specs.NewStepResult("segment profile %q replied", spid)
+
+	if req, ok := message.(*sfera.SFERAG2BReplyMessage); ok {
+		if req.G2BReplyPayload != nil {
+			if req.G2BReplyPayload.SegmentProfile != nil {
+				for _, sp := range req.G2BReplyPayload.SegmentProfile {
+					if sp.SegmentProfileIdentificationComplexType.SPID == spid {
 						return sr.Success()
 					}
 				}
@@ -299,5 +382,17 @@ func TestJP2RequestJourneyProfile(t *testing.T) {
 		When(RequestingJourneyProfile()).
 		Then(ActiveSessionsIs(1)).
 		And(JourneyProfileReplied()).
+		Execute()
+}
+
+func TestJP4RequestSegmentProfile(t *testing.T) {
+	onboardStory.Scenario(t).
+		Given(TrackSide()).
+		Given(Onboard("3.0.0", "0099", "OB1")).
+		Given(Train("0001", "123", "01")).
+		Given(SessionStarted("GoA1", "BoardAdviceCalculation", "Connected")).
+		And(SegmentProfileExists("sp01", "1", "0")).
+		When(RequestingSegmentProfile("sp01")).
+		Then(SegmentProfileReplied("sp01")).
 		Execute()
 }
