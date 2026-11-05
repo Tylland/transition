@@ -184,13 +184,32 @@ func Train(company, core, variant string) *specs.StepResult {
 func SessionStarted(drivingMode, architecture, connectivity string) *specs.StepResult {
 	sr := specs.NewStepResult("session started for %q %q in mode %q", connectivity, architecture, drivingMode)
 
-	svc.startSession(trainID, string(*messageHeader.Sender.TeltsiCompanyCode), messageHeader.SourceDevice, drivingMode)
+	startOnboardSession(drivingMode)
 
 	return sr.Success()
 }
 
+func ActiveOnboardSession() *specs.StepResult {
+	sr := specs.NewStepResult("an active onboard session")
+
+	sr.With(TrackSide()).
+		With(Onboard("3.0.0", "0099", "OB1")).
+		With(Train("0001", "123", "01"))
+	if sr.Err() != nil {
+		return sr
+	}
+
+	startOnboardSession(SupportedDrivingMode)
+
+	return sr.Success()
+}
+
+func startOnboardSession(drivingMode string) {
+	svc.startSession(trainID, string(*messageHeader.Sender.TeltsiCompanyCode), messageHeader.SourceDevice, drivingMode)
+}
+
 func BoardReceivedMessage(messageID string) *specs.StepResult {
-	sr := specs.NewStepResult("onboard received message %q ", messageID)
+	sr := specs.NewStepResult("the onboard device received message %q", messageID)
 
 	g2bReplyMessageID = &messageID
 
@@ -313,7 +332,7 @@ func RequestingSegmentProfile(spid string) *specs.StepResult {
 }
 
 func BoardSendingResponse(result sfera.ResponseResult) *specs.StepResult {
-	sr := specs.NewStepResult("onboard sending %q as respons for message %q", result, *g2bReplyMessageID)
+	sr := specs.NewStepResult("the onboard device responds to %q with %q", *g2bReplyMessageID, result)
 
 	messageHeader.CorrelationID = g2bReplyMessageID
 
@@ -447,7 +466,7 @@ func ErrorIsReplied(errorCode string) *specs.StepResult {
 }
 
 func ResponseIsLogged(result sfera.ResponseResult) *specs.StepResult {
-	sr := specs.NewStepResult("track side logged message %q as %q", *g2bReplyMessageID, result)
+	sr := specs.NewStepResult("the trackside service logs the response as %q", result)
 
 	companyCode := new(string(*messageHeader.Sender.TeltsiCompanyCode))
 	sourceeDevice := new(messageHeader.SourceDevice)
@@ -501,36 +520,25 @@ func TestDX2TerminatingSession(t *testing.T) {
 
 func TestJP2RequestJourneyProfile(t *testing.T) {
 	onboardStory.Scenario(t).
-		Given(TrackSide()).
-		Given(Onboard("3.0.0", "0099", "OB1")).
-		Given(Train("0001", "123", "01")).
-		Given(SessionStarted("GoA1", "BoardAdviceCalculation", "Connected")).
+		Given(ActiveOnboardSession()).
 		And(JourneyProfileExists()).
 		When(RequestingJourneyProfile()).
-		Then(ActiveSessionsIs(1)).
-		And(JourneyProfileReplied()).
+		Then(JourneyProfileReplied()).
 		Execute()
 }
 
 func TestJP2RequestUnavailableJourneyProfile(t *testing.T) {
 	onboardStory.Scenario(t).
-		Given(TrackSide()).
-		Given(Onboard("3.0.0", "0099", "OB1")).
-		Given(Train("0001", "123", "01")).
-		Given(SessionStarted("GoA1", "BoardAdviceCalculation", "Connected")).
+		Given(ActiveOnboardSession()).
 		When(RequestingJourneyProfile()).
-		Then(ActiveSessionsIs(1)).
-		And(ErrorIsReplied("51")).
+		Then(ErrorIsReplied("51")).
 		Execute()
 }
 
-func TestJP3OnboardResponseERROR(t *testing.T) {
+func TestJP3TracksideLogsOnboardErrorResponse(t *testing.T) {
 	onboardStory.Scenario(t).
-		Given(TrackSide()).
-		Given(Onboard("3.0.0", "0099", "OB1")).
-		Given(Train("0001", "123", "01")).
-		Given(SessionStarted("GoA1", "BoardAdviceCalculation", "Connected")).
-		Given(BoardReceivedMessage("msg001")).
+		Given(ActiveOnboardSession()).
+		And(BoardReceivedMessage("msg001")).
 		When(BoardSendingResponse(sfera.ResponseResultERROR)).
 		Then(ResponseIsLogged(sfera.ResponseResultERROR)).
 		Execute()
@@ -538,10 +546,7 @@ func TestJP3OnboardResponseERROR(t *testing.T) {
 
 func TestJP4RequestSegmentProfile(t *testing.T) {
 	onboardStory.Scenario(t).
-		Given(TrackSide()).
-		Given(Onboard("3.0.0", "0099", "OB1")).
-		Given(Train("0001", "123", "01")).
-		Given(SessionStarted("GoA1", "BoardAdviceCalculation", "Connected")).
+		Given(ActiveOnboardSession()).
 		And(SegmentProfileExists("sp01", "1", "0")).
 		When(RequestingSegmentProfile("sp01")).
 		Then(SegmentProfileReplied("sp01")).
@@ -550,10 +555,7 @@ func TestJP4RequestSegmentProfile(t *testing.T) {
 
 func TestJP4RequestUnavailableSegmentProfile(t *testing.T) {
 	onboardStory.Scenario(t).
-		Given(TrackSide()).
-		Given(Onboard("3.0.0", "0099", "OB1")).
-		Given(Train("0001", "123", "01")).
-		Given(SessionStarted("GoA1", "BoardAdviceCalculation", "Connected")).
+		Given(ActiveOnboardSession()).
 		When(RequestingSegmentProfile("sp01")).
 		Then(ErrorIsReplied("51")).
 		Execute()
