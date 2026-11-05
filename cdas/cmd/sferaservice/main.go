@@ -2,7 +2,8 @@ package main
 
 import (
 	"context"
-	"log"
+	"log/slog"
+	"os"
 
 	"github.com/nats-io/nats.go"
 	"github.com/nats-io/nats.go/jetstream"
@@ -15,9 +16,13 @@ import (
 )
 
 func main() {
-	nc, err := nats.Connect("nuclear:4222")
+	logger := slog.New(slog.NewJSONHandler(os.Stdout, nil))
+	responsLogger := &SlogResponsLogger{}
+
+	const url = "nuclear:4222"
+	nc, err := nats.Connect(url)
 	if err != nil {
-		log.Fatal(err)
+		logger.Error("connecting to nats", "error", err, "url", url)
 	}
 	defer nc.Close()
 
@@ -33,8 +38,16 @@ func main() {
 	spReader := &reader.SegmentProfileReader{KeyValueReader: cdas.Must(reader.NewKeyValueReader(js, cdas.SegmentProfileBucket))}
 	jpReader := &reader.JourneyProfileReader{KeyValueReader: cdas.Must(reader.NewKeyValueReader(js, cdas.JourneyProfileBucket))}
 
-	sferaService := service.NewSFERAService(settings, msgPublisher, spKey, spReader, jpKey, jpReader)
+	sferaService := service.NewSFERAService(settings, msgPublisher, spKey, spReader, jpKey, jpReader, responsLogger, logger)
 
 	msgConsumer := cdas.Must(consumer.NewSFERAMessageConsumer(ctx, nc, js, cdas.B2GStreamName, cdas.B2GDefaultConsumerName, sferaService))
 	msgConsumer.Start(ctx)
+}
+
+type SlogResponsLogger struct {
+	logger *slog.Logger
+}
+
+func (l *SlogResponsLogger) Log(companyCode, sourceDevice, messageID, text, result string, errorCodes []string) {
+	l.logger.Debug(text, "companyCode", companyCode, "sourceDevice", sourceDevice, "messageID", messageID, "result", result, "errorCodes", errorCodes)
 }

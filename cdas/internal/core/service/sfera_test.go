@@ -4,6 +4,8 @@ import (
 	"context"
 	"encoding/xml"
 	"fmt"
+	"log/slog"
+	"os"
 	"slices"
 	"testing"
 	"time"
@@ -23,18 +25,70 @@ var onboardStory = specs.NewStory(specs.UserStory{
 })
 
 var (
-	jpKey    port.JPKeyProvider = &provider.JPKeyProvider{}
-	spKey    port.SPKeyProvider = &provider.SPKeyProvider{}
-	jpReader *TestReader[sfera.JourneyProfile]
-	spReader *TestReader[sfera.SegmentProfile]
+	jpKey          port.JPKeyProvider = &provider.JPKeyProvider{}
+	spKey          port.SPKeyProvider = &provider.SPKeyProvider{}
+	jpReader       *TestReader[sfera.JourneyProfile]
+	spReader       *TestReader[sfera.SegmentProfile]
+	responseLogger *TestResponseLogger
 )
 
 var (
-	messageHeader *sfera.MessageHeader
-	trainID       *sfera.TrainIdentificationComplexType
-	svc           *SFERAService
-	message       any
+	messageHeader     *sfera.MessageHeader
+	trainID           *sfera.TrainIdentificationComplexType
+	svc               *SFERAService
+	message           any
+	g2bReplyMessageID *string
 )
+
+type ResponseLoggerEntry struct {
+	CompanyCode  string
+	SourceDevice string
+	MessageID    string
+	Msg          string
+	Result       string
+	ErrorCodes   []string
+}
+
+func (r *ResponseLoggerEntry) Equals(companyCode, sourceDevice, messageID, result *string) bool {
+	if companyCode != nil && r.CompanyCode != *companyCode {
+		return false
+	} else if sourceDevice != nil && r.SourceDevice != *sourceDevice {
+		return false
+	} else if messageID != nil && r.MessageID != *messageID {
+		return false
+	} else if result != nil && r.Result != *result {
+		return false
+	}
+
+	return true
+}
+
+type TestResponseLogger struct {
+	Entries []*ResponseLoggerEntry
+}
+
+func (l *TestResponseLogger) Log(companyCode, sourceDevice, messageID, text, result string, errorCodes []string) {
+	entry := &ResponseLoggerEntry{
+		CompanyCode:  companyCode,
+		SourceDevice: sourceDevice,
+		MessageID:    messageID,
+		Msg:          text,
+		Result:       result,
+		ErrorCodes:   errorCodes,
+	}
+
+	l.Entries = append(l.Entries, entry)
+}
+
+func (l *TestResponseLogger) Contains(companyCode, sourceDevice, messageID, result *string) bool {
+	for _, e := range l.Entries {
+		if e.Equals(companyCode, sourceDevice, messageID, result) {
+			return true
+		}
+	}
+
+	return false
+}
 
 type TestPublisher struct {
 	callback func(msg any)
@@ -49,6 +103,17 @@ func (p *TestPublisher) Publish(ctx context.Context, msg any) error {
 
 	return nil
 }
+
+// func (p *TestPublisher) save(ctx context.Context, msg any) error {
+
+// 	data, err := xml.Marshal(msg)
+
+// 	if err != nil {
+// 		return err
+// 	}
+
+// 	return nil
+// }
 
 type TestReader[T any] struct {
 	Items map[string]*T
@@ -70,30 +135,6 @@ func (r *TestReader[T]) Clear() {
 	r.Items = make(map[string]*T)
 }
 
-type TestJourneyProfileReader struct {
-	JourneyProfiles map[string]*sfera.JourneyProfile
-}
-
-func NewTestJourneyProfileReader() *TestJourneyProfileReader {
-	return &TestJourneyProfileReader{JourneyProfiles: make(map[string]*sfera.JourneyProfile)}
-}
-
-func (r *TestJourneyProfileReader) Read(ctx context.Context, key string) (*sfera.JourneyProfile, error) {
-	if jp, ok := r.JourneyProfiles[key]; ok {
-		return jp, nil
-	}
-
-	return nil, nil
-}
-
-type TestSegmentProfileReader struct {
-	*TestReader[sfera.SegmentProfile]
-}
-
-func NewTestSegmentProfileReader() *TestSegmentProfileReader {
-	return &TestSegmentProfileReader{TestReader: NewTestReader[sfera.SegmentProfile]()}
-}
-
 func TrackSide() *specs.StepResult {
 	sr := specs.NewStepResult("track side service")
 
@@ -102,8 +143,10 @@ func TrackSide() *specs.StepResult {
 
 	spReader = NewTestReader[sfera.SegmentProfile]()
 	jpReader = NewTestReader[sfera.JourneyProfile]()
+	responseLogger = &TestResponseLogger{}
+	logger := slog.New(slog.NewJSONHandler(os.Stdout, nil))
 
-	svc = NewSFERAService(settings, publisher, spKey, spReader, jpKey, jpReader)
+	svc = NewSFERAService(settings, publisher, spKey, spReader, jpKey, jpReader, responseLogger, logger)
 
 	return sr.Success()
 }
@@ -142,6 +185,14 @@ func SessionStarted(drivingMode, architecture, connectivity string) *specs.StepR
 	sr := specs.NewStepResult("session started for %q %q in mode %q", connectivity, architecture, drivingMode)
 
 	svc.startSession(trainID, string(*messageHeader.Sender.TeltsiCompanyCode), messageHeader.SourceDevice, drivingMode)
+
+	return sr.Success()
+}
+
+func BoardReceivedMessage(messageID string) *specs.StepResult {
+	sr := specs.NewStepResult("onboard received message %q ", messageID)
+
+	g2bReplyMessageID = &messageID
 
 	return sr.Success()
 }
@@ -253,6 +304,27 @@ func RequestingSegmentProfile(spid string) *specs.StepResult {
 	}
 
 	err := svc.HandleB2GMessage(context.Background(), req)
+
+	if err != nil {
+		return sr.WithError(err)
+	}
+
+	return sr.Success()
+}
+
+func BoardSendingResponse(result sfera.ResponseResult) *specs.StepResult {
+	sr := specs.NewStepResult("onboard sending %q as respons for message %q", result, *g2bReplyMessageID)
+
+	messageHeader.CorrelationID = g2bReplyMessageID
+
+	reply := &sfera.SFERAB2GReplyMessage{
+		MessageHeader: messageHeader,
+		B2GReplyPayload: &sfera.B2GReplyPayload{
+			B2GMessageResponse: &sfera.B2GMessageResponse{Result: string(result)},
+		},
+	}
+
+	err := svc.HandleB2GMessage(context.Background(), reply)
 
 	if err != nil {
 		return sr.WithError(err)
@@ -374,13 +446,26 @@ func ErrorIsReplied(errorCode string) *specs.StepResult {
 	}
 }
 
+func ResponseIsLogged(result sfera.ResponseResult) *specs.StepResult {
+	sr := specs.NewStepResult("track side logged message %q as %q", *g2bReplyMessageID, result)
+
+	companyCode := new(string(*messageHeader.Sender.TeltsiCompanyCode))
+	sourceeDevice := new(messageHeader.SourceDevice)
+
+	if !responseLogger.Contains(companyCode, sourceeDevice, g2bReplyMessageID, new(string(result))) {
+		return sr.WithErrorf("log entry for %q not found", *g2bReplyMessageID)
+	}
+
+	return sr.Success()
+}
+
 func TestDX1HandshakeInvalidVersionRejected(t *testing.T) {
 	onboardStory.Scenario(t).
 		Given(TrackSide()).
 		Given(Onboard("1.0.0", "0099", "OB1")).
 		Given(Train("0001", "123", "01")).
 		When(Handshaking(t.Context(), "GoA1", "BoardAdviceCalculation", "Connected")).
-		Then(RejectedWithReason(RejectReasonSFERAVersionIncompatible)).
+		Then(RejectedWithReason(sfera.RejectReasonSFERAVersionIncompatible)).
 		Execute()
 }
 
@@ -390,7 +475,7 @@ func TestDX1HandshakeInvalidConnectivityRejected(t *testing.T) {
 		Given(Onboard("3.0.0", "0099", "OB1")).
 		Given(Train("0001", "123", "01")).
 		When(Handshaking(t.Context(), "GoA1", "BoardAdviceCalculation", "Standalone")).
-		Then(RejectedWithReason(RejectReasonConnectivityNotSupported)).
+		Then(RejectedWithReason(sfera.RejectReasonConnectivityNotSupported)).
 		Execute()
 }
 func TestDX1HandshakeValidAcknowledged(t *testing.T) {
@@ -436,6 +521,18 @@ func TestJP2RequestUnavailableJourneyProfile(t *testing.T) {
 		When(RequestingJourneyProfile()).
 		Then(ActiveSessionsIs(1)).
 		And(ErrorIsReplied("51")).
+		Execute()
+}
+
+func TestJP3OnboardResponseERROR(t *testing.T) {
+	onboardStory.Scenario(t).
+		Given(TrackSide()).
+		Given(Onboard("3.0.0", "0099", "OB1")).
+		Given(Train("0001", "123", "01")).
+		Given(SessionStarted("GoA1", "BoardAdviceCalculation", "Connected")).
+		Given(BoardReceivedMessage("msg001")).
+		When(BoardSendingResponse(sfera.ResponseResultERROR)).
+		Then(ResponseIsLogged(sfera.ResponseResultERROR)).
 		Execute()
 }
 

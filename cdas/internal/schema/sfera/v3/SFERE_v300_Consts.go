@@ -164,6 +164,23 @@ const (
 	TrainPartTypeTrainLastPantograph TrainPartType = "TrainLastPantograph"
 )
 
+const (
+	RejectReasonSFERAVersionIncompatible     = "SFERA version incompatible"
+	RejectReasonATOSystemVersionIncompatible = "ATO system version incompatible"
+	RejectReasonAnotherDASATOInCharge        = "Another DAS-TS/ATO-TS in charge"
+	RejectReasonUnknownDASATOInCharge        = "DAS-TS/ATO-TS in charge unknown"
+	RejectReasonArchitectureNotSupported     = "Architecture not supported"
+	RejectReasonConnectivityNotSupported     = "Connectivity not supported"
+	RejectReasonDrivingModesNotSupported     = "Driving Modes not supported"
+)
+
+type ResponseResult string
+
+const (
+	ResponseResultOK    ResponseResult = "OK"
+	ResponseResultERROR ResponseResult = "ERROR"
+)
+
 type ErrorCode struct {
 	Code        int
 	Description string

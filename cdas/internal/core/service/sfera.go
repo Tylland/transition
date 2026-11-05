@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"log/slog"
 	"slices"
 	"sync"
 	"time"
@@ -16,6 +17,10 @@ import (
 )
 
 var NoRequestHandledErr = errors.New("No request was handled")
+
+type ResponseLogger interface {
+	Log(companyCode, sourceDevice, messageID, text, result string, errorCodes []string)
+}
 
 type SFERASettings interface {
 	SchemaVersion() string
@@ -49,16 +54,6 @@ var SupportedDrivingModes = []string{"Inactive", "Read-only", "GoA1"} // Inactiv
 var SupportedArchitectures = []string{"BoardAdviceCalculation"}       // DAS-O or DAS-C
 var SupportedConnectivities = []string{"Connected"}                   // Connected or Standalone
 
-const (
-	RejectReasonSFERAVersionIncompatible     = "SFERA version incompatible"
-	RejectReasonATOSystemVersionIncompatible = "ATO system version incompatible"
-	RejectReasonAnotherDASATOInCharge        = "Another DAS-TS/ATO-TS in charge"
-	RejectReasonUnknownDASATOInCharge        = "DAS-TS/ATO-TS in charge unknown"
-	RejectReasonArchitectureNotSupported     = "Architecture not supported"
-	RejectReasonConnectivityNotSupported     = "Connectivity not supported"
-	RejectReasonDrivingModesNotSupported     = "Driving Modes not supported"
-)
-
 type SFERAService struct {
 	settings     SFERASettings
 	publisher    port.SFERAMessagePublisher
@@ -68,6 +63,8 @@ type SFERAService struct {
 	jpReader     port.JourneyProfileReader
 	activeTrains map[string]*domain.ActiveTrainSession
 	mutex        *sync.RWMutex
+	response     ResponseLogger
+	log          *slog.Logger
 }
 
 func NewSFERAService(settings SFERASettings,
@@ -75,7 +72,9 @@ func NewSFERAService(settings SFERASettings,
 	spKey port.SPKeyProvider,
 	spReader port.SegmentProfileReader,
 	jpKey port.JPKeyProvider,
-	jpReader port.JourneyProfileReader) *SFERAService {
+	jpReader port.JourneyProfileReader,
+	response ResponseLogger,
+	log *slog.Logger) *SFERAService {
 
 	return &SFERAService{settings: settings,
 		publisher:    publisher,
@@ -83,7 +82,9 @@ func NewSFERAService(settings SFERASettings,
 		spReader:     spReader,
 		jpKey:        jpKey,
 		jpReader:     jpReader,
-		activeTrains: make(map[string]*domain.ActiveTrainSession)}
+		activeTrains: make(map[string]*domain.ActiveTrainSession),
+		response:     response,
+		log:          log}
 }
 
 func timestamp() string {
@@ -202,7 +203,31 @@ func (s *SFERAService) HandleB2GEventMessage(evt *sfera.SFERAB2GEventMessage) er
 	return nil
 }
 
-func (s *SFERAService) HandleB2GReplyMessage(evt *sfera.SFERAB2GReplyMessage) error {
+func (s *SFERAService) HandleB2GReplyMessage(reply *sfera.SFERAB2GReplyMessage) error {
+
+	if reply.B2GReplyPayload != nil {
+		if reply.B2GReplyPayload.B2GMessageResponse != nil {
+			companyCode := string(*reply.MessageHeader.Sender.TeltsiCompanyCode)
+			sourceDevice := reply.MessageHeader.SourceDevice
+
+			var errorCodes []string
+
+			for _, b2gError := range reply.B2GReplyPayload.B2GMessageResponse.B2GError {
+				if b2gError.ErrorCode != nil {
+					errorCodes = append(errorCodes, *b2gError.ErrorCode)
+				}
+			}
+
+			messageID := ""
+
+			if reply.MessageHeader.CorrelationID != nil {
+				messageID = *reply.MessageHeader.CorrelationID
+			}
+
+			s.response.Log(companyCode, sourceDevice, messageID, "b2g message response", reply.B2GReplyPayload.B2GMessageResponse.Result, errorCodes)
+		}
+	}
+
 	return nil
 }
 
@@ -229,7 +254,7 @@ func (s *SFERAService) Handshake(req *sfera.HandshakeRequest, hdr *sfera.Message
 	if hdr.SFERAVersion != s.settings.SchemaVersion() {
 		reject := &sfera.HandshakeReject{
 			SPZone:                s.settings.Zone(),
-			HandshakeRejectReason: []string{RejectReasonSFERAVersionIncompatible},
+			HandshakeRejectReason: []string{sfera.RejectReasonSFERAVersionIncompatible},
 		}
 
 		return nil, reject, nil
@@ -256,15 +281,15 @@ func (s *SFERAService) Handshake(req *sfera.HandshakeRequest, hdr *sfera.Message
 		reason := []string{}
 
 		if !slices.Contains(SupportedDrivingModes, mode.DASDrivingMode) {
-			reason = append(reason, RejectReasonDrivingModesNotSupported)
+			reason = append(reason, sfera.RejectReasonDrivingModesNotSupported)
 		}
 
 		if !slices.Contains(SupportedArchitectures, mode.DASArchitecture) {
-			reason = append(reason, RejectReasonArchitectureNotSupported)
+			reason = append(reason, sfera.RejectReasonArchitectureNotSupported)
 		}
 
 		if !slices.Contains(SupportedConnectivities, mode.DASConnectivity) {
-			reason = append(reason, RejectReasonConnectivityNotSupported)
+			reason = append(reason, sfera.RejectReasonConnectivityNotSupported)
 		}
 
 		if len(reason) > 0 {
@@ -319,7 +344,7 @@ func (s *SFERAService) handleSPRequest(ctx context.Context, reqs []*sfera.SPRequ
 			segments = append(segments, segment)
 		} else {
 			return &sfera.G2BReplyPayload{G2BMessageResponse: &sfera.G2BMessageResponse{
-				Result:   "ERROR",
+				Result:   string(sfera.ResponseResultERROR),
 				G2BError: createErrors(sfera.ErrorCodeRequestedDataNotAvailable),
 			}}, nil
 		}
@@ -344,7 +369,7 @@ func (s *SFERAService) handleJPRequest(ctx context.Context, reqs []*sfera.JPRequ
 			journeys = append(journeys, journey)
 		} else {
 			return &sfera.G2BReplyPayload{G2BMessageResponse: &sfera.G2BMessageResponse{
-				Result:   "ERROR",
+				Result:   string(sfera.ResponseResultERROR),
 				G2BError: createErrors(sfera.ErrorCodeRequestedDataNotAvailable),
 			}}, nil
 		}
