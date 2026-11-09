@@ -14,11 +14,11 @@ import (
 type FacilityDataFileNetworkProvider struct {
 	inputDir  string
 	interval  time.Duration
-	service   port.FacilityService
+	service   port.SegmentService
 	filesSeen map[string]time.Time
 }
 
-func NewFacilityDataFileNetworkProvider(inputDir string, interval time.Duration, service port.FacilityService) *FacilityDataFileNetworkProvider {
+func NewFacilityDataFileNetworkProvider(inputDir string, interval time.Duration, service port.SegmentService) *FacilityDataFileNetworkProvider {
 	return &FacilityDataFileNetworkProvider{inputDir: inputDir, interval: interval, service: service, filesSeen: make(map[string]time.Time)}
 }
 

@@ -7,17 +7,17 @@ import (
 	sfera "github.com/tylland/transition/cdas/internal/schema/sfera/v3"
 )
 
-type FacilityService struct {
+type SegmentService struct {
 	srWriter port.SignalRouteWriter
 	trWriter port.TrackRouteWriter
 	spWriter port.SegmentProfileWriter
 }
 
-func NewFacilityService(srWriter port.SignalRouteWriter, trWriter port.TrackRouteWriter, spWriter port.SegmentProfileWriter) *FacilityService {
-	return &FacilityService{srWriter: srWriter, trWriter: trWriter, spWriter: spWriter}
+func NewSegmentService(srWriter port.SignalRouteWriter, trWriter port.TrackRouteWriter, spWriter port.SegmentProfileWriter) *SegmentService {
+	return &SegmentService{srWriter: srWriter, trWriter: trWriter, spWriter: spWriter}
 }
 
-func (s *FacilityService) ProcessNetwork(net *dm.Network) error {
+func (s *SegmentService) ProcessNetwork(net *dm.Network) error {
 	segmentLookup := make(map[string]*sfera.SegmentProfile)
 
 	segmentProfiles := domain.BuildSegmentProfiles(net)

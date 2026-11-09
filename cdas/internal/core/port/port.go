@@ -20,9 +20,13 @@ type SegmentProfileWriter interface {
 	Write(sp *sfera.SegmentProfile) (string, error)
 }
 
+type JourneyProfileWriter interface {
+	Write(sp *sfera.JourneyProfile) (string, error)
+}
+
 // type NetworkFunc func(*network.Network) error
 
-type FacilityService interface {
+type SegmentService interface {
 	ProcessNetwork(net *network.Network) error
 }
 

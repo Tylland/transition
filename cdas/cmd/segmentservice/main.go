@@ -28,10 +28,10 @@ func main() {
 	}
 
 	var (
-		facilityService port.FacilityService
-		srWriter        port.SignalRouteWriter
-		trWriter        port.TrackRouteWriter
-		spWriter        port.SegmentProfileWriter
+		segmentService port.SegmentService
+		srWriter       port.SignalRouteWriter
+		trWriter       port.TrackRouteWriter
+		spWriter       port.SegmentProfileWriter
 	)
 
 	nc, err := nats.Connect("nuclear:4222")
@@ -52,9 +52,9 @@ func main() {
 	spKey := &provider.SPKeyProvider{}
 	spWriter = cdas.Must(publisher.NewSegmentProfileKVWriter(js, spKey, cdas.SegmentProfileBucket))
 
-	facilityService = service.NewFacilityService(srWriter, trWriter, spWriter)
+	segmentService = service.NewSegmentService(srWriter, trWriter, spWriter)
 
-	networkProvider := provider.NewFacilityDataFileNetworkProvider(inputDir, 5*time.Second, facilityService)
+	networkProvider := provider.NewFacilityDataFileNetworkProvider(inputDir, 5*time.Second, segmentService)
 
 	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
 	defer stop()

@@ -52,7 +52,9 @@ story. Use the grouped layout when the story has multiple named requirements.
 **Flat layout** (no requirements):
 ```
 # Story          ← H1, one per file
-> blockquote     ← user story (As a / I want / So that)
+> **As a** <role>  
+> **I want** <goal>  
+> **So that** <benefit>  
 
 plain text       ← optional: background context, domain explanation, key concepts
                     (one or more paragraphs; no heading needed)
@@ -69,7 +71,9 @@ plain text       ← optional: background context, domain explanation, key conce
 **Grouped layout** (with requirements):
 ```
 # Story          ← H1, one per file
-> blockquote     ← user story (As a / I want / So that)
+> **As a** <role>  
+> **I want** <goal>  
+> **So that** <benefit>  
 
 plain text       ← optional: background context, domain explanation, key concepts
                     (one or more paragraphs; no heading needed)
@@ -81,6 +85,9 @@ plain text       ← optional: background context, domain explanation, key conce
   step
   ```
 ```
+
+Write each user story as three blockquote lines. Bold the `As a`, `I want`, and `So that`
+labels, and end each line with two spaces to create a Markdown line break.
 
 ---
 
@@ -206,11 +213,11 @@ Example: `TS-302.03-T`
 ```markdown
 ## Requirement: <Plain-English statement of the rule>
 
-> **<prefix>-<section>.<seq>-<type>**
+> **<prefix>-<section>.<seq>-<type>**  
 >
-> <Requirement text>
+> <Requirement text>  
 >
-> _Comment_: <Comment>
+> _Comment_: <Comment>  
 
 ### Scenario: <Happy-path title>
 ```gherkin
@@ -248,28 +255,28 @@ Use a comment when any of the following is true:
 **Design decision** — the implementation makes a non-obvious algorithmic choice that
 testers need to understand:
 
-> _Comment_: `HasCommonNetworks` is symmetric by design. Even when only a one-directional
-> gateway A→B exists, device A's reachable set contains B and device B's reachable set
-> contains B, so both devices share B — enabling tunnel formation without a reverse gateway.
+> _Comment_: `HasCommonNetworks` is symmetric by design. Even when only a one-directional  
+> gateway A→B exists, device A's reachable set contains B and device B's reachable set  
+> contains B, so both devices share B — enabling tunnel formation without a reverse gateway.  
 
 **Scope boundary** — the requirement deliberately excludes something a reader might expect
 to be included:
 
-> _Comment_: This check applies to the Virtual Network as a whole; a mixed-zone VN is
-> skipped entirely rather than filtering individual port pairs within it.
+> _Comment_: This check applies to the Virtual Network as a whole; a mixed-zone VN is  
+> skipped entirely rather than filtering individual port pairs within it.  
 
 **Dependency or pre-condition** — the requirement only makes sense in the context of
 another requirement or a domain constraint:
 
-> _Comment_: Requires TG-301.01-T. The AdminTunnel flag is set at tunnel-creation time;
-> it cannot be changed after the tunnel object is constructed.
+> _Comment_: Requires TG-301.01-T. The AdminTunnel flag is set at tunnel-creation time;  
+> it cannot be changed after the tunnel object is constructed.  
 
 **Non-obvious test implication** — the way a requirement must be tested differs from
 what the wording suggests:
 
-> _Comment_: A disabled port pair has `enabled=false` and a nil crypto port. The eligibility
-> check must guard against nil before dereferencing the crypto network — this scenario
-> exercises that guard.
+> _Comment_: A disabled port pair has `enabled=false` and a nil crypto port. The eligibility  
+> check must guard against nil before dereferencing the crypto network — this scenario  
+> exercises that guard.  
 
 Omit `_Comment_:` when the requirement text is self-contained and the scenarios make
 the intent clear without additional explanation.
@@ -283,7 +290,9 @@ Place tags as a comment line directly below the `# Story` heading.
 ```markdown
 # Story
 <!-- @smoke @regression @epic-auth @PROJ-1234 -->
-> As a ...
+> **As a** <role>  
+> **I want** <goal>  
+> **So that** <benefit>  
 ```
 
 | Category       | Example tags                                        |
@@ -301,7 +310,7 @@ Place tags as a comment line directly below the `# Story` heading.
 | Element          | Convention                                            | Example                                   |
 |------------------|-------------------------------------------------------|-------------------------------------------|
 | Story heading    | Short imperative phrase — what the system does        | `# Story`                                 |
-| User story       | As a / I want / So that in blockquote lines           | `> As a Network Administrator`            |
+| User story       | Bold As a / I want / So that labels in blockquote lines | `> **As a** Network Administrator`         |
 | Scenario title   | Full sentence — readable without the story context    | `Successful login with valid credentials` |
 | Outline title    | Present-tense description of the varying behaviour    | `Login redirects based on user role`      |
 | Step text        | Plain English; avoid technical jargon in Given/When   | `Given I am on the login page`            |
@@ -523,7 +532,7 @@ Before saving a feature file, verify:
 
 - [ ] File is saved as `kebab-case-title.md`
 - [ ] `# Story` heading is present with a blockquote user story
-- [ ] User story follows As a / I want / So that format
+- [ ] User story uses bold **As a**, **I want**, and **So that** labels, each on a blockquote line ending in two spaces
 - [ ] If the file has `## Requirement:` headings, all scenarios use `### Scenario:` (H3)
 - [ ] If there are no `## Requirement:` headings, all scenarios use `## Scenario:` (H2)
 - [ ] `## Requirement:` titles match the corresponding spec requirement names
