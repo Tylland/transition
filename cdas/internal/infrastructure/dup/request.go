@@ -1,20 +1,27 @@
 package dup
 
 import (
-	"bytes"
 	"encoding/xml"
 	"fmt"
 )
 
+type RequestWriter interface {
+	Inline(elem xml.StartElement)
+	Start(elem xml.StartElement) func()
+	End(elem xml.EndElement)
+}
+
+type Login struct {
+	AuthenticationKey string `xml:"nickname,omitempty"`
+}
+
 type Request struct {
-	AuthenticationKey string
-	Queries           []*Query
+	Login   *Login `xml:"LOGIN,omitempty"`
+	Queries []*Query
 }
 
 func NewRequest(key string) *Request {
-	return &Request{
-		AuthenticationKey: key,
-	}
+	return &Request{Login: &Login{AuthenticationKey: key}}
 }
 
 func (r *Request) Query(q *Query) *Request {
@@ -23,52 +30,41 @@ func (r *Request) Query(q *Query) *Request {
 }
 
 func (r *Request) XML() ([]byte, error) {
-	var buf bytes.Buffer
 
-	enc := xml.NewEncoder(&buf)
-	enc.Indent("", "  ")
+	w := NewXMLRequestWriter("", "  ")
 
-	start := xml.StartElement{
+	request := xml.StartElement{
 		Name: xml.Name{Local: "REQUEST"},
 	}
 
-	if err := enc.EncodeToken(start); err != nil {
-		return nil, err
-	}
+	w.Start(request)
 
 	login := xml.StartElement{
 		Name: xml.Name{Local: "LOGIN"},
 		Attr: []xml.Attr{
 			{
 				Name:  xml.Name{Local: "authenticationkey"},
-				Value: r.AuthenticationKey,
+				Value: r.Login.AuthenticationKey,
 			},
 		},
 	}
 
-	enc.EncodeToken(login)
-	enc.EncodeToken(login.End())
+	w.Inline(login)
 
 	for _, q := range r.Queries {
-		if err := writeQuery(enc, q); err != nil {
-			return nil, err
-		}
+		writeQuery(w, q)
 	}
 
-	enc.EncodeToken(start.End())
+	w.End(request.End())
 
-	if err := enc.Flush(); err != nil {
-		return nil, err
-	}
-
-	return buf.Bytes(), nil
+	return []byte(w.builder.String()), nil
 }
 
-func writeExpression(enc *xml.Encoder, expr Expression) error {
+func writeExpression(w RequestWriter, expr Expression) {
 
 	switch e := expr.(type) {
 	case Comparison:
-		start := xml.StartElement{
+		comp := xml.StartElement{
 			Name: xml.Name{Local: e.Operator},
 			Attr: []xml.Attr{
 				{
@@ -82,23 +78,18 @@ func writeExpression(enc *xml.Encoder, expr Expression) error {
 			},
 		}
 
-		enc.EncodeToken(start)
-		enc.EncodeToken(start.End())
+		w.Inline(comp)
 	case Logical:
-		start := xml.StartElement{
+		logic := xml.StartElement{
 			Name: xml.Name{Local: e.Operator},
 		}
 
-		enc.EncodeToken(start)
+		w.Start(logic)
 
 		for _, child := range e.Children {
-			if err := writeExpression(enc, child); err != nil {
-				return err
-			}
+			writeExpression(w, child)
 		}
 
-		enc.EncodeToken(start.End())
+		w.End(logic.End())
 	}
-
-	return nil
 }

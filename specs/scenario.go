@@ -197,8 +197,11 @@ func (sb *ThenStepBlock) Execute() {
 	maxTitleWidth := 0
 
 	for _, s := range sb.scenario.steps {
-		if len(s.title) > maxTitleWidth {
-			maxTitleWidth = len(s.title)
+		lines := strings.Split(s.title, "\n")
+		for _, line := range lines {
+			if len(line) > maxTitleWidth {
+				maxTitleWidth = len(line)
+			}
 		}
 	}
 

@@ -6,11 +6,11 @@ import (
 )
 
 type Query struct {
-	ObjectType    string
-	NamespaceName string
-	SchemaVer     string
-	LimitValue    int
-	FilterExpr    Expression
+	ObjectType    string     `xml:"objecttype,attr"`
+	NamespaceName string     `xml:"namespace,attr,omitempty"`
+	SchemaVer     string     `xml:"schemaversion,attr,omitempty"`
+	LimitValue    int        `xml:"limit,attr,omitempty"`
+	FilterExpr    Expression `xml:"FILTER"`
 }
 
 func NewQuery(objectType string) *Query {
@@ -39,7 +39,7 @@ func (q *Query) Filter(expr Expression) *Query {
 	return q
 }
 
-func writeQuery(enc *xml.Encoder, q *Query) error {
+func writeQuery(w RequestWriter, q *Query) {
 	attrs := []xml.Attr{
 		{
 			Name:  xml.Name{Local: "objecttype"},
@@ -73,27 +73,19 @@ func writeQuery(enc *xml.Encoder, q *Query) error {
 		Attr: attrs,
 	}
 
-	if err := enc.EncodeToken(query); err != nil {
-		return err
-	}
+	w.Start(query)
 
 	if q.FilterExpr != nil {
 		filter := xml.StartElement{
 			Name: xml.Name{Local: "FILTER"},
 		}
 
-		if err := enc.EncodeToken(filter); err != nil {
-			return err
-		}
+		w.Start(filter)
 
-		if err := writeExpression(enc, q.FilterExpr); err != nil {
-			return err
-		}
+		writeExpression(w, q.FilterExpr)
 
-		if err := enc.EncodeToken(filter.End()); err != nil {
-			return err
-		}
+		w.End(filter.End())
 	}
 
-	return enc.EncodeToken(query.End())
+	w.End(query.End())
 }

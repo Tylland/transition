@@ -115,21 +115,21 @@ func NOTIN(name string, values ...any) Expression {
 
 func AND(expressions ...Expression) Expression {
 	return Logical{
-		Operator: "and",
+		Operator: "AND",
 		Children: expressions,
 	}
 }
 
 func OR(expressions ...Expression) Expression {
 	return Logical{
-		Operator: "or",
+		Operator: "OR",
 		Children: expressions,
 	}
 }
 
 func NOT(expression Expression) Expression {
 	return Logical{
-		Operator: "not",
+		Operator: "NOT",
 		Children: []Expression{expression},
 	}
 }
